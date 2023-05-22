@@ -1,3 +1,9 @@
+import IndexRatestList from "../src/components/units/index/ratest/IndexRatestList.container";
+
 export default function Home(): JSX.Element {
-  return <>첫 페이지</>;
+  return (
+    <>
+      <IndexRatestList />
+    </>
+  );
 }
