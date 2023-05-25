@@ -1,5 +1,6 @@
 import Image from "next/image";
 import * as S from "./LayoutHeader.styles";
+import Link from "next/link";
 
 const MENU_ITEMS = [
   { link: "/free", text: "자유게시판" },
@@ -13,7 +14,11 @@ export default function LayoutHeaderUI(): JSX.Element {
         <S.HeaderWrap>
           <S.HeaderLeft>
             <S.Logo>
-              <Image src="/logo.png" width={353} height={150} />
+              <Link href="/">
+                <a>
+                  <Image src="/logo.png" width={353} height={150} />
+                </a>
+              </Link>
             </S.Logo>
             <S.HeaderNav>
               {MENU_ITEMS.map((el) => (

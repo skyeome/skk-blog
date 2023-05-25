@@ -12,8 +12,8 @@ export const RatestList = styled.ul`
 
   list-style: none;
 `;
-export const RatestListItem = styled.li`
-  width: 25%;
+export const RatestListItem = styled.div<{ counts?: number }>`
+  width: ${(props) => (props.counts === undefined ? 100 : 100 / props.counts)}%;
   padding: 10px;
   margin-bottom: 15px;
 `;

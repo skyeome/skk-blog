@@ -1,0 +1,52 @@
+import styled from "@emotion/styled";
+export const topKv = styled.div`
+  background: url("/kv-image.jpg") 50% 50% / cover no-repeat;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const topKvBox = styled.div`
+  width: 98%;
+  max-width: 37.5em;
+  background-color: #fff;
+  padding: 2.5em;
+  text-align: center;
+`;
+
+export const topKvTitle = styled.h2`
+  font-size: 1.375em;
+  margin-bottom: 1.25rem;
+`;
+
+export const topKvCategory = styled.h5`
+  position: relative;
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 0.3125em;
+  margin-bottom: 1.25em;
+  z-index: 1;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-color: rgba(228, 156, 134, 0.6);
+    z-index: -1;
+    transform: translateY(40%);
+  }
+`;
+export const topKvInfos = styled.div`
+  > p {
+    display: inline-block;
+    color: #888;
+    font-size: 0.8125em;
+    font-weight: 400;
+    line-height: 1;
+    margin: 0 6px;
+  }
+`;

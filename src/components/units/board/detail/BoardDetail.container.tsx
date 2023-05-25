@@ -14,5 +14,8 @@ export default function BoardDetail(): JSX.Element {
     FETCH_BOARD,
     { variables: { boardId: router.query.boardId } }
   );
-  return <BoardDetailUI data={data} />;
+  const onClickEditBtn = (): void => {
+    void router.push(`/free/${router.query.boardId as string}/edit`);
+  };
+  return <BoardDetailUI data={data} onClickEditBtn={onClickEditBtn} />;
 }

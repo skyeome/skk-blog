@@ -1,3 +1,4 @@
+import LayoutFooter from "./footer/LayoutFooter.container";
 import LayoutHeader from "./header/LayoutHeader.container";
 import { Wrapper } from "./header/LayoutHeader.styles";
 
@@ -12,6 +13,7 @@ export default function Layout(props: ILayoutProps): JSX.Element {
       <main>
         <Wrapper>{props.children}</Wrapper>
       </main>
+      <LayoutFooter />
     </>
   );
 }

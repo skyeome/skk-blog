@@ -4,6 +4,17 @@ import * as S from "./IndexRatestList.styles";
 import type { IindexRatestListProps } from "./IndexRatestList.types";
 import Link from "next/link";
 import { Skeleton, Space } from "antd";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+};
 
 export default function IndexRatestListUI(
   props: IindexRatestListProps
@@ -11,7 +22,7 @@ export default function IndexRatestListUI(
   return (
     <>
       <S.RatestTitle>What's New</S.RatestTitle>
-      <S.RatestList>
+      <Slider {...settings}>
         {props.data !== undefined
           ? props.data?.fetchBoards.map((el) => (
               <S.RatestListItem key={el._id}>
@@ -46,7 +57,7 @@ export default function IndexRatestListUI(
                 <Skeleton active />
               </S.RatestListItem>
             ))}
-      </S.RatestList>
+      </Slider>
       <S.Ratest></S.Ratest>
     </>
   );
