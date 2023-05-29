@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
 
+export const CommentListItemWrap = styled.div`
+  margin-bottom: 2.5em;
+`;
+export const CommentHeader = styled.div`
+  margin-bottom: 1.25em;
+`;
 export const CommentWriter = styled.h5`
   color: #111;
   font-size: 1.125em;
