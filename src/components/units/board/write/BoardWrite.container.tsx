@@ -12,11 +12,13 @@ import type {
   IMutationUpdateBoardArgs,
   IUpdateBoardInput,
 } from "../../../../commons/types/generated/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 import { useRouter } from "next/router";
+import { notification } from "antd";
 
 export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
+  const [api, contextHolder] = notification.useNotification();
   const router = useRouter();
   const [inputs, setInputs] = useState<IBoardWriteInputs>({
     writer: "",
@@ -29,6 +31,7 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
     id: "",
     message: "",
   });
+  const [fileUrls, setFileUrls] = useState(["", "", ""]);
   const [createBoard] = useMutation<
     Pick<IMutation, "createBoard">,
     IMutationCreateBoardArgs
@@ -37,6 +40,11 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
     Pick<IMutation, "updateBoard">,
     IMutationUpdateBoardArgs
   >(UPDATE_BOARD);
+
+  useEffect(() => {
+    const images = props.data?.fetchBoard.images;
+    if (images !== undefined && images !== null) setFileUrls([...images]);
+  }, [props.data]);
 
   const onChangeInputs = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -48,6 +56,12 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
 
     if (event.target.value !== "")
       setErrors({ id: event.target.id, message: "" });
+  };
+
+  const onChangeFileUrls = (fileUrl: string, index: number): void => {
+    const newFileUrls = [...fileUrls];
+    newFileUrls[index] = fileUrl;
+    setFileUrls(newFileUrls);
   };
 
   const onClickWrite = async (): Promise<void> => {
@@ -62,24 +76,29 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
           variables: {
             createBoardInput: {
               ...inputs,
+              images: [...fileUrls],
             },
           },
         });
         console.log(result.data?.createBoard._id);
         if (result.data?.createBoard._id === undefined) {
-          alert("요청에 문제가 있습니다.");
+          api.error({ message: "요청에 문제가 있습니다." });
           return;
         }
 
         void router.push(`/free/${result.data?.createBoard._id}`);
       } catch (error) {
         // TODO: 에러 메시지를 alert -> 모달창으로 바꾸기
-        if (error instanceof Error) alert(error.message);
+        if (error instanceof Error) api.error({ message: error.message });
       }
     }
   };
 
   const onClickUpdate = async (): Promise<void> => {
+    const currentFiles = JSON.stringify(fileUrls);
+    const defaultFiles = JSON.stringify(props.data?.fetchBoard.images);
+    const isChangedFiles = currentFiles !== defaultFiles;
+
     if (
       inputs.title === "" &&
       inputs.contents === "" &&
@@ -99,6 +118,7 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
     if (inputs.contents !== "") updateBoardInput.contents = inputs.contents;
     if (inputs.youtubeUrl !== "")
       updateBoardInput.youtubeUrl = inputs.youtubeUrl;
+    if (isChangedFiles) updateBoardInput.images = fileUrls;
 
     try {
       if (typeof router.query.boardId !== "string") {
@@ -131,8 +151,12 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
       onClickWrite={onClickWrite}
       onClickUpdate={onClickUpdate}
       onChangeInputs={onChangeInputs}
+      onChangeFileUrls={onChangeFileUrls}
       errors={errors}
       data={props.data}
+      fileUrls={fileUrls}
+      api={api}
+      contextHolder={contextHolder}
     />
   );
 }

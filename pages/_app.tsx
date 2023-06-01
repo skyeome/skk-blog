@@ -1,4 +1,4 @@
-import ApolloSetting from "../src/components/commons/apllo";
+import ApolloSetting from "../src/components/commons/apollo";
 import type { AppProps } from "next/app";
 import { Global } from "@emotion/react";
 import { globalStyle } from "../src/commons/styles/globalStyles";

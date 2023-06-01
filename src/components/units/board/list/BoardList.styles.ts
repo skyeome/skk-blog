@@ -6,3 +6,8 @@ export const BoardListItemWrap = styled.div`
     flex-wrap: wrap;
   }
 `;
+export const BoardListItemImg = styled.div`
+  position: relative;
+  aspect-ratio: 1024 / 699;
+  background-color: #000;
+`;

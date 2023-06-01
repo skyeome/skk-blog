@@ -36,7 +36,7 @@ export default function IndexRatestListUI(
                         el.images === undefined ||
                         el.images === null
                           ? "/placeholder-image.jpg"
-                          : `/${el.images[0]}`
+                          : `https://storage.googleapis.com/${el.images[0]}`
                       }
                     />
                     <S.RatestListItemTitle>{el.title}</S.RatestListItemTitle>

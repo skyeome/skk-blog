@@ -14,7 +14,7 @@ export default function BoardListUI(props: IBoardListProps): JSX.Element {
           loader={<div>loading...</div>}
         >
           {props.data?.fetchBoards.map((el) => (
-            <BoardListItem el={el} colCounts={2} />
+            <BoardListItem key={el._id} el={el} colCounts={2} />
           ))}
         </InfiniteScroller>
       ) : (

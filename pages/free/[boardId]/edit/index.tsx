@@ -6,6 +6,7 @@ import type {
   IQueryFetchBoardArgs,
 } from "../../../../src/commons/types/generated/types";
 import { FETCH_BOARD } from "../../../../src/components/units/board/detail/BoardDetail.queries";
+import { Skeleton } from "antd";
 
 export default function BoardUpdatePage(): JSX.Element {
   const router = useRouter();
@@ -17,6 +18,6 @@ export default function BoardUpdatePage(): JSX.Element {
       variables: { boardId: router.query.boardId },
     }
   );
-
+  if (data === undefined) return <Skeleton />;
   return <BoardWrite isEdit={true} data={data} />;
 }
