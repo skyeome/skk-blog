@@ -4,6 +4,8 @@ import { Col, Row, Form, Input, Button } from "antd";
 import type { IBoardWriteUIProps } from "./BoardWrite.types";
 import FileUpload from "../../../commons/upload/FileUpload.container";
 import { v4 as uuidv4 } from "uuid";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor } from "@toast-ui/react-editor";
 
 export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
   return (
@@ -43,7 +45,7 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
             onChange={props.onChangeInputs}
           />
         </Form.Item>
-        <Form.Item label="내용">
+        {/* <Form.Item label="내용">
           <Input.TextArea
             id="contents"
             rows={4}
@@ -51,7 +53,13 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
             defaultValue={props.data?.contents}
             onChange={props.onChangeInputs}
           />
-        </Form.Item>
+        </Form.Item> */}
+        <Editor
+          previewStyle="vertical"
+          height="400px"
+          initialEditType="markdown"
+          initialValue="hello"
+        />
         {props.fileUrls.map((el, index) => (
           <FileUpload
             key={uuidv4()}
