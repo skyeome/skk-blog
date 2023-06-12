@@ -102,7 +102,7 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
         // }
 
         // void router.push(`/free/${result.data?.createBoard._id}`);
-        void router.push(`/free/${result.id}`);
+        void router.push(`/free/${String(result.id)}`);
       } catch (error) {
         // TODO: 에러 메시지를 alert -> 모달창으로 바꾸기
         if (error instanceof Error) api.error({ message: error.message });
