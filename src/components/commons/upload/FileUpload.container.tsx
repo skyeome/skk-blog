@@ -28,7 +28,6 @@ export default function FileUpload(props: IFileUploadProps): JSX.Element {
     const isValid = checkImageValidation(props.api, file);
     if (!isValid) return;
     try {
-      console.log(file?.name);
       const storageRef = ref(storage, `images/${file?.name ?? "file"}`);
       if (typeof file === "undefined") return;
       const uploadRef = await uploadBytes(storageRef, file).then(

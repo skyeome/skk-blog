@@ -1,5 +1,6 @@
 // import { useMutation } from "@apollo/client";
 import BoardWriteUI from "./BoardWrite.presenter";
+import type { Editor } from "@toast-ui/react-editor";
 import type {
   IBoardWriteInputs,
   IBoardWriteProps,
@@ -12,11 +13,11 @@ import type {
   // IMutationUpdateBoardArgs,
   IUpdateBoardInput,
 } from "../../../../commons/types/generated/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import { notification } from "antd";
-import { db } from "../../../../commons/libraries/firebase";
+import { db, storage } from "../../../../commons/libraries/firebase";
 import {
   serverTimestamp,
   addDoc,
@@ -24,6 +25,8 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import { checkImageValidation } from "../../../commons/upload/FileUpload.validation";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
   const [api, contextHolder] = notification.useNotification();
@@ -35,6 +38,7 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
     contents: "",
     youtubeUrl: "",
   });
+  const editorRef = useRef<Editor>(null);
   const [errors, setErrors] = useState<IBoardWriteErrors>({
     id: "",
     message: "",
@@ -51,7 +55,6 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
 
   useEffect(() => {
     const images = props.data?.images;
-    // console.log(images);
     if (images !== undefined && images !== null) setFileUrls([...images]);
   }, [props.data]);
 
@@ -66,12 +69,48 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
     if (event.target.value !== "")
       setErrors({ id: event.target.id, message: "" });
   };
+  const onChangeContents = (): void => {
+    const contents = editorRef.current?.getInstance().getMarkdown();
+    // console.log("contents changed");
+    if (typeof contents === "undefined") return;
+    setInputs((prev) => ({
+      ...prev,
+      contents,
+    }));
+  };
 
+  const onUploadImage = async (
+    blob: Blob | File,
+    callback: (url: string, text?: string) => void
+  ): Promise<void> => {
+    console.log(blob);
+    if (blob instanceof File) {
+      const isValid = checkImageValidation(api, blob);
+      if (!isValid) return;
+      try {
+        const storageRef = ref(storage, `images/${blob?.name ?? "file"}`);
+        const uploadRef = await uploadBytes(storageRef, blob).then(
+          (snapshot) => snapshot.ref
+        );
+        const url = await getDownloadURL(uploadRef).then(
+          (downloadUrl) => downloadUrl
+        );
+        callback(url, blob?.name);
+      } catch (error) {
+        if (error instanceof Error)
+          api.error({
+            message: error.message,
+          });
+      }
+    }
+
+    // eslint-disable-next-line n/no-callback-literal
+  };
   const onChangeFileUrls = (fileUrl: string, index: number): void => {
     const newFileUrls = [...fileUrls];
     newFileUrls[index] = fileUrl;
     setFileUrls(newFileUrls);
-    console.log(newFileUrls);
+    // console.log(newFileUrls);
   };
 
   const onClickWrite = async (): Promise<void> => {
@@ -142,7 +181,6 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
         return;
       }
       const ref = doc(db, "Board", router.query.boardId);
-      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
       void updateDoc(ref, {
         ...updateBoardInput,
         updatedAt: serverTimestamp(),
@@ -181,6 +219,9 @@ export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
       onClickUpdate={onClickUpdate}
       onChangeInputs={onChangeInputs}
       onChangeFileUrls={onChangeFileUrls}
+      onChangeContents={onChangeContents}
+      onUploadImage={onUploadImage}
+      editorRef={editorRef}
       errors={errors}
       data={props.data}
       fileUrls={fileUrls}

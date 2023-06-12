@@ -5,7 +5,15 @@ import type { IBoardWriteUIProps } from "./BoardWrite.types";
 import FileUpload from "../../../commons/upload/FileUpload.container";
 import { v4 as uuidv4 } from "uuid";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor } from "@toast-ui/react-editor";
+// import { Editor } from "@toast-ui/react-editor";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(
+  async () => await import("../../../commons/editor/TuiEditor"),
+  {
+    ssr: false,
+  }
+);
 
 export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
   return (
@@ -55,10 +63,10 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
           />
         </Form.Item> */}
         <Editor
-          previewStyle="vertical"
-          height="400px"
-          initialEditType="markdown"
-          initialValue="hello"
+          initialValue={String(props.data?.contents) ?? ""}
+          editorRef={props.editorRef}
+          onChangeContents={props.onChangeContents}
+          onUploadImage={props.onUploadImage}
         />
         {props.fileUrls.map((el, index) => (
           <FileUpload

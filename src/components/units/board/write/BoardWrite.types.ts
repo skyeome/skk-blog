@@ -1,7 +1,13 @@
-import type { ChangeEvent, JSXElementConstructor, ReactElement } from "react";
+import type {
+  ChangeEvent,
+  JSXElementConstructor,
+  ReactElement,
+  RefObject,
+} from "react";
 import type { DocumentData } from "firebase/firestore";
 // import type { IQuery } from "../../../../commons/types/generated/types";
 import type { NotificationInstance } from "antd/es/notification/interface";
+import type { Editor } from "@toast-ui/react-editor";
 
 export interface IBoardWriteProps {
   isEdit: boolean;
@@ -15,6 +21,12 @@ export interface IBoardWriteUIProps {
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => void;
   onChangeFileUrls: (fileUrls: string, index: number) => void;
+  onChangeContents: () => void;
+  onUploadImage: (
+    blob: Blob | File,
+    callback: (url: string, text?: string) => void
+  ) => Promise<void>;
+  editorRef: RefObject<Editor>;
   errors: IBoardWriteErrors;
   data?: DocumentData;
   fileUrls: string[];

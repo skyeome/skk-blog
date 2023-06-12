@@ -7,6 +7,7 @@ import {
   ClockCircleOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import TuiViewer from "../../../commons/editor/TuiViewer";
 
 export default function BoardDetailUI(props: IBoardDetailProps): JSX.Element {
   return (
@@ -28,7 +29,8 @@ export default function BoardDetailUI(props: IBoardDetailProps): JSX.Element {
       </S.topKv>
       {props.data !== undefined ? (
         <>
-          <p>{props.data?.contents}</p>
+          <TuiViewer contents={props.data?.contents} />
+          {/* <p>{props.data?.contents}</p> */}
           <div>
             <Button
               type="primary"
