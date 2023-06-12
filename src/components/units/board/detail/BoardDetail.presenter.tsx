@@ -14,21 +14,21 @@ export default function BoardDetailUI(props: IBoardDetailProps): JSX.Element {
       <S.topKv>
         <S.topKvBox>
           <S.topKvCategory>자유게시판</S.topKvCategory>
-          <S.topKvTitle>{props.data?.fetchBoard.title}</S.topKvTitle>
+          <S.topKvTitle>{props.data?.title}</S.topKvTitle>
           <S.topKvInfos>
             <p>
-              <UserOutlined rev={undefined} /> {props.data?.fetchBoard.writer}
+              <UserOutlined rev={undefined} /> {props.data?.writer}
             </p>
             <p>
               <ClockCircleOutlined rev={undefined} />{" "}
-              {getDate(props.data?.fetchBoard.createdAt)}
+              {getDate(props.data?.createdAt?.toDate())}
             </p>
           </S.topKvInfos>
         </S.topKvBox>
       </S.topKv>
       {props.data !== undefined ? (
         <>
-          <p>{props.data?.fetchBoard.contents}</p>
+          <p>{props.data?.contents}</p>
           <div>
             <Button
               type="primary"

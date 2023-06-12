@@ -1,10 +1,11 @@
 import type { ChangeEvent, JSXElementConstructor, ReactElement } from "react";
-import type { IQuery } from "../../../../commons/types/generated/types";
+import type { DocumentData } from "firebase/firestore";
+// import type { IQuery } from "../../../../commons/types/generated/types";
 import type { NotificationInstance } from "antd/es/notification/interface";
 
 export interface IBoardWriteProps {
   isEdit: boolean;
-  data?: Pick<IQuery, "fetchBoard">;
+  data?: DocumentData;
 }
 export interface IBoardWriteUIProps {
   isEdit: boolean;
@@ -15,7 +16,7 @@ export interface IBoardWriteUIProps {
   ) => void;
   onChangeFileUrls: (fileUrls: string, index: number) => void;
   errors: IBoardWriteErrors;
-  data?: Pick<IQuery, "fetchBoard">;
+  data?: DocumentData;
   fileUrls: string[];
   api: NotificationInstance;
   contextHolder: ReactElement<any, string | JSXElementConstructor<any>>;

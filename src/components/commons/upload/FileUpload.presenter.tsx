@@ -7,7 +7,7 @@ export default function FileUploadUI(props: IFileUploadUIProps): JSX.Element {
     <>
       {props.fileUrl !== "" ? (
         <S.FileUploadWrap onClick={props.onClickUpload}>
-          <img src={`https://storage.googleapis.com/${props.fileUrl}`} />
+          <img src={props.fileUrl} />
         </S.FileUploadWrap>
       ) : (
         <S.FileUploadWrap onClick={props.onClickUpload}>

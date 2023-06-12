@@ -19,8 +19,8 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
                 placeholder="이름을 적어주세요."
                 prefix={<UserOutlined rev={undefined} />}
                 onChange={props.onChangeInputs}
-                defaultValue={props.data?.fetchBoard.writer ?? ""}
-                readOnly={Boolean(props.data?.fetchBoard.writer)}
+                defaultValue={props.data?.writer ?? ""}
+                readOnly={Boolean(props.data?.writer)}
               />
             </Form.Item>
           </Col>
@@ -39,7 +39,7 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
           <Input
             id="title"
             placeholder="제목을 적어주세요."
-            defaultValue={props.data?.fetchBoard.title}
+            defaultValue={props.data?.title}
             onChange={props.onChangeInputs}
           />
         </Form.Item>
@@ -48,7 +48,7 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
             id="contents"
             rows={4}
             placeholder="내용을 작성해주세요."
-            defaultValue={props.data?.fetchBoard.contents}
+            defaultValue={props.data?.contents}
             onChange={props.onChangeInputs}
           />
         </Form.Item>

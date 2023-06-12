@@ -1,5 +1,5 @@
 import * as S from "./LayoutFooter.styles";
-export default function LayoutFooterUI(): JSX.Element {
+export default function LayoutFooter(): JSX.Element {
   return (
     <S.Footer>
       <S.copyright>

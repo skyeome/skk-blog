@@ -4,6 +4,10 @@ export const BoardListItemWrap = styled.div`
   > div {
     display: flex;
     flex-wrap: wrap;
+    a {
+      display: block;
+      width: 100%;
+    }
   }
 `;
 export const BoardListItemImg = styled.div`

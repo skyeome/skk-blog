@@ -7,7 +7,7 @@ const MENU_ITEMS = [
   { link: "/notice", text: "공지사항" },
 ];
 
-export default function LayoutHeaderUI(): JSX.Element {
+export default function LayoutHeader(): JSX.Element {
   return (
     <>
       <S.Header>

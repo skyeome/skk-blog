@@ -1,5 +1,5 @@
-import LayoutFooter from "./footer/LayoutFooter.container";
-import LayoutHeader from "./header/LayoutHeader.container";
+import LayoutFooter from "./footer/LayoutFooter.index";
+import LayoutHeader from "./header/LayoutHeader.index";
 import { Wrapper } from "./header/LayoutHeader.styles";
 
 interface ILayoutProps {
