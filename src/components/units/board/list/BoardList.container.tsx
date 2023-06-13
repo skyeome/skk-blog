@@ -1,59 +1,37 @@
 import { useState, useEffect } from "react";
-// import { useQuery } from "@apollo/client";
+import type { IBoardList } from "../../../../commons/hooks/queries/useQueryFetchBoards";
+import {
+  useQueryFetchBoards,
+  useQueryFetchMoreBoards,
+} from "../../../../commons/hooks/queries/useQueryFetchBoards";
 import BoardListUI from "./BoardList.presenter";
-// import { FETCH_BOARDS, FETCH_BOARDS_COUNT } from "./BoardList.queries";
-// import type {
-//   IQuery,
-//   IQueryFetchBoardsArgs,
-//   IQueryFetchBoardsCountArgs,
-// } from "../../../../commons/types/generated/types";
-import type { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../../../../commons/libraries/firebase";
 
 export default function BoardList(): JSX.Element {
-  const [datas, setDatas] =
-    useState<Array<QueryDocumentSnapshot<DocumentData>>>();
-  const getDatas = async (): Promise<void> => {
-    const q = query(collection(db, "Board"));
-    const querySnapshot = await getDocs(q);
-    const datas = querySnapshot.docs;
-    setDatas(datas);
-  };
+  const [posts, setPosts] = useState<IBoardList[]>();
+  const [lastKey, setLastKey] = useState("");
   useEffect(() => {
-    void getDatas();
+    void useQueryFetchBoards()
+      .then((res) => {
+        setPosts(res.posts);
+        setLastKey(res.lastKey);
+      })
+      .catch((err) => {
+        if (err instanceof Error) alert(err.message);
+      });
   }, []);
 
-  // const { data, fetchMore } = useQuery<
-  //   Pick<IQuery, "fetchBoards">,
-  //   IQueryFetchBoardsArgs
-  // >(FETCH_BOARDS);
+  const onLoadMore = (key: any): void => {
+    console.log(key);
+    if (key.length <= 0) return;
+    void useQueryFetchMoreBoards(key)
+      .then((res) => {
+        setLastKey(res.lastKey); // add new posts to old posts
+        setPosts((prev) => prev?.concat(res.posts));
+      })
+      .catch((err) => {
+        if (err instanceof Error) alert(err.message);
+      });
+  };
 
-  // const { data: dataBoardsCount } = useQuery<
-  //   Pick<IQuery, "fetchBoardsCount">,
-  //   IQueryFetchBoardsCountArgs
-  // >(FETCH_BOARDS_COUNT);
-
-  // const onLoadMore = (): void => {
-  //   if (data === undefined) return;
-  //   void fetchMore({
-  //     variables: {
-  //       page: Math.ceil((data?.fetchBoards.length ?? 10) / 10) + 1,
-  //     },
-  //     updateQuery: (prev, { fetchMoreResult }) => {
-  //       if (fetchMoreResult.fetchBoards === undefined)
-  //         return { fetchBoards: [...prev.fetchBoards] };
-  //       return {
-  //         fetchBoards: [...prev.fetchBoards, ...fetchMoreResult.fetchBoards],
-  //       };
-  //     },
-  //   });
-  // };
-  return (
-    <BoardListUI
-      data={datas}
-      // onLoadMore={onLoadMore}
-      // dataBoardsCount={dataBoardsCount}
-    />
-  );
+  return <BoardListUI data={posts} onLoadMore={onLoadMore} lastKey={lastKey} />;
 }

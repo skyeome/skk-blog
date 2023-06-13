@@ -13,4 +13,7 @@ export const globalStyle = css`
     text-decoration: none;
     color: inherit;
   }
+  .toastui-editor-contents img {
+    max-width: 100%;
+  }
 `;

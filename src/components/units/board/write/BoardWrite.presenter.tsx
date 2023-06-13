@@ -63,7 +63,7 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
           />
         </Form.Item> */}
         <Editor
-          initialValue={String(props.data?.contents) ?? ""}
+          initialValue={props.data?.contents}
           editorRef={props.editorRef}
           onChangeContents={props.onChangeContents}
           onUploadImage={props.onUploadImage}

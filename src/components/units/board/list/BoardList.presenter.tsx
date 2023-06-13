@@ -1,7 +1,7 @@
 import type { IBoardListProps } from "./BoardList.types";
-// import InfiniteScroller from "react-infinite-scroller";
+import InfiniteScroller from "react-infinite-scroller";
 import BoardListItem from "./BoardListItem.presenter";
-import { Affix, Button } from "antd";
+import { Affix, Button, Skeleton } from "antd";
 import { BoardListItemWrap } from "./BoardList.styles";
 import { EditOutlined } from "@ant-design/icons";
 import Link from "next/link";
@@ -10,28 +10,21 @@ export default function BoardListUI(props: IBoardListProps): JSX.Element {
   return (
     <>
       <BoardListItemWrap>
-        {/* {props.data !== undefined ? (
+        {props.data !== undefined ? (
           <InfiniteScroller
-            loadMore={props.onLoadMore}
-            hasMore={true}
-            loader={<div>loading...</div>}
+            loadMore={() => {
+              props.onLoadMore(props.lastKey ?? "");
+            }}
+            hasMore={props.lastKey.toString() !== ""}
+            loader={<Skeleton />}
           >
-            {props.data?.fetchBoards.map((el) => (
-              <BoardListItem key={el._id} el={el} colCounts={2} />
+            {props.data?.map((el) => (
+              <BoardListItem key={el.id} el={el} colCounts={2} />
             ))}
-            
           </InfiniteScroller>
         ) : (
           <Skeleton />
-        )} */}
-        {props.data?.map((el) => (
-          <BoardListItem
-            key={el.id}
-            boardId={el.id}
-            el={el.data({ serverTimestamps: "estimate" })}
-            colCounts={2}
-          />
-        ))}
+        )}
       </BoardListItemWrap>
       <Affix offsetBottom={10}>
         <Link href="/free/new">

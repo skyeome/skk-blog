@@ -17,7 +17,7 @@ export default function TuiEditor(props: IEditorProps): JSX.Element {
       previewStyle="vertical"
       height="400px"
       initialEditType="markdown"
-      initialValue={props.initialValue}
+      initialValue={props.initialValue ?? ""}
       ref={props.editorRef}
       onChange={props.onChangeContents}
       hooks={{ addImageBlobHook: props.onUploadImage }}
