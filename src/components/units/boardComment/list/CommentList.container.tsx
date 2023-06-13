@@ -1,20 +1,18 @@
-import { useQuery } from "@apollo/client";
-import CommentListUI from "./CommentList.presenter";
-import { FETCH_BOARD_COMMENTS } from "./CommentList.queries";
-import type {
-  IQuery,
-  IQueryFetchBoardCommentsArgs,
-} from "../../../../commons/types/generated/types";
-import { useRouter } from "next/router";
+import { Divider } from "antd";
+import { useQueryIdCheck } from "../../../../commons/hooks/custom/useQueryIdCheck";
+import { useQueryFetchComment } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import CommentListItem from "./CommentListItem.presenter";
 
 export default function CommentList(): JSX.Element {
-  const router = useRouter();
-  const { data } = useQuery<
-    Pick<IQuery, "fetchBoardComments">,
-    IQueryFetchBoardCommentsArgs
-  >(FETCH_BOARD_COMMENTS, {
-    variables: { boardId: router.query.boardId as string },
-  });
+  const { id } = useQueryIdCheck("boardId");
+  const { data } = useQueryFetchComment({ boardId: id });
 
-  return <CommentListUI data={data} onLoadMore={() => {}} />;
+  return (
+    <>
+      <Divider>{data?.length} Comments</Divider>
+      {data?.map((el) => (
+        <CommentListItem key={el.id} el={el} />
+      ))}
+    </>
+  );
 }

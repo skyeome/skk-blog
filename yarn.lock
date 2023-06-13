@@ -6411,6 +6411,7 @@ __metadata:
     react: 17.0.2
     react-daum-postcode: ^3.1.1
     react-dom: 17.0.2
+    react-hook-form: ^7.44.3
     react-infinite-scroller: ^1.2.6
     react-player: ^2.11.0
     react-slick: ^0.29.0
@@ -7865,6 +7866,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.44.3":
+  version: 7.44.3
+  resolution: "react-hook-form@npm:7.44.3"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 8dc97e705d28d842c60fd79b0f07b8b045c458c234e3bf422baab87a844d0ebecbdf3e349538eaaa5c12366cd85169f60a52ed84dd31cdd99729899e424548bf
+  languageName: node
+  linkType: hard
+
 "react-infinite-scroller@npm:^1.2.6":
   version: 1.2.6
   resolution: "react-infinite-scroller@npm:1.2.6"
@@ -8841,11 +8851,11 @@ __metadata:
 
 "typescript@patch:typescript@*#~builtin<compat/typescript>":
   version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=289587"
+  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=23ec76"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2160f7ad975c59b2f5816817d3916be1d156c5688a7517602b3b640c5015e740f4ba933996ac85371d68f7bbdd41602150fb8b68334122ac637fdb5418085e7a
+  checksum: 3e2ab0772908676d9b9cb83398c70003a3b08e1c6b3b122409df9f4b520f2fdaefa20c3d7d57dce283fed760ac94b3ce94d4a7fa875127b67852904425a1f0dc
   languageName: node
   linkType: hard
 

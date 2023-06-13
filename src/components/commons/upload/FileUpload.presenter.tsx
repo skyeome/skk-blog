@@ -4,7 +4,7 @@ import type { IFileUploadUIProps } from "./FileUpload.types";
 
 export default function FileUploadUI(props: IFileUploadUIProps): JSX.Element {
   return (
-    <>
+    <div>
       {props.fileUrl !== "" ? (
         <S.FileUploadWrap onClick={props.onClickUpload}>
           <img src={props.fileUrl} />
@@ -23,6 +23,6 @@ export default function FileUploadUI(props: IFileUploadUIProps): JSX.Element {
         ref={props.fileRef}
         onChange={props.onChangeFile}
       />
-    </>
+    </div>
   );
 }

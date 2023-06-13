@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import "@toast-ui/editor/dist/toastui-editor.css";
 // import { Editor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
+import { FileUploadWrap } from "./BoardWrite.styles";
 
 const Editor = dynamic(
   async () => await import("../../../commons/editor/TuiEditor"),
@@ -68,15 +69,17 @@ export default function BoardWriteUI(props: IBoardWriteUIProps): JSX.Element {
           onChangeContents={props.onChangeContents}
           onUploadImage={props.onUploadImage}
         />
-        {props.fileUrls.map((el, index) => (
-          <FileUpload
-            key={uuidv4()}
-            api={props.api}
-            fileUrl={el}
-            onChangeFileUrls={props.onChangeFileUrls}
-            index={index}
-          />
-        ))}
+        <FileUploadWrap>
+          {props.fileUrls.map((el, index) => (
+            <FileUpload
+              key={uuidv4()}
+              api={props.api}
+              fileUrl={el}
+              onChangeFileUrls={props.onChangeFileUrls}
+              index={index}
+            />
+          ))}
+        </FileUploadWrap>
         <Button
           onClick={props.isEdit ? props.onClickUpdate : props.onClickWrite}
           type="primary"

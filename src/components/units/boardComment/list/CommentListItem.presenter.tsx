@@ -1,10 +1,10 @@
 import { Avatar } from "antd";
-import type { IBoardComment } from "../../../../commons/types/generated/types";
+import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
 import * as S from "./CommentList.styles";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function CommentListItem(props: {
-  el: IBoardComment;
+  el: IBoardCommentData;
 }): JSX.Element {
   return (
     <S.CommentListItemWrap>
