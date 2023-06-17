@@ -31,8 +31,16 @@ export default function LayoutHeader(): JSX.Element {
             </S.HeaderNav>
           </S.HeaderLeft>
           <S.HeaderUsers>
-            <S.LinkBtn type="link">로그인</S.LinkBtn>
-            <S.LinkBtn type="text">회원가입</S.LinkBtn>
+            <S.LinkBtn type="link">
+              <S.NextLink href={"/auth/signin"}>
+                <a>로그인</a>
+              </S.NextLink>
+            </S.LinkBtn>
+            <S.LinkBtn type="text">
+              <S.NextLink href={"/auth/signup"}>
+                <a>회원가입</a>
+              </S.NextLink>
+            </S.LinkBtn>
           </S.HeaderUsers>
         </S.HeaderWrap>
       </S.Header>
