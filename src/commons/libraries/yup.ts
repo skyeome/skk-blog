@@ -5,6 +5,7 @@ export const signUpSchema = yup.object({
     .string()
     .required("이메일 주소(ID)를 입력해 주세요")
     .email("이메일 형식으로 입력해주세요"),
+  nickname: yup.string().required("닉네임을 입력해 주세요"),
   password: yup
     .string()
     .required("비밀번호를 입력해 주세요")

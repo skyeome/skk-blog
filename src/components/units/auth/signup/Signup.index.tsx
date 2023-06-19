@@ -1,39 +1,16 @@
 import { Button, Checkbox, Form, Input, Collapse } from "antd";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import * as S from "./Signup.styles";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import type { SignUpInputType } from "./Signup.types";
-import { signUpSchema } from "../../../../commons/libraries/yup";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../../commons/libraries/firebase";
+import { Controller } from "react-hook-form";
 
-export default function Signup(): JSX.Element {
-  const router = useRouter();
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<SignUpInputType>({
-    resolver: yupResolver(signUpSchema),
-  });
+import { useMutationCreateUser } from "../../../../commons/hooks/mutations/useMutationCreateUser";
+import type { ISignupProps } from "./Signup.types";
 
-  const onSubmit = handleSubmit((data: SignUpInputType) => {
-    createUserWithEmailAndPassword(auth, data.userId, data.password)
-      .then((userCredential) => {
-        console.log(userCredential.user);
-        void router.push("/auth/signin");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, ": ", errorMessage);
-      });
-    console.log(data);
-  });
+export default function Signup(props: ISignupProps): JSX.Element {
+  const { control, errors, onSubmit } = useMutationCreateUser(props.api);
   return (
     <S.SignWrap>
+      {props.contextHolder}
       <S.SignContent>
         <S.SignTitle>
           이메일로 <span>가입하기</span>
@@ -84,6 +61,20 @@ export default function Signup(): JSX.Element {
               <strong>영문 숫자 특수기호 조합 8자리 이상</strong>으로
               입력해주세요
             </S.SignDesc>
+          </Form.Item>
+          <Form.Item>
+            <Controller
+              name="nickname"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  onChange={onChange}
+                  value={value}
+                  placeholder="닉네임을 입력해 주세요"
+                />
+              )}
+            />
+            {errors.nickname?.message}
           </Form.Item>
           <div>
             <Collapse defaultActiveKey={["1"]}>

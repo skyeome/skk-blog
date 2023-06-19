@@ -1,6 +1,7 @@
 import Image from "next/image";
 import * as S from "./LayoutHeader.styles";
 import Link from "next/link";
+import { AuthUser } from "./LayoutAuthUser.index";
 
 const MENU_ITEMS = [
   { link: "/free", text: "자유게시판" },
@@ -30,18 +31,7 @@ export default function LayoutHeader(): JSX.Element {
               ))}
             </S.HeaderNav>
           </S.HeaderLeft>
-          <S.HeaderUsers>
-            <S.LinkBtn type="link">
-              <S.NextLink href={"/auth/signin"}>
-                <a>로그인</a>
-              </S.NextLink>
-            </S.LinkBtn>
-            <S.LinkBtn type="text">
-              <S.NextLink href={"/auth/signup"}>
-                <a>회원가입</a>
-              </S.NextLink>
-            </S.LinkBtn>
-          </S.HeaderUsers>
+          <AuthUser />
         </S.HeaderWrap>
       </S.Header>
     </>
