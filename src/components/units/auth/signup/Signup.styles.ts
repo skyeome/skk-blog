@@ -55,3 +55,8 @@ export const SignConfirmWrap = styled.div`
     font-family: "Noto Sans KR", Arial, Helvetica, sans-serif;
   }
 `;
+
+export const SignResetPass = styled.a`
+  color: #333;
+  font-weight: bold;
+`;

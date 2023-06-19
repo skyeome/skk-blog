@@ -1,39 +1,17 @@
 import { Button, Form, Input } from "antd";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import * as S from "../signup/Signup.styles";
-import { Controller, useForm } from "react-hook-form";
-import type { SignInInputType } from "./Signin.types";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { signInSchema } from "../../../../commons/libraries/yup";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../../commons/libraries/firebase";
+import { Controller } from "react-hook-form";
+import type { ISigninProps } from "./Signin.types";
 
-export default function Signin(): JSX.Element {
-  const router = useRouter();
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<SignInInputType>({
-    resolver: yupResolver(signInSchema),
-  });
+import { useMutationLoginUser } from "../../../../commons/hooks/mutations/useMutationLoginUser";
 
-  const onSubmit = handleSubmit((data: SignInInputType) => {
-    signInWithEmailAndPassword(auth, data.userId, data.password)
-      .then((userCredential) => {
-        console.log(userCredential.user);
-        void router.push("/");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, ": ", errorMessage);
-      });
-  });
+export default function Signin(props: ISigninProps): JSX.Element {
+  const { control, errors, onSubmit } = useMutationLoginUser(props.api);
 
   return (
     <S.SignWrap>
+      {props.contextHolder}
       <S.SignContent>
         <S.SignTitle>
           이메일로 <span>로그인</span>
@@ -69,7 +47,7 @@ export default function Signin(): JSX.Element {
             <S.SignDesc>
               비밀번호를 잊으셨나요? <span>&nbsp;</span>
               <Link href="/auth/find-password">
-                <a>비밀번호 재설정</a>
+                <S.SignResetPass>비밀번호 재설정</S.SignResetPass>
               </Link>
             </S.SignDesc>
           </Form.Item>

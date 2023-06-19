@@ -21,7 +21,7 @@ export default function BoardList(): JSX.Element {
   }, []);
 
   const onLoadMore = (key: any): void => {
-    console.log(key);
+    // console.log(key);
     if (key.length <= 0) return;
     void useQueryFetchMoreBoards(key)
       .then((res) => {

@@ -1,10 +1,41 @@
 import * as yup from "yup";
+// import { debounce } from "lodash";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "./firebase";
 
+const chkEmail = async (
+  value: string,
+  values: yup.TestContext<any>
+): Promise<boolean> => {
+  try {
+    const sn = await getDocs(
+      query(collection(db, "User"), where("email", "==", value))
+    );
+    const data = sn.docs;
+    if (data.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    values.createError({ path: "purchase_code" });
+    return false;
+  }
+};
+
+// let timer: NodeJS.Timeout | null = null;
 export const signUpSchema = yup.object({
   userId: yup
     .string()
     .required("이메일 주소(ID)를 입력해 주세요")
-    .email("이메일 형식으로 입력해주세요"),
+    .email("이메일 형식으로 입력해주세요")
+    .test(
+      "isInUseEmail",
+      "이미 사용중인 이메일 입니다.",
+      async (value, values) => {
+        return await chkEmail(value, values);
+      }
+    ),
   nickname: yup.string().required("닉네임을 입력해 주세요"),
   password: yup
     .string()
@@ -42,4 +73,11 @@ export const signInSchema = yup.object({
     })
     .max(15, "비밀번호는 15자리 이하여야 합니다.")
     .min(8, "비밀번호는 8자리 이상이어야 합니다."),
+});
+
+export const resetPassSchema = yup.object({
+  email: yup
+    .string()
+    .required("이메일 주소(ID)를 입력해 주세요")
+    .email("이메일 형식으로 입력해주세요"),
 });

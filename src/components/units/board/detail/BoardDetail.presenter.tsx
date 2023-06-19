@@ -8,10 +8,14 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import TuiViewer from "../../../commons/editor/TuiViewer";
+import Head from "next/head";
 
 export default function BoardDetailUI(props: IBoardDetailProps): JSX.Element {
   return (
     <>
+      <Head>
+        <title>{props.data?.title} | 자유게시판</title>
+      </Head>
       <S.topKv>
         <S.topKvBox>
           <S.topKvCategory>자유게시판</S.topKvCategory>

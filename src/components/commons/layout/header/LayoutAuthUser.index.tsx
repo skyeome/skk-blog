@@ -11,6 +11,8 @@ export function AuthUser(): JSX.Element {
     onAuthStateChanged(auth, (user) => {
       if (user !== null) {
         setUser(user);
+      } else {
+        setUser(null);
       }
     });
   }, []);

@@ -2,7 +2,7 @@ import type { BaseSyntheticEvent } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../libraries/firebase";
 import { useForm } from "react-hook-form";
-import type { Control, FieldErrors } from "react-hook-form";
+import type { Control, FieldErrors, UseFormTrigger } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../../libraries/yup";
@@ -18,20 +18,23 @@ export const useMutationCreateUser = (
   onSubmit: (
     e?: BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
+  trigger: UseFormTrigger<SignUpInputType>;
 } => {
   const router = useRouter();
   const {
     handleSubmit,
     formState: { errors },
     control,
+    trigger,
   } = useForm<SignUpInputType>({
     resolver: yupResolver(signUpSchema),
+    mode: "all",
   });
 
   const onSubmit = handleSubmit((data: SignUpInputType) => {
     createUserWithEmailAndPassword(auth, data.userId, data.password)
       .then((userCredential) => {
-        console.log(userCredential.user);
+        // console.log(userCredential.user);
         addDoc(collection(db, "User"), {
           uid: userCredential.user.uid,
           email: userCredential.user.email,
@@ -49,8 +52,9 @@ export const useMutationCreateUser = (
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, ": ", errorMessage);
+        if (errorCode === "auth/email-already-in-use")
+          api.error({ message: "이미 사용중인 이메일 입니다." });
+        // console.log(errorCode, ": ", errorMessage);
       });
   });
 
@@ -58,5 +62,6 @@ export const useMutationCreateUser = (
     control,
     errors,
     onSubmit,
+    trigger,
   };
 };
