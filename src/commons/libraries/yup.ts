@@ -81,3 +81,8 @@ export const resetPassSchema = yup.object({
     .required("이메일 주소(ID)를 입력해 주세요")
     .email("이메일 형식으로 입력해주세요"),
 });
+
+export const boardWriteSchema = yup.object({
+  title: yup.string(),
+  category: yup.array(),
+});

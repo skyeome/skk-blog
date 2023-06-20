@@ -27,7 +27,6 @@ export interface IBoardWriteUIProps {
     callback: (url: string, text?: string) => void
   ) => Promise<void>;
   editorRef: RefObject<Editor>;
-  errors: IBoardWriteErrors;
   data?: DocumentData;
   fileUrls: string[];
   api: NotificationInstance;
@@ -41,11 +40,13 @@ export interface IBoardWriteInputs {
   youtubeUrl?: string;
 }
 export interface IBoardUpdateInputs {
-  title: string;
-  contents: string;
-  youtubeUrl?: string;
+  title?: string;
+  contents?: string;
+  category?: string[];
+  images?: string[];
 }
-export interface IBoardWriteErrors {
-  id: string;
-  message: string;
+
+export interface IBoardWriteInputTypes {
+  title: string | undefined;
+  category: any[] | undefined;
 }

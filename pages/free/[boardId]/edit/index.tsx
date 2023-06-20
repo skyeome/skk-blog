@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import BoardWrite from "../../../../src/components/units/board/write/BoardWrite.container";
+// import BoardWrite from "../../../../src/components/units/board/write/BoardWrite.container";
 // import { useQuery } from "@apollo/client";
 // import type {
 //   IQuery,
@@ -11,7 +11,14 @@ import type { DocumentData } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../../../src/commons/libraries/firebase";
-
+import dynamic from "next/dynamic";
+const BoardWrite = dynamic(
+  async () =>
+    await import(
+      "../../../../src/components/units/board/write/BoardWrite.index"
+    ),
+  { ssr: false }
+);
 export default function BoardUpdatePage(): JSX.Element {
   const [data, setData] = useState<DocumentData | undefined>();
   const router = useRouter();
