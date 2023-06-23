@@ -1,46 +1,47 @@
+import { useQueryFetchBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
+import Head from "next/head";
 import * as S from "./BoardDetail.styles";
-import { getDate } from "../../../../commons/libraries/utils";
-import type { IBoardDetailProps } from "./BoardDetail.types";
 import { Button, Skeleton } from "antd";
 import {
-  UserOutlined,
   ClockCircleOutlined,
   EditOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import { getDate } from "../../../../commons/libraries/utils";
 import TuiViewer from "../../../commons/editor/TuiViewer";
-import Head from "next/head";
 
-export default function BoardDetailUI(props: IBoardDetailProps): JSX.Element {
+export default function BoardDetail(): JSX.Element {
+  const { data, onClickEditBtn } = useQueryFetchBoard();
   return (
     <>
       <Head>
-        <title>{props.data?.title} | 자유게시판</title>
+        <title>{data?.title} | 자유게시판</title>
       </Head>
       <S.topKv>
         <S.topKvBox>
           <S.topKvCategory>자유게시판</S.topKvCategory>
-          <S.topKvTitle>{props.data?.title}</S.topKvTitle>
+          <S.topKvTitle>{data?.title}</S.topKvTitle>
           <S.topKvInfos>
             <p>
-              <UserOutlined rev={undefined} /> {props.data?.writer}
+              <UserOutlined rev={undefined} /> {data?.writer}
             </p>
             <p>
               <ClockCircleOutlined rev={undefined} />{" "}
-              {getDate(props.data?.createdAt?.toDate())}
+              {getDate(data?.createdAt?.toDate().toDateString() ?? "")}
             </p>
           </S.topKvInfos>
         </S.topKvBox>
       </S.topKv>
-      {props.data !== undefined ? (
+      {data !== undefined ? (
         <>
-          <TuiViewer contents={props.data?.contents} />
-          {/* <p>{props.data?.contents}</p> */}
+          <TuiViewer contents={data?.contents ?? ""} />
+          {/* <p>{data?.contents}</p> */}
           <div>
             <Button
               type="primary"
               icon={<EditOutlined rev={undefined} />}
               size="large"
-              onClick={props.onClickEditBtn}
+              onClick={onClickEditBtn}
             >
               수정
             </Button>
