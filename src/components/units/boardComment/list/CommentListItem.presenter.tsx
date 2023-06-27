@@ -4,6 +4,7 @@ import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQue
 import * as S from "./CommentList.styles";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import CommentWrite from "../write/CommentWrite.index";
+import { useMutationDeleteComment } from "../../../../commons/hooks/mutations/useMutationDeleteComent";
 
 export default function CommentListItem(props: {
   el: IBoardCommentData;
@@ -15,6 +16,7 @@ export default function CommentListItem(props: {
   const onClickSubmit = (): void => {
     setIsEdit(false);
   };
+  const { onClickDelete } = useMutationDeleteComment(props.el.id);
   return (
     <S.CommentListItemWrap>
       {isEdit ? (
@@ -44,7 +46,7 @@ export default function CommentListItem(props: {
           </S.CommentContentsWrap>
           <S.CommentEditWrap>
             <EditOutlined onClick={onClickEdit} rev={undefined} />
-            <DeleteOutlined rev={undefined} />
+            <DeleteOutlined onClick={onClickDelete} rev={undefined} />
           </S.CommentEditWrap>
         </>
       )}
