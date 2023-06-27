@@ -19,6 +19,7 @@ export const useMutationLoginUser = (
   ) => Promise<void>;
 } => {
   const router = useRouter();
+  console.log(router);
   const {
     handleSubmit,
     formState: { errors },
@@ -30,7 +31,8 @@ export const useMutationLoginUser = (
   const onSubmit = handleSubmit((data: SignInInputType) => {
     signInWithEmailAndPassword(auth, data.userId, data.password)
       .then((userCredential) => {
-        void router.push("/");
+        router.back();
+        // void router.push("/");
       })
       .catch((error) => {
         const errorCode = error.code;

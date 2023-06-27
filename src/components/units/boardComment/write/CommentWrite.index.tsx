@@ -4,17 +4,31 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useQueryIdCheck } from "../../../../commons/hooks/custom/useQueryIdCheck";
 import type { ICommentValues } from "../../../../commons/hooks/custom/useBoardComment";
 import { useBoardComment } from "../../../../commons/hooks/custom/useBoardComment";
+import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
 
-export default function CommentWrite(): JSX.Element {
+interface ICommentWriteProps {
+  isEdit: boolean;
+  data?: Omit<IBoardCommentData, "password">;
+  onClickSubmit?: () => void;
+}
+
+export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
   const { id } = useQueryIdCheck("boardId");
-  const { handleSubmit, setValue, control } = useForm<ICommentValues>({
-    defaultValues: {
-      star: 0,
-    },
-  });
-  const { onClickWrite, setRating } = useBoardComment({
+  const { handleSubmit, setValue, reset, control, formState } =
+    useForm<ICommentValues>({
+      defaultValues: {
+        writer: props.data?.writer ?? "",
+        contents: props.data?.contents ?? "",
+        star: props.data?.star ?? 0,
+      },
+    });
+  const { onClickWrite, onClickUpdate, setRating } = useBoardComment({
     boardId: id,
+    commentId: props.data?.id,
+    formState,
     setValue,
+    reset,
+    onClickSubmit: props.onClickSubmit,
   });
   return (
     <>
@@ -29,6 +43,7 @@ export default function CommentWrite(): JSX.Element {
                 value={value}
                 placeholder="이름을 적어주세요."
                 prefix={<UserOutlined rev={undefined} />}
+                disabled={props.isEdit}
               />
             )}
           />
@@ -48,7 +63,7 @@ export default function CommentWrite(): JSX.Element {
           />
         </Col>
         <Col span={8}>
-          <Rate onChange={setRating} />
+          <Rate onChange={setRating} defaultValue={props.data?.star ?? 0} />
         </Col>
       </Row>
       <Space></Space>
@@ -68,8 +83,16 @@ export default function CommentWrite(): JSX.Element {
           />
         </Col>
       </Row>
-      <Button type="primary" size="large" onClick={handleSubmit(onClickWrite)}>
-        댓글 남기기
+      <Button
+        type="primary"
+        size="large"
+        onClick={
+          props.isEdit
+            ? handleSubmit(onClickUpdate)
+            : handleSubmit(onClickWrite)
+        }
+      >
+        {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
       </Button>
     </>
   );

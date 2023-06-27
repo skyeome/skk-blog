@@ -13,6 +13,8 @@ import {
   type QueryDocumentSnapshot,
   collection,
   getDocs,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import { db } from "../../../../commons/libraries/firebase";
 
@@ -23,7 +25,11 @@ export default function IndexRatestList(): JSX.Element {
   //   FETCH_BOARDS
   // );
   const getData = async (): Promise<void> => {
-    const q = query(collection(db, "Board"));
+    const q = query(
+      collection(db, "Board"),
+      orderBy("createdAt", "desc"),
+      limit(6)
+    );
     const querySnapshot = await getDocs(q);
     const datas = querySnapshot.docs;
     setData(datas);
