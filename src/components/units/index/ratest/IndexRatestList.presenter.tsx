@@ -34,7 +34,7 @@ export default function IndexRatestListUI(
                       src={
                         String(el.data().images[0]) !== ""
                           ? String(el.data().images[0])
-                          : "/placeholder-image.jpg"
+                          : "https://s3.ap-northeast-2.amazonaws.com/skkblog.com/placeholder-image.jpg"
                       }
                     />
                     <S.RatestListItemTitle>

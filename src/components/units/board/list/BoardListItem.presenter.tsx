@@ -18,7 +18,7 @@ export default function BoardListItem(props: IBoardListItemProps): JSX.Element {
               src={
                 props.el.images[0] !== ""
                   ? props.el.images[0]
-                  : "/placeholder-image.jpg"
+                  : "https://s3.ap-northeast-2.amazonaws.com/skkblog.com/placeholder-image.jpg"
               }
             />
           </BoardListItemImg>
