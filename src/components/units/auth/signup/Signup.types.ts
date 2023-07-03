@@ -4,9 +4,9 @@ export interface SignUpInputType {
   userId: string;
   nickname: string;
   password: string;
-  password2: string;
-  term: boolean;
-  term2: boolean;
+  password2: string | undefined;
+  term: NonNullable<boolean | undefined>;
+  term2: NonNullable<boolean | undefined>;
 }
 export interface ISignupProps {
   api: NotificationInstance;
