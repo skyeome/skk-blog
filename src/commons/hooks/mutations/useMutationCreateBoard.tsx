@@ -130,6 +130,7 @@ export const useMutationCreateBoard = (
     const emptyCategory = JSON.stringify([]);
     const notEmptyCategory = currentCategory !== emptyCategory;
 
+    console.log(inputs.category);
     const markdown = editorRef.current?.getInstance().getMarkdown();
     if (inputs.title === "" && notEmptyCategory && markdown === "") {
       alert("수정한 내용이 없습니다.");
@@ -138,7 +139,8 @@ export const useMutationCreateBoard = (
 
     const updateBoardInput: IBoardUpdateInputs = {};
     if (inputs.title !== undefined) updateBoardInput.title = inputs.title;
-    if (notEmptyCategory) updateBoardInput.category = inputs.category;
+    if (inputs.category !== undefined && notEmptyCategory)
+      updateBoardInput.category = inputs.category;
     if (markdown !== "") updateBoardInput.contents = markdown;
     if (isChangedFiles) updateBoardInput.images = fileUrls;
     if (typeof router.query.boardId !== "string") {
@@ -147,6 +149,7 @@ export const useMutationCreateBoard = (
     }
 
     const ref = doc(db, "Board", router.query.boardId);
+
     updateDoc(ref, {
       ...updateBoardInput,
       updatedAt: serverTimestamp(),
