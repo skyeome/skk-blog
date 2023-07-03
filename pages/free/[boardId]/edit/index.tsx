@@ -22,7 +22,6 @@ const BoardWrite = dynamic(
 export default function BoardUpdatePage(): JSX.Element {
   const [data, setData] = useState<DocumentData | undefined>();
   const router = useRouter();
-  if (typeof router.query.boardId !== "string") return <></>;
 
   // const { data } = useQuery<Pick<IQuery, "fetchBoard">, IQueryFetchBoardArgs>(
   //   FETCH_BOARD,
@@ -30,14 +29,19 @@ export default function BoardUpdatePage(): JSX.Element {
   //     variables: { boardId: router.query.boardId },
   //   }
   // );
-  const getData = async (): Promise<void> => {
-    const docRef = doc(db, "Board", router.query.boardId as string);
-    const docSnap = await getDoc(docRef);
-    console.log(docSnap.data());
-    if (docSnap.exists()) setData(docSnap.data());
-  };
   useEffect(() => {
-    void getData();
+    if (typeof router.query.boardId !== "string") return;
+    const docRef = doc(db, "Board", router.query.boardId);
+    getDoc(docRef)
+      .then((docSnap) => {
+        console.log(docSnap.data());
+        if (docSnap.exists()) setData(docSnap.data());
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+
+    // void getData();
   }, []);
   if (data === undefined) return <Skeleton />;
   return <BoardWrite isEdit={true} data={data} />;
