@@ -45,11 +45,11 @@ export function AuthUser(): JSX.Element {
               <a>로그인</a>
             </NextLink>
           </LinkBtn>
-          <LinkBtn type="text">
+          {/* <LinkBtn type="text">
             <NextLink href={"/auth/signup"}>
               <a>회원가입</a>
             </NextLink>
-          </LinkBtn>
+          </LinkBtn> */}
         </HeaderUsers>
       )}
     </>

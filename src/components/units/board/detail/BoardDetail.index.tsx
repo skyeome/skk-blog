@@ -1,9 +1,10 @@
 import { useQueryFetchBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
 import Head from "next/head";
 import * as S from "./BoardDetail.styles";
-import { Button, Skeleton } from "antd";
+import { Button, Col, Row, Skeleton } from "antd";
 import {
   ClockCircleOutlined,
+  DeleteOutlined,
   EditOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -17,7 +18,7 @@ export default function BoardDetail(): JSX.Element {
       <Head>
         <title>{data?.title} | 자유게시판</title>
       </Head>
-      <S.topKv>
+      <S.topKv bg={data?.images?.[0]}>
         <S.topKvBox>
           <S.topKvCategory>자유게시판</S.topKvCategory>
           <S.topKvTitle>{data?.title}</S.topKvTitle>
@@ -36,16 +37,26 @@ export default function BoardDetail(): JSX.Element {
         <>
           <TuiViewer contents={data?.contents ?? ""} />
           {/* <p>{data?.contents}</p> */}
-          <div>
-            <Button
-              type="primary"
-              icon={<EditOutlined rev={undefined} />}
-              size="large"
-              onClick={onClickEditBtn}
-            >
-              수정
-            </Button>
-          </div>
+          <Row justify="end" style={{ margin: "50px 0 100px" }}>
+            <Col>
+              <Button
+                type="primary"
+                icon={<EditOutlined rev={undefined} />}
+                size="large"
+                onClick={onClickEditBtn}
+              >
+                수정
+              </Button>
+              <Button
+                danger
+                icon={<DeleteOutlined rev={undefined} />}
+                size="large"
+                style={{ marginLeft: "10px" }}
+              >
+                삭제
+              </Button>
+            </Col>
+          </Row>
         </>
       ) : (
         <Skeleton active />

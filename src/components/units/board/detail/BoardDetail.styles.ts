@@ -1,13 +1,17 @@
 import styled from "@emotion/styled";
-export const topKv = styled.div`
-  background: url("/kv-image.jpg") 50% 50% / cover no-repeat;
-  height: 500px;
+export const topKv = styled.div<{ bg: string | undefined }>`
+  background: url(${(props) => (props.bg === "" ? "/kv-image.jpg" : props.bg)})
+    50% 50% / cover no-repeat;
+  aspect-ratio: 2/1;
+  /* height: 500px; */
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 15px 0;
+  margin-bottom: 50px;
 `;
 export const topKvBox = styled.div`
-  width: 98%;
+  width: 88%;
   max-width: 37.5em;
   background-color: #fff;
   padding: 2.5em;

@@ -9,30 +9,23 @@ export const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
 `;
-export const Header = styled.header`
+export const HeaderWrap = styled.div`
+  padding: 0 15px;
+  width: 100%;
+  max-width: 1024px;
   height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
-export const HeaderWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 15px;
-  width: 100%;
-  max-width: 1024px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  z-index: 999;
 `;
 
-export const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-`;
 export const HeaderNav = styled.ul`
   display: flex;
-  margin-left: 40px;
+  margin-left: 0px;
   list-style: none;
   li {
     margin-right: 10px;
@@ -42,11 +35,25 @@ export const HeaderNav = styled.ul`
     }
   }
 `;
-export const HeaderUsers = styled.div``;
-export const Logo = styled.h1`
-  width: 150px;
+export const HeaderUsers = styled.div`
+  width: 90px;
+  margin-left: auto;
+`;
+export const Logo = styled.h1<{ collapsed?: boolean }>`
+  width: ${(props) => (props.collapsed === true ? "40px" : "104px")};
+  height: ${(props) => (props.collapsed === true ? "33px" : "80px")};
+  margin-top: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 `;
 export const LinkBtn = styled(Button)`
   font-family: "Noto Sans KR", sans-serif;
+  font-size: 14px;
 `;
 export const NextLink = styled(Link)``;

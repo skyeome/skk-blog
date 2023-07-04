@@ -6,6 +6,6 @@ export const FileUploadWrap = styled.div`
   display: flex;
   justify-content: flex-start;
   > div {
-    width: 120px;
+    width: 33.3333%;
   }
 `;
