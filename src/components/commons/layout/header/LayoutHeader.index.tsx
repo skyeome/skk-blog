@@ -34,9 +34,9 @@ function LayoutHeader(props: IHeaderProps): JSX.Element {
               <Link href="/">
                 <a>
                   <Image
-                    src="https://s3.ap-northeast-2.amazonaws.com/skkblog.com/hello-seri-logo.webp"
+                    src="https://s3.ap-northeast-2.amazonaws.com/skkblog.com/seri.diary-logo.webp"
                     width={104}
-                    height={80}
+                    height={68}
                     objectFit="cover"
                   />
                 </a>
