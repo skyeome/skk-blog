@@ -1,17 +1,11 @@
 import { useRouter } from "next/router";
-// import BoardWrite from "../../../../src/components/units/board/write/BoardWrite.container";
-// import { useQuery } from "@apollo/client";
-// import type {
-//   IQuery,
-//   IQueryFetchBoardArgs,
-// } from "../../../../src/commons/types/generated/types";
-// import { FETCH_BOARD } from "../../../../src/components/units/board/detail/BoardDetail.queries";
 import { Skeleton } from "antd";
 import type { DocumentData } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../../../src/commons/libraries/firebase";
 import dynamic from "next/dynamic";
+import { userIdCheck } from "../../../../src/components/commons/hocs/loginCheck";
 const BoardWrite = dynamic(
   async () =>
     await import(
@@ -19,16 +13,10 @@ const BoardWrite = dynamic(
     ),
   { ssr: false }
 );
-export default function BoardUpdatePage(): JSX.Element {
+function BoardUpdatePage(): JSX.Element {
   const [data, setData] = useState<DocumentData | undefined>();
   const router = useRouter();
 
-  // const { data } = useQuery<Pick<IQuery, "fetchBoard">, IQueryFetchBoardArgs>(
-  //   FETCH_BOARD,
-  //   {
-  //     variables: { boardId: router.query.boardId },
-  //   }
-  // );
   useEffect(() => {
     if (typeof router.query.boardId !== "string") return;
     const docRef = doc(db, "Board", router.query.boardId);
@@ -40,9 +28,9 @@ export default function BoardUpdatePage(): JSX.Element {
       .catch((error) => {
         alert(error.message);
       });
-
-    // void getData();
   }, []);
   if (data === undefined) return <Skeleton />;
   return <BoardWrite isEdit={true} data={data} />;
 }
+
+export default userIdCheck(BoardUpdatePage);

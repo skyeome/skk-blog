@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
 interface IFetchBoardData {
+  uid?: string | undefined;
   writer?: string | undefined;
   title?: string | undefined;
   contents?: string | undefined;
@@ -44,6 +45,7 @@ export const useQueryFetchBoard = (): {
     getData()
       .then((board) => {
         const boardData: IFetchBoardData = { ...board };
+        boardData.uid = board?.writer;
         if (board?.writer === undefined) return;
         const writerRef = collection(db, "User");
         const q = query(writerRef, where("uid", "==", board.writer));
