@@ -1,7 +1,7 @@
 import { useQueryFetchBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
 import Head from "next/head";
 import * as S from "./BoardDetail.styles";
-import { Button, Col, Row, Skeleton } from "antd";
+import { Button, Col, Row, Skeleton, Modal } from "antd";
 import {
   ClockCircleOutlined,
   DeleteOutlined,
@@ -14,10 +14,12 @@ import { userState } from "../../../../commons/stores";
 import { useRecoilState } from "recoil";
 
 export default function BoardDetail(): JSX.Element {
-  const { data, onClickEditBtn } = useQueryFetchBoard();
+  const [modal, contextHolder] = Modal.useModal();
+  const { data, onClickEditBtn, onClickDeleteBtn } = useQueryFetchBoard(modal);
   const [user] = useRecoilState(userState);
   return (
     <>
+      <div>{contextHolder}</div>
       <Head>
         <title>{data?.title} | 자유게시판</title>
       </Head>
@@ -55,6 +57,7 @@ export default function BoardDetail(): JSX.Element {
                   icon={<DeleteOutlined rev={undefined} />}
                   size="large"
                   style={{ marginLeft: "10px" }}
+                  onClick={onClickDeleteBtn}
                 >
                   삭제
                 </Button>

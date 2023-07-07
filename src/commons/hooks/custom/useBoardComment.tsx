@@ -6,7 +6,7 @@ import {
   addDoc,
   updateDoc,
   doc,
-  getDoc,
+  // getDoc,
 } from "firebase/firestore";
 
 export interface ICommentValues {
@@ -51,22 +51,25 @@ export const useBoardComment = (
 
   const onClickUpdate = async (data: ICommentValues): Promise<void> => {
     try {
+      const updatedData: Partial<ICommentValues> = {};
+      if (data.writer !== undefined) updatedData.writer = data.writer;
+      if (data.password !== undefined) updatedData.password = data.password;
+      if (data.contents !== undefined) updatedData.contents = data.contents;
+      if (data.star !== undefined) updatedData.star = data.star;
       if (args.commentId === undefined || args.onClickSubmit === undefined)
         return;
-      if (data.password === undefined) {
-        alert("비밀번호를 입력해주세요");
-        return;
-      }
-      const result = await getDoc(doc(db, "BoardComment", args.commentId));
-      if (result.exists()) {
-        const resultData = result.data();
-        if (resultData.password !== data.password) {
-          alert("비밀번호가 다릅니다.");
-          return;
-        }
-      }
+
+      // const result = await getDoc(doc(db, "BoardComment", args.commentId));
+      // if (result.exists()) {
+      //   const resultData = result.data();
+      //   if (resultData.password !== data.password) {
+      //     alert("비밀번호가 다릅니다.");
+      //     return;
+      //   }
+      // }
+      console.log(updatedData);
       await updateDoc(doc(db, "BoardComment", args.commentId), {
-        ...data,
+        ...updatedData,
         updatedAt: serverTimestamp(),
       });
       args.onClickSubmit();

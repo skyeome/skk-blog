@@ -8,8 +8,12 @@ import {
   getDoc,
   getDocs,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
+import type { ModalStaticFunctions } from "antd/es/modal/confirm";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+
 interface IFetchBoardData {
   uid?: string | undefined;
   writer?: string | undefined;
@@ -19,9 +23,12 @@ interface IFetchBoardData {
   images?: string[] | undefined;
 }
 
-export const useQueryFetchBoard = (): {
+export const useQueryFetchBoard = (
+  modal: Omit<ModalStaticFunctions, "warn">
+): {
   data: IFetchBoardData | undefined;
   onClickEditBtn: () => void;
+  onClickDeleteBtn: () => void;
 } => {
   const [data, setData] = useState<IFetchBoardData | undefined>();
   const router = useRouter();
@@ -39,6 +46,26 @@ export const useQueryFetchBoard = (): {
 
   const onClickEditBtn = (): void => {
     void router.push(`/free/${router.query.boardId as string}/edit`);
+  };
+
+  const onClickDeleteBtn = (): void => {
+    modal.confirm({
+      title: "게시글 삭제",
+      icon: <ExclamationCircleOutlined rev={undefined} />,
+      content:
+        "게시글을 삭제하시겠습니까? 삭제한 게시글은 복구가 불가능합니다.",
+      okText: "삭제",
+      cancelText: "취소",
+      onOk: () => {
+        deleteDoc(doc(db, "Board", router.query.boardId as string))
+          .then((res) => {
+            void router.push(`/free`);
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      },
+    });
   };
 
   useEffect(() => {
@@ -70,5 +97,6 @@ export const useQueryFetchBoard = (): {
   return {
     data,
     onClickEditBtn,
+    onClickDeleteBtn,
   };
 };
