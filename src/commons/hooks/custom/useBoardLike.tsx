@@ -57,11 +57,11 @@ export const useBoardLike = (): {
   useEffect(() => {
     getLikeCount()
       .then((res) => {
-        if (user !== undefined && user !== null && res !== undefined) {
+        if (res !== undefined) {
           setLikeCount(res.length);
           console.log(res.length);
           res.forEach((el) => {
-            if (el.id === user.uid) {
+            if (user !== undefined && user !== null && el.id === user.uid) {
               setLiked(true);
             }
           });
