@@ -54,3 +54,22 @@ export const topKvInfos = styled.div`
     margin: 0 6px;
   }
 `;
+export const BoardLikeWrap = styled.div`
+  width: 150px;
+  height: 48px;
+  border: 2px solid rgb(255, 77, 79);
+  border-radius: 10px;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const BoardLikeCount = styled.div`
+  flex: 1;
+`;
+export const BoardLikeBtn = styled.div`
+  width: 90px;
+`;

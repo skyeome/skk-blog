@@ -6,17 +6,22 @@ import {
   ClockCircleOutlined,
   DeleteOutlined,
   EditOutlined,
+  HeartFilled,
+  HeartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { getDate } from "../../../../commons/libraries/utils";
 import TuiViewer from "../../../commons/editor/TuiViewer";
 import { userState } from "../../../../commons/stores";
 import { useRecoilState } from "recoil";
+import { useBoardLike } from "../../../../commons/hooks/custom/useBoardLike";
+import _ from "lodash";
 
 export default function BoardDetail(): JSX.Element {
   const [modal, contextHolder] = Modal.useModal();
   const { data, onClickEditBtn, onClickDeleteBtn } = useQueryFetchBoard(modal);
   const [user] = useRecoilState(userState);
+  const { likeCount, liked, onClickLikeBtn } = useBoardLike();
   return (
     <>
       <div>{contextHolder}</div>
@@ -41,6 +46,17 @@ export default function BoardDetail(): JSX.Element {
       {data !== undefined ? (
         <>
           <TuiViewer contents={data?.contents ?? ""} />
+          <S.BoardLikeWrap>
+            <S.BoardLikeCount>{likeCount}</S.BoardLikeCount>
+            <S.BoardLikeBtn onClick={_.debounce(onClickLikeBtn, 300)}>
+              {liked ? (
+                <HeartFilled rev={undefined} />
+              ) : (
+                <HeartOutlined rev={undefined} />
+              )}{" "}
+              좋아요!
+            </S.BoardLikeBtn>
+          </S.BoardLikeWrap>
           {user?.uid === data.uid ? (
             <Row justify="end" style={{ margin: "50px 0 100px" }}>
               <Col>

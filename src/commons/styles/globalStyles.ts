@@ -16,4 +16,7 @@ export const globalStyle = css`
   .toastui-editor-contents img {
     max-width: 100%;
   }
+  #__next .slick-slider {
+    overflow: hidden;
+  }
 `;
