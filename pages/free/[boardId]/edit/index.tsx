@@ -22,7 +22,7 @@ function BoardUpdatePage(): JSX.Element {
     const docRef = doc(db, "Board", router.query.boardId);
     getDoc(docRef)
       .then((docSnap) => {
-        console.log(docSnap.data());
+        // console.log(docSnap.data());
         if (docSnap.exists()) setData(docSnap.data());
       })
       .catch((error) => {

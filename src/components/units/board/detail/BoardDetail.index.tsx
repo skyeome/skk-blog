@@ -1,7 +1,7 @@
 import { useQueryFetchBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
 import Head from "next/head";
 import * as S from "./BoardDetail.styles";
-import { Button, Col, Row, Skeleton, Modal } from "antd";
+import { Button, Col, Row, Skeleton, Modal, message } from "antd";
 import {
   ClockCircleOutlined,
   DeleteOutlined,
@@ -18,12 +18,14 @@ import { useBoardLike } from "../../../../commons/hooks/custom/useBoardLike";
 import _ from "lodash";
 
 export default function BoardDetail(): JSX.Element {
+  const [msgApi, msgCtx] = message.useMessage();
   const [modal, contextHolder] = Modal.useModal();
   const { data, onClickEditBtn, onClickDeleteBtn } = useQueryFetchBoard(modal);
   const [user] = useRecoilState(userState);
-  const { likeCount, liked, onClickLikeBtn } = useBoardLike();
+  const { likeCount, liked, onClickLikeBtn } = useBoardLike(msgApi);
   return (
     <>
+      <div>{msgCtx}</div>
       <div>{contextHolder}</div>
       <Head>
         <title>{data?.title} | 자유게시판</title>

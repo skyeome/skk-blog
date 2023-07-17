@@ -47,7 +47,7 @@ export const useQueryFetchComment = (
 
   useEffect(() => {
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      console.log("데이터 받아옴");
+      // console.log("데이터 받아옴");
       const comments = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as Omit<IBoardCommentData, "id">),

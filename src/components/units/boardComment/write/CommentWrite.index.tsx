@@ -33,7 +33,7 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={8}>
+        <Col xs={24} md={8}>
           <Controller
             name="writer"
             control={control}
@@ -48,7 +48,7 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
             )}
           />
         </Col>
-        <Col span={8}>
+        <Col xs={12} md={8}>
           <Controller
             name="password"
             control={control}
@@ -62,38 +62,45 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
             )}
           />
         </Col>
-        <Col span={8}>
+        <Col xs={12} md={8}>
           <Rate onChange={setRating} defaultValue={props.data?.star ?? 0} />
         </Col>
       </Row>
       <Space></Space>
-      <Row gutter={[16, 16]}>
+      <Row style={{ margin: "16px 0 36px" }}>
         <Col span={24}>
           <Controller
             name="contents"
             control={control}
             render={({ field: { onChange, value } }) => (
               <Input.TextArea
+                showCount
                 rows={4}
                 onChange={onChange}
                 value={value}
                 placeholder="내용을 작성해주세요."
+                autoSize={{ minRows: 3, maxRows: 5 }}
+                style={{ width: "100%", resize: "none" }}
               />
             )}
           />
         </Col>
       </Row>
-      <Button
-        type="primary"
-        size="large"
-        onClick={
-          props.isEdit
-            ? handleSubmit(onClickUpdate)
-            : handleSubmit(onClickWrite)
-        }
-      >
-        {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
-      </Button>
+      <Row justify="end" style={{ marginBottom: "60px" }}>
+        <Col>
+          <Button
+            type="primary"
+            size="large"
+            onClick={
+              props.isEdit
+                ? handleSubmit(onClickUpdate)
+                : handleSubmit(onClickWrite)
+            }
+          >
+            {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
+          </Button>
+        </Col>
+      </Row>
     </>
   );
 }

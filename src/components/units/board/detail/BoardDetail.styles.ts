@@ -55,9 +55,9 @@ export const topKvInfos = styled.div`
   }
 `;
 export const BoardLikeWrap = styled.div`
-  width: 150px;
+  width: 175px;
   height: 48px;
-  border: 2px solid rgb(255, 77, 79);
+  border: 1px solid rgb(241, 243, 245);
   border-radius: 10px;
   margin-top: 100px;
   margin-left: auto;
@@ -65,11 +65,21 @@ export const BoardLikeWrap = styled.div`
   text-align: center;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  background-color: rgb(248, 249, 250);
+  padding: 4px;
 `;
 
 export const BoardLikeCount = styled.div`
   flex: 1;
 `;
 export const BoardLikeBtn = styled.div`
-  width: 90px;
+  width: 100px;
+  height: 36px;
+  line-height: 36px;
+  background-color: #fff;
+  border: 1px solid rgb(241, 243, 245);
+  border-radius: 6px;
+  color: #ff4d4f;
+  cursor: pointer;
 `;

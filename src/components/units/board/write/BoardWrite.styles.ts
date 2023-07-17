@@ -5,6 +5,7 @@ export const FileUploadWrap = styled.div`
   margin-top: 20px;
   display: flex;
   justify-content: flex-start;
+  overflow: hidden;
   > div {
     width: 33.3333%;
   }

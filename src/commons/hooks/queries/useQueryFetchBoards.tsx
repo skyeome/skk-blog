@@ -21,12 +21,14 @@ export interface IBoardList {
   images: string[];
 }
 
-export const useQueryFetchBoards = async (): Promise<IFetchBoardsList> => {
+export const useQueryFetchBoards = async (
+  limits: number = 4
+): Promise<IFetchBoardsList> => {
   try {
     const q = query(
       collection(db, "Board"),
       orderBy("createdAt", "desc"),
-      limit(4)
+      limit(limits)
     );
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs;
@@ -53,14 +55,15 @@ export const useQueryFetchBoards = async (): Promise<IFetchBoardsList> => {
   }
 };
 export const useQueryFetchMoreBoards = async (
-  key: any
+  key: any,
+  limits: number = 4
 ): Promise<IFetchBoardsList> => {
   try {
     const q = query(
       collection(db, "Board"),
       orderBy("createdAt", "desc"),
       startAfter(key),
-      limit(4)
+      limit(limits)
     );
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs;

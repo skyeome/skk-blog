@@ -13,8 +13,11 @@ import { db } from "../../libraries/firebase";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { userState } from "../../stores";
+import type { MessageInstance } from "antd/es/message/interface";
 
-export const useBoardLike = (): {
+export const useBoardLike = (
+  msgApi: MessageInstance
+): {
   likeCount: number;
   liked: boolean;
   onClickLikeBtn: () => void;
@@ -26,7 +29,13 @@ export const useBoardLike = (): {
 
   const onClickLikeBtn = async (): Promise<void> => {
     const boardId = router.query.boardId as string;
-    if (user === null) return;
+    if (user === null) {
+      void msgApi.open({
+        type: "error",
+        content: "로그인 해주시면 좋아요가 가능합니다.",
+      });
+      return;
+    }
     if (!liked) {
       try {
         await setDoc(doc(db, `Board/${boardId}/Like`, user.uid), {
@@ -59,7 +68,7 @@ export const useBoardLike = (): {
       .then((res) => {
         if (res !== undefined) {
           setLikeCount(res.length);
-          console.log(res.length);
+          // console.log(res.length);
           res.forEach((el) => {
             if (user !== undefined && user !== null && el.id === user.uid) {
               setLiked(true);
