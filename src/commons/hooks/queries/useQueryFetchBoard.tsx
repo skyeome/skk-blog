@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import type { DocumentReference, Timestamp } from "firebase/firestore";
 import {
   collection,
   query,
@@ -13,36 +12,44 @@ import {
 import { db } from "../../libraries/firebase";
 import type { ModalStaticFunctions } from "antd/es/modal/confirm";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-
-interface IFetchBoardData {
-  uid?: string | undefined;
-  writer?: string | undefined;
-  title?: string | undefined;
-  contents?: string | undefined;
-  createdAt?: Timestamp | undefined;
-  images?: string[] | undefined;
-}
+import { BoardDetailConverter } from "../../libraries/firestore";
+import type { BoardDetail } from "../../libraries/firestore";
 
 export const useQueryFetchBoard = (
   modal: Omit<ModalStaticFunctions, "warn">
 ): {
-  data: IFetchBoardData | undefined;
+  data: BoardDetail | undefined;
+  isLoaded: boolean;
   onClickEditBtn: () => void;
   onClickDeleteBtn: () => void;
 } => {
-  const [data, setData] = useState<IFetchBoardData | undefined>();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [BoardData, setBoardData] = useState<BoardDetail>();
   const router = useRouter();
 
-  const getData = async (): Promise<IFetchBoardData | undefined> => {
-    const docRef = doc(
-      db,
-      "Board",
-      router.query.boardId as string
-    ) as DocumentReference<IFetchBoardData>;
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) return docSnap.data();
-    return undefined;
-  };
+  const fetchBoardData = async (): Promise<void> => {
+    const docRef = doc(db, "Board", router.query.boardId as string).withConverter(BoardDetailConverter);
+    try {
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists()) {
+        const boardData: BoardDetail = docSnap.data();
+        const writerRef = collection(db, "User");
+        const q = query(writerRef, where("uid", "==", boardData.writer));
+        const querySn = await getDocs(q);
+
+        let username = "";
+        querySn.forEach((user) => {
+          username = user.data().nickname;
+        });
+        if (username !== "") boardData.writer = username;
+        setBoardData(boardData);
+      }
+    } catch (error) {
+      if(error instanceof Error) console.error(error.message);
+    } finally {
+      setIsLoaded(true);
+    }
+  }
 
   const onClickEditBtn = (): void => {
     void router.push(`/free/${router.query.boardId as string}/edit`);
@@ -69,33 +76,12 @@ export const useQueryFetchBoard = (
   };
 
   useEffect(() => {
-    getData()
-      .then((board) => {
-        const boardData: IFetchBoardData = { ...board };
-        boardData.uid = board?.writer;
-        if (board?.writer === undefined) return;
-        const writerRef = collection(db, "User");
-        const q = query(writerRef, where("uid", "==", board.writer));
-        getDocs(q)
-          .then((users) => {
-            let username = "";
-            users.forEach((user) => {
-              username = user.data().nickname;
-            });
-            if (username !== "") boardData.writer = username;
-            setData(boardData);
-          })
-          .catch((error) => {
-            alert(error.message);
-          });
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+    void fetchBoardData();
   }, []);
 
   return {
-    data,
+    data: BoardData,
+    isLoaded,
     onClickEditBtn,
     onClickDeleteBtn,
   };

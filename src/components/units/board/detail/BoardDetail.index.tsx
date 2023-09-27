@@ -20,10 +20,11 @@ import _ from "lodash";
 export default function BoardDetail(): JSX.Element {
   const [msgApi, msgCtx] = message.useMessage();
   const [modal, contextHolder] = Modal.useModal();
-  const { data, onClickEditBtn, onClickDeleteBtn } = useQueryFetchBoard(modal);
+  const { data, isLoaded, onClickEditBtn, onClickDeleteBtn } = useQueryFetchBoard(modal);
   const [user] = useRecoilState(userState);
   const { likeCount, liked, onClickLikeBtn } = useBoardLike(msgApi);
-  return (
+  if(!isLoaded && data === undefined) return (<Skeleton active />)
+  else return (
     <>
       <div>{msgCtx}</div>
       <div>{contextHolder}</div>
@@ -45,48 +46,42 @@ export default function BoardDetail(): JSX.Element {
           </S.topKvInfos>
         </S.topKvBox>
       </S.topKv>
-      {data !== undefined ? (
-        <>
-          <TuiViewer contents={data?.contents ?? ""} />
-          <S.BoardLikeWrap>
-            <S.BoardLikeCount>{likeCount}</S.BoardLikeCount>
-            <S.BoardLikeBtn onClick={_.debounce(onClickLikeBtn, 300)}>
-              {liked ? (
-                <HeartFilled rev={undefined} />
-              ) : (
-                <HeartOutlined rev={undefined} />
-              )}{" "}
-              좋아요!
-            </S.BoardLikeBtn>
-          </S.BoardLikeWrap>
-          {user?.uid === data.uid ? (
-            <Row justify="end" style={{ margin: "50px 0 100px" }}>
-              <Col>
-                <Button
-                  type="primary"
-                  icon={<EditOutlined rev={undefined} />}
-                  size="large"
-                  onClick={onClickEditBtn}
-                >
-                  수정
-                </Button>
-                <Button
-                  danger
-                  icon={<DeleteOutlined rev={undefined} />}
-                  size="large"
-                  style={{ marginLeft: "10px" }}
-                  onClick={onClickDeleteBtn}
-                >
-                  삭제
-                </Button>
-              </Col>
-            </Row>
+      <TuiViewer contents={data?.contents ?? ""} />
+      <S.BoardLikeWrap>
+        <S.BoardLikeCount>{likeCount}</S.BoardLikeCount>
+        <S.BoardLikeBtn onClick={_.debounce(onClickLikeBtn, 300)}>
+          {liked ? (
+            <HeartFilled rev={undefined} />
           ) : (
-            <div style={{ margin: "50px 0 100px" }}></div>
-          )}
-        </>
+            <HeartOutlined rev={undefined} />
+          )}{" "}
+          좋아요!
+        </S.BoardLikeBtn>
+      </S.BoardLikeWrap>
+      {user?.uid === data?.uid ? (
+        <Row justify="end" style={{ margin: "50px 0 100px" }}>
+          <Col>
+            <Button
+              type="primary"
+              icon={<EditOutlined rev={undefined} />}
+              size="large"
+              onClick={onClickEditBtn}
+            >
+              수정
+            </Button>
+            <Button
+              danger
+              icon={<DeleteOutlined rev={undefined} />}
+              size="large"
+              style={{ marginLeft: "10px" }}
+              onClick={onClickDeleteBtn}
+            >
+              삭제
+            </Button>
+          </Col>
+        </Row>
       ) : (
-        <Skeleton active />
+        <div style={{ margin: "50px 0 100px" }}></div>
       )}
     </>
   );

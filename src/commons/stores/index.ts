@@ -6,3 +6,8 @@ export const userState = atom<User | null>({
   key: `userState/${uuidv4()}`,
   default: null,
 });
+
+export const refetchState = atom<boolean>({
+  key: "refetchState",
+  default: false,
+});
