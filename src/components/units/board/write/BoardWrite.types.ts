@@ -47,6 +47,6 @@ export interface IBoardUpdateInputs {
 }
 
 export interface IBoardWriteInputTypes {
-  title: string | undefined;
-  category: any[] | undefined;
+  title?: string | undefined;
+  category?: any[] | undefined;
 }
