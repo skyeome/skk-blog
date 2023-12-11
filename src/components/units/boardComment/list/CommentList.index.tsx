@@ -1,18 +1,16 @@
+import React from 'react';
 import { Divider } from "antd";
-import { useQueryIdCheck } from "../../../../commons/hooks/custom/useQueryIdCheck";
-import { useQueryFetchComment } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
 import CommentListItem from "./CommentListItem.presenter";
 
-export default function CommentList(): JSX.Element {
-  const { id } = useQueryIdCheck("boardId");
-  const { data } = useQueryFetchComment({ boardId: id });
-
+function CommentList({comments}: {comments?: IBoardCommentData[]}): JSX.Element {
   return (
     <>
-      <Divider>{data?.length} Comments</Divider>
-      {data?.map((el) => (
+      <Divider>{comments?.length} Comments</Divider>
+      {comments?.map((el) => (
         <CommentListItem key={el.id} el={el} />
       ))}
     </>
   );
 }
+export default React.memo(CommentList);
