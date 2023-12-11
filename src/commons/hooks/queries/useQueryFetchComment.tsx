@@ -1,12 +1,6 @@
 import { useQuery } from "react-query";
 import type { Timestamp } from "firebase/firestore";
-import {
-  collection,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
 
 export interface IBoardCommentData {
@@ -19,9 +13,7 @@ export interface IBoardCommentData {
   updatedAt: Timestamp;
 }
 
-export const useQueryFetchComment = (
-  boardId: string
-) => {
+export const useQueryFetchComment = (boardId: string) => {
   const docRef = collection(db, "BoardComment");
   const q = query(
     docRef,
@@ -52,7 +44,7 @@ export const useQueryFetchComment = (
       CommentData.push({ ...docData, id: doc.id });
     });
     return CommentData;
-  }
+  };
   const { data, isLoading, refetch } = useQuery(["comments"], getCommentData);
 
   return { data, isLoading, refetch };

@@ -5,7 +5,7 @@ import Layout from "../src/components/commons/layout";
 import { RecoilRoot } from "recoil";
 import { QueryClientProvider } from "react-query";
 import client from "../src/commons/libraries/reactQuery";
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (

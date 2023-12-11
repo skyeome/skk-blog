@@ -1,9 +1,13 @@
-import React from 'react';
+import React from "react";
 import { Divider } from "antd";
 import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
 import CommentListItem from "./CommentListItem.presenter";
 
-function CommentList({comments}: {comments?: IBoardCommentData[]}): JSX.Element {
+function CommentList({
+  comments,
+}: {
+  comments?: IBoardCommentData[];
+}): JSX.Element {
   return (
     <>
       <Divider>{comments?.length} Comments</Divider>

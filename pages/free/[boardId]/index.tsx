@@ -11,7 +11,9 @@ const BoardDetail = dynamic(
     ),
   { ssr: false }
 );
-export default function BoardDetailPage({id}: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
+export default function BoardDetailPage({
+  id,
+}: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   const { data, refetch } = useQueryFetchComment(id);
 
   return (
@@ -23,16 +25,18 @@ export default function BoardDetailPage({id}: InferGetServerSidePropsType<typeof
   );
 }
 
-export const getServerSideProps: GetServerSideProps<{id: string}> = async (context) => {
+export const getServerSideProps: GetServerSideProps<{ id: string }> = async (
+  context
+) => {
   // context에서 query 추출
   const { query } = context;
   // query에서 boardId를 추출
   const { boardId } = query;
   let id = "";
 
-  if (boardId === undefined) id = "" ;
+  if (boardId === undefined) id = "";
   if (typeof boardId === "string") id = boardId;
-  if (typeof boardId === "object")  id = boardId[0];
+  if (typeof boardId === "object") id = boardId[0];
 
   return {
     props: {
