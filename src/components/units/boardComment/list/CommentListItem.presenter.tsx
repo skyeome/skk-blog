@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import type { ChangeEvent } from "react";
 import { Avatar, Input, Modal } from "antd";
 import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
@@ -8,7 +8,7 @@ import CommentWrite from "../write/CommentWrite.index";
 import { useMutationDeleteComment } from "../../../../commons/hooks/mutations/useMutationDeleteComent";
 import { useMutationUpdateComment } from "../../../../commons/hooks/mutations/useMutationUpdateComment";
 
-export default function CommentListItem(props: {
+function CommentListItem(props: {
   el: IBoardCommentData;
 }): JSX.Element {
   const [password, setPassword] = useState("");
@@ -134,3 +134,4 @@ export default function CommentListItem(props: {
     </>
   );
 }
+export default React.memo(CommentListItem);

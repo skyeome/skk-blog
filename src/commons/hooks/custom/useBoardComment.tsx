@@ -23,6 +23,7 @@ interface IUseBoardCommentArgs {
   setValue: UseFormSetValue<ICommentValues>;
   reset: UseFormReset<ICommentValues>;
   onClickSubmit?: () => void;
+  refetch?: () => void;
 }
 
 export const useBoardComment = (
@@ -47,6 +48,7 @@ export const useBoardComment = (
       contents: "",
       star: 0,
     });
+    if(args.refetch !== undefined) args.refetch();
   };
 
   const onClickUpdate = async (data: ICommentValues): Promise<void> => {
@@ -73,6 +75,7 @@ export const useBoardComment = (
         updatedAt: serverTimestamp(),
       });
       args.onClickSubmit();
+      if(args.refetch !== undefined) args.refetch();
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
