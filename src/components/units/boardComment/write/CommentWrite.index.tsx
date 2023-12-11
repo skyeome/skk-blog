@@ -10,6 +10,7 @@ interface ICommentWriteProps {
   isEdit: boolean;
   data?: Omit<IBoardCommentData, "password">;
   onClickSubmit?: () => void;
+  refetch?: () => void;
 }
 
 export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
@@ -29,6 +30,7 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
     setValue,
     reset,
     onClickSubmit: props.onClickSubmit,
+    refetch: props.refetch
   });
   return (
     <>

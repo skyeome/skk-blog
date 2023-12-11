@@ -12,12 +12,12 @@ const BoardDetail = dynamic(
   { ssr: false }
 );
 export default function BoardDetailPage({id}: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
-  const { data } = useQueryFetchComment(id);
+  const { data, refetch } = useQueryFetchComment(id);
 
   return (
     <>
       <BoardDetail />
-      <CommentWrite isEdit={false} />
+      <CommentWrite isEdit={false} refetch={refetch} />
       <CommentList comments={data} />
     </>
   );
