@@ -1,14 +1,5 @@
 import styled from "@emotion/styled";
 
-export const Ratest = styled.div`
-  flex: 1;
-`;
-export const RatestList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-
-  list-style: none;
-`;
 export const RatestListItem = styled.div<{ counts?: number }>`
   display: flex;
   gap: 1rem;

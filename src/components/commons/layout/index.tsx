@@ -6,6 +6,7 @@ import { Wrapper } from "./header/LayoutHeader.styles";
 import Link from "next/link";
 import LayoutHeaderIndex from "./header/LayoutHeader.index";
 import LayoutSider from "./sider/LayoutSider.index";
+import LayoutBanner from "./banner/LayoutBanner";
 interface ILayoutProps {
   children: JSX.Element;
 }
@@ -63,6 +64,7 @@ export default function Layout(props: ILayoutProps): JSX.Element {
         collapsed={collapsed}
         toggleCollapsed={toggleCollapsed}
       />
+      <LayoutBanner />
       <main style={{ minHeight: "calc(100vh - 100px)" }}>
         <Wrapper>{props.children}</Wrapper>
       </main>

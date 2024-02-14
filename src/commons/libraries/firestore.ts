@@ -1,4 +1,10 @@
-import type { DocumentData, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, Timestamp } from "firebase/firestore";
+import type {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+  Timestamp,
+} from "firebase/firestore";
 
 export class BoardDetail {
   constructor(
@@ -7,11 +13,23 @@ export class BoardDetail {
     public title: string,
     public contents: string,
     public createdAt: Timestamp,
-    public images: string[],
-  ){}
+    public images: string[]
+  ) {}
 
   toString(): string {
-    return this.uid + ", " + this.writer + ", " + this.title + ", " + this.contents + ", " + this.createdAt.toDate().toLocaleString() + ", " + this.images[0]
+    return (
+      this.uid +
+      ", " +
+      this.writer +
+      ", " +
+      this.title +
+      ", " +
+      this.contents +
+      ", " +
+      this.createdAt.toDate().toLocaleString() +
+      ", " +
+      this.images[0]
+    );
   }
 }
 
@@ -23,12 +41,12 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       title: docData.title,
       contents: docData.contents,
       createdAt: docData.createdAt,
-      images: docData.images
+      images: docData.images,
     };
   },
   fromFirestore: (
     snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions,
+    options: SnapshotOptions
   ) => {
     const sn = snapshot;
     const data = sn.data(options);
@@ -38,6 +56,56 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       data.title,
       data.contents,
       data.createdAt,
+      data.images
+    );
+  },
+};
+
+export class Board {
+  constructor(
+    public writer: string,
+    public title: string,
+    public contents: string,
+    public createdAt: Timestamp,
+    public category: string[],
+    public images: string[]
+  ) {}
+
+  toString(): string {
+    return (
+      this.writer +
+      ", " +
+      this.title +
+      ", " +
+      this.contents +
+      ", " +
+      this.createdAt.toDate().toLocaleString() +
+      ", " +
+      this.category[0] +
+      ", " +
+      this.images[0]
+    );
+  }
+}
+
+export const BoardConverter: FirestoreDataConverter<Board> = {
+  toFirestore: (docData: Board): DocumentData => {
+    return {
+      ...docData,
+    };
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ) => {
+    const sn = snapshot;
+    const data = sn.data(options);
+    return new Board(
+      data.writer,
+      data.title,
+      data.contents,
+      data.createdAt,
+      data.category,
       data.images
     );
   },

@@ -1,8 +1,9 @@
-// import type { IQuery } from "../../../../commons/types/generated/types";
+import type { Board } from "../../../../commons/libraries/firestore";
 
-import type { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+export type BoardRatest = Board & {
+  id: string;
+};
 
 export interface IindexRatestListProps {
-  data: Array<QueryDocumentSnapshot<DocumentData>> | undefined;
-  // data: Pick<IQuery, "fetchBoards"> | undefined;
+  data?: BoardRatest[];
 }
