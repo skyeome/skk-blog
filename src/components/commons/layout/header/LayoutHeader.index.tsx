@@ -29,11 +29,7 @@ function LayoutHeader({ handleOpen }: IHeaderProps): JSX.Element {
           <S.Logo>
             <Link href="/">
               <a>
-                <Image
-                  src="https://s3.ap-northeast-2.amazonaws.com/skkblog.com/seri.diary-logo.webp"
-                  // objectFit="cover"
-                  layout="fill"
-                />
+                <Image src="//seri.diary-logo.webp" width={122} height={80} />
               </a>
             </Link>
           </S.Logo>
