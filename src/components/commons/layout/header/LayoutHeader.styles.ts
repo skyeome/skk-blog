@@ -36,7 +36,7 @@ export const HeaderNav = styled.ul`
   }
 `;
 export const HeaderUsers = styled.div`
-  width: 90px;
+  width: fit-content;
   margin-left: auto;
 `;
 export const Logo = styled.h1<{ collapsed?: boolean }>`
