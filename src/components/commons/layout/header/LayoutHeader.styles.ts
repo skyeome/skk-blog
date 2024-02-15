@@ -40,11 +40,14 @@ export const HeaderUsers = styled.div`
   margin-left: auto;
 `;
 export const Logo = styled.h1<{ collapsed?: boolean }>`
-  width: ${(props) => (props.collapsed === true ? "40px" : "104px")};
+  /* width: ${(props) => (props.collapsed === true ? "40px" : "104px")};
   height: ${(props) => (props.collapsed === true ? "33px" : "68px")};
   margin-left: auto;
-  margin-right: auto;
+  margin-right: auto; */
+  width: 100%;
+  aspect-ratio: 1.53;
   a {
+    position: relative;
     display: block;
     width: 100%;
     height: 100%;

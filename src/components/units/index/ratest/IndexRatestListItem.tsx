@@ -6,6 +6,7 @@ import { ko } from "date-fns/locale";
 import MarkdownIt from "markdown-it";
 import type { IndexRatestListItemProps } from "./IndexRatestListItem.types";
 import * as S from "./IndexRatestListItem.styles";
+import Grid from "@mui/material/Grid";
 
 function IndexRatestListItem({ data }: IndexRatestListItemProps) {
   const md = new MarkdownIt();
@@ -17,8 +18,13 @@ function IndexRatestListItem({ data }: IndexRatestListItemProps) {
     .textContent;
 
   return (
-    <S.RatestListItem key={data.id}>
-      <div>
+    <Grid
+      container
+      rowSpacing={1}
+      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+      mb={3}
+    >
+      <Grid item xs={4} sm={3}>
         <Link href={`/free/${data.id}`}>
           <S.RatestItemThumb>
             <Image
@@ -32,23 +38,27 @@ function IndexRatestListItem({ data }: IndexRatestListItemProps) {
             />
           </S.RatestItemThumb>
         </Link>
-      </div>
-      <S.RatestItemDesc>
+      </Grid>
+      <Grid item xs={8} sm={9}>
         <Typography variant="body2" color="GrayText">
-          {data.writer}
-          {` • `}
-          {format(data.createdAt.toDate(), "yyyy. MM. dd", {
-            locale: ko,
-          })}
+          {data.writer +
+            " • " +
+            format(data.createdAt.toDate(), "yyyy. MM. dd", {
+              locale: ko,
+            })}
         </Typography>
-        <Typography variant="h3" mt={2} mb={2}>
-          {data.title}
-        </Typography>
-        <Typography variant="body2" color="GrayText">
-          {text}
-        </Typography>
-      </S.RatestItemDesc>
-    </S.RatestListItem>
+        <Link href={`/free/${data.id}`}>
+          <a>
+            <Typography variant="h3" my={{ xs: 1, sm: 2 }}>
+              {data.title}
+            </Typography>
+            <Typography variant="body2" color="GrayText">
+              {text}
+            </Typography>
+          </a>
+        </Link>
+      </Grid>
+    </Grid>
   );
 }
 

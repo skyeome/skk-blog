@@ -1,34 +1,41 @@
-import { Menu, Layout } from "antd";
-import * as S from "./LayoutSider.styles";
-import type { MenuItem } from "..";
-const { Sider } = Layout;
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ChatIcon from "@mui/icons-material/Chat";
+import { useRouter } from "next/router";
 
 interface ISiderProps {
-  collapsed: boolean;
-  toggleCollapsed: () => void;
-  items: MenuItem[];
+  open: boolean;
+  handleClose: VoidFunction;
 }
 
-const LayoutSider = (props: ISiderProps): JSX.Element => {
+const LayoutSider = ({ open, handleClose }: ISiderProps) => {
+  const router = useRouter();
+  const navigate = (to: string) => {
+    void router.push(to);
+    handleClose();
+  };
+
   return (
-    <S.FixedDimmed collapsed={props.collapsed} onClick={props.toggleCollapsed}>
-      <S.FixedSiderWrap>
-        <Sider
-          theme="dark"
-          trigger={null}
-          collapsedWidth={0}
-          collapsed={props.collapsed}
-        >
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            theme="dark"
-            items={props.items}
-          />
-        </Sider>
-      </S.FixedSiderWrap>
-    </S.FixedDimmed>
+    <Drawer anchor="left" open={open} onClose={handleClose}>
+      <nav aria-label="board folders">
+        <List>
+          <ListItem
+            onClick={() => {
+              navigate("/free");
+            }}
+            sx={{ cursor: "pointer" }}
+          >
+            <ListItemIcon>
+              <ChatIcon />
+            </ListItemIcon>
+            <ListItemText primary="자유게시판" />
+          </ListItem>
+        </List>
+      </nav>
+    </Drawer>
   );
 };
 
