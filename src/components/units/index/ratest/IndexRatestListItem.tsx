@@ -42,7 +42,7 @@ function IndexRatestListItem({ data }: IndexRatestListItemProps) {
               src={
                 data.images[0] !== ""
                   ? data.images[0]
-                  : "https://s3.ap-northeast-2.amazonaws.com/skkblog.com/placeholder-image.jpg"
+                  : "//placeholder-image.jpg"
               }
             />
           </S.RatestItemThumb>
