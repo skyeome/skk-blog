@@ -4,14 +4,14 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { BoardListItemImg } from "./BoardList.styles";
 import type { IBoardListItemProps } from "./BoardList.types";
-import * as S from "../../index/ratest/IndexRatestList.styles";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box/Box";
 
 export default function BoardListItem({
   el,
 }: IBoardListItemProps): JSX.Element {
   return (
-    <S.RatestListItem key={el.id} counts={2}>
+    <Box key={el.id} mb={1}>
       <Link href={`/free/${el.id}`}>
         <a>
           <BoardListItemImg>
@@ -37,6 +37,6 @@ export default function BoardListItem({
           </Typography>
         </a>
       </Link>
-    </S.RatestListItem>
+    </Box>
   );
 }

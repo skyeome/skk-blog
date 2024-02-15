@@ -11,7 +11,5 @@ export interface IBoardListProps {
   // dataBoardsCount: Pick<IQuery, "fetchBoardsCount"> | undefined;
 }
 export interface IBoardListItemProps {
-  // boardId: string;
   el: IBoardList;
-  colCounts: number;
 }

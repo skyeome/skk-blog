@@ -9,11 +9,10 @@ export const RatestList = styled.ul`
 
   list-style: none;
 `;
-export const RatestListItem = styled.div<{ counts?: number }>`
+export const RatestListItem = styled.div`
   display: flex;
   gap: 1rem;
 
-  width: ${(props) => (props.counts === undefined ? 100 : 100 / props.counts)}%;
   margin-bottom: 1.5rem;
 `;
 export const RatestItemThumb = styled.a`
