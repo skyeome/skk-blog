@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
+import { useRouter } from "next/router";
 import LayoutFooter from "./footer/LayoutFooter.index";
 import LayoutHeaderIndex from "./header/LayoutHeader.index";
 import LayoutSider from "./sider/LayoutSider.index";
@@ -11,6 +12,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const router = useRouter();
+  const isIndexPage = router.pathname === "/";
   const [open, setOpen] = useState(false);
 
   const handleOpen = (): void => {
@@ -22,7 +25,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <LayoutHeaderIndex handleOpen={handleOpen} />
-      <LayoutBanner />
+      {isIndexPage && <LayoutBanner />}
       <main style={{ minHeight: "calc(100vh - 100px)" }}>
         <Container maxWidth="md">{children}</Container>
       </main>

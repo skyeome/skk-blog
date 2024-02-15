@@ -17,6 +17,7 @@ const options: object[] = [
   { label: "Typescript", value: "Typescript" },
   { label: "React", value: "React" },
   { label: "Next.js", value: "Next.js" },
+  { label: "Git", value: "Git" },
 ];
 
 export default function BoardWrite(props: IBoardWriteProps): JSX.Element {

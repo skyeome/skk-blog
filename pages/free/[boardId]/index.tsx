@@ -1,8 +1,10 @@
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
+import { useQuery } from "react-query";
 import CommentWrite from "../../../src/components/units/boardComment/write/CommentWrite.index";
 import CommentList from "../../../src/components/units/boardComment/list/CommentList.index";
-import dynamic from "next/dynamic";
 import { useQueryFetchComment } from "../../../src/commons/hooks/queries/useQueryFetchComment";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { getBoardDetail } from "../../../src/commons/apis/board";
 
 const BoardDetail = dynamic(
   async () =>
@@ -14,11 +16,15 @@ const BoardDetail = dynamic(
 export default function BoardDetailPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
+  const { data: boardDetail } = useQuery({
+    queryKey: ["board", id],
+    queryFn: async () => await getBoardDetail(id),
+  });
   const { data, refetch } = useQueryFetchComment(id);
 
   return (
     <>
-      <BoardDetail />
+      {boardDetail !== undefined && <BoardDetail data={boardDetail} />}
       <CommentWrite isEdit={false} refetch={refetch} />
       <CommentList comments={data} />
     </>

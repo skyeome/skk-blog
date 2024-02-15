@@ -1,8 +1,5 @@
-import type { DocumentData } from "firebase/firestore";
-// import type { IQuery } from "../../../../commons/types/generated/types";
+import type { BoardDetail } from "../../../../commons/libraries/firestore";
 
-export interface IBoardDetailProps {
-  data: DocumentData | undefined;
-  // data: Pick<IQuery, "fetchBoard"> | undefined;
-  onClickEditBtn: () => void;
+export interface BoardDetailProps {
+  data: BoardDetail;
 }

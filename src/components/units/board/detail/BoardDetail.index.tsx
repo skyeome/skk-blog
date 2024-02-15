@@ -1,7 +1,9 @@
-import { useQueryFetchBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
 import Head from "next/head";
-import * as S from "./BoardDetail.styles";
-import { Button, Col, Row, Skeleton, Modal, message } from "antd";
+import _ from "lodash";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { useMutateBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
+import { Button, Col, Row, Modal, message } from "antd";
 import {
   ClockCircleOutlined,
   DeleteOutlined,
@@ -10,43 +12,44 @@ import {
   HeartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { Viewer } from "@toast-ui/react-editor";
 import { getDate } from "../../../../commons/libraries/utils";
-import TuiViewer from "../../../commons/editor/TuiViewer";
 import { userState } from "../../../../commons/stores";
-import { useRecoilState } from "recoil";
 import { useBoardLike } from "../../../../commons/hooks/custom/useBoardLike";
-import _ from "lodash";
+import type { BoardDetailProps } from "./BoardDetail.types";
+import * as S from "./BoardDetail.styles";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
-export default function BoardDetail(): JSX.Element {
+export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
+  const router = useRouter();
   const [msgApi, msgCtx] = message.useMessage();
   const [modal, contextHolder] = Modal.useModal();
-  const { data, isLoaded, onClickEditBtn, onClickDeleteBtn } = useQueryFetchBoard(modal);
+  const { onClickEditBtn, onClickDeleteBtn } = useMutateBoard(modal, router);
   const [user] = useRecoilState(userState);
   const { likeCount, liked, onClickLikeBtn } = useBoardLike(msgApi);
-  if(!isLoaded && data === undefined) return (<Skeleton active />)
-  else return (
+  return (
     <>
       <div>{msgCtx}</div>
       <div>{contextHolder}</div>
       <Head>
-        <title>{data?.title} | 자유게시판</title>
+        <title>{data.title} | 자유게시판</title>
       </Head>
-      <S.topKv bg={data?.images?.[0]}>
+      <S.topKv bg={data.images?.[0]}>
         <S.topKvBox>
           <S.topKvCategory>자유게시판</S.topKvCategory>
-          <S.topKvTitle>{data?.title}</S.topKvTitle>
+          <S.topKvTitle>{data.title}</S.topKvTitle>
           <S.topKvInfos>
             <p>
-              <UserOutlined rev={undefined} /> {data?.writer}
+              <UserOutlined rev={undefined} /> {data.writer}
             </p>
             <p>
               <ClockCircleOutlined rev={undefined} />{" "}
-              {getDate(data?.createdAt?.toDate().toDateString() ?? "")}
+              {getDate(data.createdAt?.toDate().toDateString() ?? "")}
             </p>
           </S.topKvInfos>
         </S.topKvBox>
       </S.topKv>
-      <TuiViewer contents={data?.contents ?? ""} />
+      <Viewer initialValue={data.contents} />
       <S.BoardLikeWrap>
         <S.BoardLikeCount>{likeCount}</S.BoardLikeCount>
         <S.BoardLikeBtn onClick={_.debounce(onClickLikeBtn, 300)}>
@@ -58,7 +61,7 @@ export default function BoardDetail(): JSX.Element {
           좋아요!
         </S.BoardLikeBtn>
       </S.BoardLikeWrap>
-      {user?.uid === data?.uid ? (
+      {user?.uid === data.uid ? (
         <Row justify="end" style={{ margin: "50px 0 100px" }}>
           <Col>
             <Button
