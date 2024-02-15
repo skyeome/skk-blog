@@ -2,9 +2,10 @@ import { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { Button, Container, Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import { AuthUser } from "./LayoutAuthUser.index";
 import * as S from "./LayoutHeader.styles";
+import IconButton from "@mui/material/IconButton";
 
 interface IHeaderProps {
   handleOpen: VoidFunction;
@@ -20,14 +21,9 @@ function LayoutHeader({ handleOpen }: IHeaderProps): JSX.Element {
         py={1}
       >
         <Grid item xs={4.5} sm={5}>
-          <Button
-            variant="text"
-            color="inherit"
-            size="small"
-            onClick={handleOpen}
-          >
+          <IconButton color="inherit" onClick={handleOpen}>
             <MenuOpenIcon />
-          </Button>
+          </IconButton>
         </Grid>
         <Grid item xs={3} sm={2}>
           <S.Logo>

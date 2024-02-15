@@ -26,8 +26,6 @@ export default function BoardListItem({
             />
           </BoardListItemImg>
           <Typography variant="body2" color="GrayText">
-            {/* {el.writer}
-            {` • `} */}
             {format(el.createdAt.toDate(), "yyyy. MM. dd", {
               locale: ko,
             })}
