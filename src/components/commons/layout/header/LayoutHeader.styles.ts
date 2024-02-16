@@ -1,6 +1,4 @@
 import styled from "@emotion/styled";
-import { Button } from "antd";
-import Link from "next/link";
 
 export const Wrapper = styled.div`
   padding: 0 15px;
@@ -53,8 +51,3 @@ export const Logo = styled.h1<{ collapsed?: boolean }>`
     height: 100%;
   }
 `;
-export const LinkBtn = styled(Button)`
-  font-family: "Noto Sans KR", sans-serif;
-  font-size: 14px;
-`;
-export const NextLink = styled(Link)``;

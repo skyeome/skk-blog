@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { auth } from "../../../../commons/libraries/firebase";
 import type { User } from "firebase/auth";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { HeaderUsers, LinkBtn, NextLink } from "./LayoutHeader.styles";
+import { HeaderUsers } from "./LayoutHeader.styles";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../../commons/stores";
+import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
@@ -107,11 +108,7 @@ export function AuthUser(): JSX.Element {
         </HeaderUsers>
       ) : (
         <HeaderUsers>
-          <LinkBtn type="link">
-            <NextLink href={"/auth/signin"}>
-              <a>로그인</a>
-            </NextLink>
-          </LinkBtn>
+          <Link href="/auth/signin">로그인</Link>
         </HeaderUsers>
       )}
     </>
