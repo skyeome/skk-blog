@@ -13,10 +13,10 @@ import { db } from "../../libraries/firebase";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { userState } from "../../stores";
-import type { MessageInstance } from "antd/es/message/interface";
+import type { ShowToastParams } from "./useToast";
 
 export const useBoardLike = (
-  msgApi: MessageInstance
+  showToast: ShowToastParams
 ): {
   likeCount: number;
   liked: boolean;
@@ -30,10 +30,7 @@ export const useBoardLike = (
   const onClickLikeBtn = async (): Promise<void> => {
     const boardId = router.query.boardId as string;
     if (user === null) {
-      void msgApi.open({
-        type: "error",
-        content: "로그인 해주시면 좋아요가 가능합니다.",
-      });
+      showToast("error", "로그인 해주시면 좋아요가 가능합니다.");
       return;
     }
     if (!liked) {

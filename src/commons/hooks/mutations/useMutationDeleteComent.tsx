@@ -7,7 +7,7 @@ export const useMutationDeleteComment = (
   password: string,
   setErrMsg: Dispatch<SetStateAction<string>>,
   setOpen: Dispatch<SetStateAction<boolean>>,
-  setIsOpenDelete: Dispatch<SetStateAction<boolean>>
+  setIsOpenEdit: Dispatch<SetStateAction<boolean>>
 ): {
   onClickDelete: () => Promise<void>;
 } => {
@@ -19,7 +19,7 @@ export const useMutationDeleteComment = (
           deleteDoc(doc(db, "BoardComment", id))
             .then(() => {
               setOpen(false);
-              setIsOpenDelete(false);
+              setIsOpenEdit(false);
             })
             .catch((error) => {
               console.log(error.message);

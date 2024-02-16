@@ -45,13 +45,8 @@ export const topKvCategory = styled.h5`
   }
 `;
 export const topKvInfos = styled.div`
-  > p {
-    display: inline-block;
-    color: #888;
-    font-size: 0.8125em;
-    font-weight: 400;
-    line-height: 1;
-    margin: 0 6px;
+  & svg {
+    vertical-align: -0.25rem;
   }
 `;
 export const BoardLikeWrap = styled.div`
@@ -82,4 +77,7 @@ export const BoardLikeBtn = styled.div`
   border-radius: 6px;
   color: #ff4d4f;
   cursor: pointer;
+  & > svg {
+    vertical-align: middle;
+  }
 `;

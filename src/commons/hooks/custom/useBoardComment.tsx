@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from "react";
 import type { FormState, UseFormReset, UseFormSetValue } from "react-hook-form";
 import { db } from "../../libraries/firebase";
 import {
@@ -6,7 +7,6 @@ import {
   addDoc,
   updateDoc,
   doc,
-  // getDoc,
 } from "firebase/firestore";
 
 export interface ICommentValues {
@@ -31,8 +31,6 @@ export const useBoardComment = (
 ): Record<any, any> => {
   const onClickWrite = async (data: ICommentValues): Promise<void> => {
     try {
-      // TODO: 댓글작성 로직구현
-
       await addDoc(collection(db, "BoardComment"), {
         boardId: args.boardId,
         ...data,
@@ -48,7 +46,7 @@ export const useBoardComment = (
       contents: "",
       star: 0,
     });
-    if(args.refetch !== undefined) args.refetch();
+    if (args.refetch !== undefined) args.refetch();
   };
 
   const onClickUpdate = async (data: ICommentValues): Promise<void> => {
@@ -61,28 +59,22 @@ export const useBoardComment = (
       if (args.commentId === undefined || args.onClickSubmit === undefined)
         return;
 
-      // const result = await getDoc(doc(db, "BoardComment", args.commentId));
-      // if (result.exists()) {
-      //   const resultData = result.data();
-      //   if (resultData.password !== data.password) {
-      //     alert("비밀번호가 다릅니다.");
-      //     return;
-      //   }
-      // }
-      console.log(updatedData);
       await updateDoc(doc(db, "BoardComment", args.commentId), {
         ...updatedData,
         updatedAt: serverTimestamp(),
       });
       args.onClickSubmit();
-      if(args.refetch !== undefined) args.refetch();
+      if (args.refetch !== undefined) args.refetch();
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
   };
 
-  const setRating = (rating: number): void => {
-    args.setValue("star", rating);
+  const setRating = (
+    event: SyntheticEvent<Element, Event>,
+    value: number | null
+  ) => {
+    args.setValue("star", value ?? 0);
   };
   return {
     onClickWrite,

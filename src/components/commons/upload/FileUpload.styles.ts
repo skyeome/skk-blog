@@ -2,19 +2,26 @@ import styled from "@emotion/styled";
 
 export const HidedInput = styled.input`
   visibility: hidden;
+  width: 0;
+  height: 0;
+  opacity: 0;
 `;
 
 export const FileUploadWrap = styled.div`
-  border-radius: 5px;
-  border: 1px dashed #000;
-  width: 100px;
-  height: 100px;
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 100px;
+  height: 100px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px dashed #000;
   text-align: center;
   cursor: pointer;
-  padding: 5px;
+
   &:hover {
     color: mediumblue;
     border-color: mediumblue;

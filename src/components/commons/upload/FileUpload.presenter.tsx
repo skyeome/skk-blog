@@ -1,18 +1,19 @@
-import { UploadOutlined } from "@ant-design/icons";
-import * as S from "./FileUpload.styles";
+import Image from "next/image";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import type { IFileUploadUIProps } from "./FileUpload.types";
+import * as S from "./FileUpload.styles";
 
 export default function FileUploadUI(props: IFileUploadUIProps): JSX.Element {
   return (
     <div>
       {props.fileUrl !== "" ? (
         <S.FileUploadWrap onClick={props.onClickUpload}>
-          <img src={props.fileUrl} />
+          <Image src={props.fileUrl} layout="fill" />
         </S.FileUploadWrap>
       ) : (
         <S.FileUploadWrap onClick={props.onClickUpload}>
           <p>
-            <UploadOutlined rev={undefined} />
+            <CloudUploadIcon fontSize="small" />
             <br />
             파일 업로드
           </p>
