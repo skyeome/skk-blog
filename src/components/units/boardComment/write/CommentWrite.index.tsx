@@ -1,10 +1,16 @@
 import { useForm, Controller } from "react-hook-form";
-import { Button, Col, Input, Rate, Row, Space } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Rating from "@mui/material/Rating";
+import Grid from "@mui/material/Grid";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LockIcon from "@mui/icons-material/Lock";
 import { useQueryIdCheck } from "../../../../commons/hooks/custom/useQueryIdCheck";
 import type { ICommentValues } from "../../../../commons/hooks/custom/useBoardComment";
 import { useBoardComment } from "../../../../commons/hooks/custom/useBoardComment";
 import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import { Textarea } from "./CommentWrite.styles";
 
 interface ICommentWriteProps {
   isEdit: boolean;
@@ -30,79 +36,86 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
     setValue,
     reset,
     onClickSubmit: props.onClickSubmit,
-    refetch: props.refetch
+    refetch: props.refetch,
   });
   return (
     <>
-      <Row gutter={[16, 16]}>
-        <Col xs={24} md={8}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
           <Controller
             name="writer"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Input
-                onChange={onChange}
-                value={value}
-                placeholder="이름을 적어주세요."
-                prefix={<UserOutlined rev={undefined} />}
-                disabled={props.isEdit}
-              />
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <AccountCircle
+                  sx={{ color: "action.active", mr: 1, my: 0.5 }}
+                />
+                <TextField
+                  label="닉네임"
+                  variant="standard"
+                  onChange={onChange}
+                  value={value}
+                  disabled={props.isEdit}
+                  margin="none"
+                  fullWidth
+                />
+              </Box>
             )}
           />
-        </Col>
-        <Col xs={12} md={8}>
+        </Grid>
+        <Grid item xs={6} md={4}>
           <Controller
             name="password"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Input.Password
-                onChange={onChange}
-                value={value}
-                placeholder="비밀번호를 작성해주세요."
-                prefix={<LockOutlined rev={undefined} />}
-              />
+              <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <LockIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+                <TextField
+                  type="password"
+                  label="비밀번호"
+                  variant="standard"
+                  onChange={onChange}
+                  value={value}
+                  margin="none"
+                  fullWidth
+                />
+              </Box>
             )}
           />
-        </Col>
-        <Col xs={12} md={8}>
-          <Rate onChange={setRating} defaultValue={props.data?.star ?? 0} />
-        </Col>
-      </Row>
-      <Space></Space>
-      <Row style={{ margin: "16px 0 36px" }}>
-        <Col span={24}>
-          <Controller
-            name="contents"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Input.TextArea
-                showCount
-                rows={4}
-                onChange={onChange}
-                value={value}
-                placeholder="내용을 작성해주세요."
-                autoSize={{ minRows: 3, maxRows: 5 }}
-                style={{ width: "100%", resize: "none" }}
-              />
-            )}
-          />
-        </Col>
-      </Row>
-      <Row justify="end" style={{ marginBottom: "60px" }}>
-        <Col>
-          <Button
-            type="primary"
-            size="large"
-            onClick={
-              props.isEdit
-                ? handleSubmit(onClickUpdate)
-                : handleSubmit(onClickWrite)
-            }
-          >
-            {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
-          </Button>
-        </Col>
-      </Row>
+        </Grid>
+        <Grid item xs={6} md={4}>
+          <Box sx={{ mt: 2 }}>
+            <Rating onChange={setRating} defaultValue={props.data?.star ?? 0} />
+          </Box>
+        </Grid>
+      </Grid>
+      <Box mt={2} mb={2}>
+        <Controller
+          name="contents"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Textarea
+              minRows={3}
+              onChange={onChange}
+              value={value}
+              placeholder="내용을 작성해주세요."
+            />
+          )}
+        />
+      </Box>
+      <Box mb={8} sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={
+            props.isEdit
+              ? handleSubmit(onClickUpdate)
+              : handleSubmit(onClickWrite)
+          }
+        >
+          {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
+        </Button>
+      </Box>
     </>
   );
 }

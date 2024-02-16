@@ -1,45 +1,75 @@
-import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import * as S from "../signup/Signup.styles";
 import { Controller } from "react-hook-form";
-import type { ISigninProps } from "./Signin.types";
-
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useMutationLoginUser } from "../../../../commons/hooks/mutations/useMutationLoginUser";
+import Toast from "../../../commons/layout/toast/Toast";
+import useToast from "../../../../commons/hooks/custom/useToast";
+import * as S from "../signup/Signup.styles";
 
-export default function Signin(props: ISigninProps): JSX.Element {
-  const { control, errors, onSubmit } = useMutationLoginUser(props.api);
+export default function Signin(): JSX.Element {
+  const { openToast, severity, messageToast, closeToast, showToast } =
+    useToast();
+  const {
+    control,
+    errors,
+    onSubmit,
+    showPassword,
+    handleClickShowPassword,
+    handleMouseDownPassword,
+  } = useMutationLoginUser(showToast);
 
   return (
     <S.SignWrap>
-      {props.contextHolder}
       <S.SignContent>
         <S.SignTitle>
           이메일로 <span>로그인</span>
         </S.SignTitle>
-        <Form onFinish={onSubmit} autoComplete="off">
-          <Form.Item>
+        <form onSubmit={onSubmit} autoComplete="off">
+          <div>
             <Controller
               name="userId"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input
+                <TextField
                   onChange={onChange}
                   value={value}
                   placeholder="이메일 주소(ID)를 입력해 주세요"
+                  sx={{ mb: 2 }}
+                  fullWidth
                 />
               )}
             />
             {errors.userId?.message}
-          </Form.Item>
-          <Form.Item>
+          </div>
+          <div>
             <Controller
               name="password"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Input.Password
+                <OutlinedInput
+                  type={showPassword ? "text" : "password"}
                   onChange={onChange}
                   value={value}
                   placeholder="비밀번호를 입력해 주세요"
+                  fullWidth
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
                 />
               )}
             />
@@ -50,25 +80,29 @@ export default function Signin(props: ISigninProps): JSX.Element {
                 <S.SignResetPass>비밀번호 재설정</S.SignResetPass>
               </Link>
             </S.SignDesc>
-          </Form.Item>
-          <Form.Item>
-            <S.SignConfirmWrap>
-              <div>
-                <Link href="/">
-                  <a>홈으로</a>
-                </Link>
-                <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
-                <Link href="/auth/signup">
-                  <a>가입하기</a>
-                </Link>
-              </div>
-              <Button type="primary" htmlType="submit" size={"large"}>
-                로그인
-              </Button>
-            </S.SignConfirmWrap>
-          </Form.Item>
-        </Form>
+          </div>
+          <S.SignConfirmWrap>
+            <div>
+              <Link href="/">
+                <a>홈으로</a>
+              </Link>
+              <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
+              <Link href="/auth/signup">
+                <a>가입하기</a>
+              </Link>
+            </div>
+            <Button variant="contained" type="submit" size="large">
+              로그인
+            </Button>
+          </S.SignConfirmWrap>
+        </form>
       </S.SignContent>
+      <Toast
+        open={openToast}
+        severity={severity}
+        message={messageToast}
+        closeToast={closeToast}
+      />
     </S.SignWrap>
   );
 }

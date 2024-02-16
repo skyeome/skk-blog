@@ -1,7 +1,7 @@
-import type { NotificationInstance } from "antd/es/notification/interface";
 import type { ChangeEvent, RefObject } from "react";
+import type { ShowToastParams } from "../../../commons/hooks/custom/useToast";
 export interface IFileUploadProps {
-  api: NotificationInstance;
+  showToast: ShowToastParams;
   fileUrl: string;
   onChangeFileUrls: (fileUrl: string, index: number) => void;
   index: number;

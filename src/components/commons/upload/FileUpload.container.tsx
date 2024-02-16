@@ -3,16 +3,15 @@ import { useRef } from "react";
 import FileUploadUI from "./FileUpload.presenter";
 import { checkImageValidation } from "./FileUpload.validation";
 import type { IFileUploadProps } from "./FileUpload.types";
-// import { useMutation } from "@apollo/client";
-// import { UPLOAD_FILE } from "./FileUpload.queries";
 import { storage } from "../../../commons/libraries/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-// import type {
-//   IMutation,
-//   IMutationUploadFileArgs,
-// } from "../../../commons/types/generated/types";
 
-export default function FileUpload(props: IFileUploadProps): JSX.Element {
+export default function FileUpload({
+  showToast,
+  fileUrl,
+  onChangeFileUrls,
+  index,
+}: IFileUploadProps): JSX.Element {
   const fileRef = useRef<HTMLInputElement>(null);
   // const [uploadFile] = useMutation<
   //   Pick<IMutation, "uploadFile">,
@@ -25,7 +24,7 @@ export default function FileUpload(props: IFileUploadProps): JSX.Element {
     event: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     const file = event.target.files?.[0];
-    const isValid = checkImageValidation(props.api, file);
+    const isValid = checkImageValidation(showToast, file);
     if (!isValid) return;
     try {
       const storageRef = ref(storage, `images/${file?.name ?? "file"}`);
@@ -37,18 +36,15 @@ export default function FileUpload(props: IFileUploadProps): JSX.Element {
         (downloadUrl) => downloadUrl
       );
       // const result = await uploadFile({ variables: { file } });
-      props.onChangeFileUrls(location ?? "", props.index);
+      onChangeFileUrls(location ?? "", index);
     } catch (error) {
-      if (error instanceof Error)
-        props.api.error({
-          message: error.message,
-        });
+      if (error instanceof Error) showToast("error", error.message);
     }
   };
   return (
     <FileUploadUI
       fileRef={fileRef}
-      fileUrl={props.fileUrl}
+      fileUrl={fileUrl}
       onClickUpload={onClickUpload}
       onChangeFile={onChangeFile}
     />

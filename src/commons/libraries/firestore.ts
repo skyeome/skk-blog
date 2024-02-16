@@ -13,6 +13,7 @@ export class BoardDetail {
     public title: string,
     public contents: string,
     public createdAt: Timestamp,
+    public category: string[],
     public images: string[]
   ) {}
 
@@ -28,6 +29,8 @@ export class BoardDetail {
       ", " +
       this.createdAt.toDate().toLocaleString() +
       ", " +
+      this.category[0] +
+      ", " +
       this.images[0]
     );
   }
@@ -41,6 +44,7 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       title: docData.title,
       contents: docData.contents,
       createdAt: docData.createdAt,
+      category: docData.category,
       images: docData.images,
     };
   },
@@ -56,6 +60,7 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       data.title,
       data.contents,
       data.createdAt,
+      data.category,
       data.images
     );
   },

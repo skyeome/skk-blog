@@ -5,31 +5,26 @@ import { Editor } from "@toast-ui/react-editor";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../commons/libraries/firebase";
 import { checkImageValidation } from "../upload/FileUpload.validation";
-import type { NotificationInstance } from "antd/es/notification/interface";
+import type { ShowToastParams } from "../../../commons/hooks/custom/useToast";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
 interface IEditorProps {
-  api: NotificationInstance;
+  showToast: ShowToastParams;
   initialValue?: string;
   editorRef: RefObject<Editor>;
-  // setContents: (value: SetStateAction<string>) => void;
 }
 
-export default function TuiEditor(props: IEditorProps): JSX.Element {
-  // const editorRef = useRef<Editor>(null);
-
-  // const onChangeContents = (): void => {
-  //   const editorIns = editorRef.current?.getInstance();
-  //   const mkdown = editorIns?.getMarkdown();
-  //   props.setContents(mkdown ?? "");
-  // };
-
+export default function TuiEditor({
+  showToast,
+  initialValue,
+  editorRef,
+}: IEditorProps): JSX.Element {
   const onUploadImage = async (
     blob: Blob | File,
     callback: (url: string, text?: string) => void
   ): Promise<void> => {
     if (blob instanceof File) {
-      const isValid = checkImageValidation(props.api, blob);
+      const isValid = checkImageValidation(showToast, blob);
       if (!isValid) return;
       try {
         const storageRef = ref(storage, `images/${blob?.name ?? "file"}`);
@@ -41,10 +36,7 @@ export default function TuiEditor(props: IEditorProps): JSX.Element {
         );
         callback(url, blob?.name);
       } catch (error) {
-        if (error instanceof Error)
-          props.api.error({
-            message: error.message,
-          });
+        if (error instanceof Error) showToast("error", error.message);
       }
     }
   };
@@ -53,9 +45,8 @@ export default function TuiEditor(props: IEditorProps): JSX.Element {
       previewStyle="vertical"
       height="400px"
       initialEditType="markdown"
-      initialValue={props.initialValue ?? ""}
-      ref={props.editorRef}
-      // onChange={onChangeContents}
+      initialValue={initialValue ?? ""}
+      ref={editorRef}
       hooks={{ addImageBlobHook: onUploadImage }}
     />
   );

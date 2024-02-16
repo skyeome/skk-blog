@@ -1,18 +1,29 @@
-import { Form, Input, Button, notification, Select } from "antd";
-// import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import type { IBoardWriteProps } from "./BoardWrite.types";
-// import dynamic from "next/dynamic";
-import FileUpload from "../../../commons/upload/FileUpload.container";
-import { v4 as uuidv4 } from "uuid";
-import { FileUploadWrap } from "./BoardWrite.styles";
-import { useMutationCreateBoard } from "../../../../commons/hooks/mutations/useMutationCreateBoard";
 import { useRef } from "react";
-
 import { Controller } from "react-hook-form";
 import type { Editor } from "@toast-ui/react-editor";
+import { v4 as uuidv4 } from "uuid";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Input from "@mui/material/Input";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import type { IBoardWriteProps } from "./BoardWrite.types";
 import TuiEditor from "../../../commons/editor/TuiEditor";
+import Toast from "../../../commons/layout/toast/Toast";
+import useToast from "../../../../commons/hooks/custom/useToast";
+import FileUpload from "../../../commons/upload/FileUpload.container";
+import { FileUploadWrap } from "./BoardWrite.styles";
+import { useMutationCreateBoard } from "../../../../commons/hooks/mutations/useMutationCreateBoard";
 
-const options: object[] = [
+interface Language {
+  label: string;
+  value: string;
+}
+
+const options: Language[] = [
   { label: "Javascript", value: "Javascript" },
   { label: "Typescript", value: "Typescript" },
   { label: "React", value: "React" },
@@ -20,89 +31,112 @@ const options: object[] = [
   { label: "Git", value: "Git" },
 ];
 
-export default function BoardWrite(props: IBoardWriteProps): JSX.Element {
-  const [api, contextHolder] = notification.useNotification();
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+export default function BoardWrite({
+  isEdit,
+  data,
+}: IBoardWriteProps): JSX.Element {
+  const { openToast, severity, messageToast, closeToast, showToast } =
+    useToast();
 
   const editorRef = useRef<Editor>(null);
   const {
     control,
     errors,
     fileUrls,
-    // onChangeContents,
-    // onUploadImage,
     onChangeFileUrls,
     onClickWrite,
     onClickUpdate,
-  } = useMutationCreateBoard(api, editorRef, props?.data);
+  } = useMutationCreateBoard(showToast, editorRef, data);
 
   return (
-    <>
-      {contextHolder}
-      <Form
-        onFinish={props.isEdit ? onClickUpdate : onClickWrite}
-        autoComplete="off"
-      >
-        <Form.Item label="제목">
-          <Controller
-            name="title"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={props.data?.title}
-                onChange={onChange}
-                value={value}
-                placeholder="제목을 적어주세요."
-              />
-            )}
-          />
-          {/* <Input
-            id="title"
-            placeholder="제목을 적어주세요."
-            defaultValue={props.data?.title}
-            onChange={onChangeInputs}
-          /> */}
-          {errors.title?.message}
-        </Form.Item>
-        <Form.Item label="언어">
-          <Controller
-            name="category"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Select
-                mode="multiple"
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="언어를 선택해 주세요"
-                onChange={onChange}
-                value={value}
-                defaultValue={props.data?.category}
-                options={options}
-              />
-            )}
-          />
-          {errors.category?.message}
-        </Form.Item>
-        <TuiEditor
-          api={api}
-          initialValue={props.data?.contents}
-          editorRef={editorRef}
-          // setContents={setContents}
-        />
-        <FileUploadWrap>
-          {fileUrls.map((el, index) => (
-            <FileUpload
-              key={uuidv4()}
-              api={api}
-              fileUrl={el}
-              onChangeFileUrls={onChangeFileUrls}
-              index={index}
+    <form onSubmit={isEdit ? onClickUpdate : onClickWrite} autoComplete="off">
+      <div>
+        <Controller
+          name="title"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              defaultValue={data?.title}
+              onChange={onChange}
+              value={value}
+              placeholder="제목을 적어주세요."
+              sx={{ mb: 2 }}
+              fullWidth
             />
-          ))}
-        </FileUploadWrap>
-        <Button type="primary" htmlType="submit" size="large">
-          {props.isEdit ? "수정완료" : "작성완료"}
-        </Button>
-      </Form>
-    </>
+          )}
+        />
+        {errors.title?.message}
+      </div>
+      <div>
+        <Controller
+          name="category"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <FormControl fullWidth>
+              <InputLabel>#태그</InputLabel>
+              <Select
+                multiple
+                defaultValue={data !== undefined ? data.category : []}
+                value={value}
+                onChange={onChange}
+                input={<Input />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value: string) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}
+                MenuProps={MenuProps}
+                sx={{ mb: 2 }}
+              >
+                {options.map((name) => (
+                  <MenuItem key={name.label} value={name.value}>
+                    {name.value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+        />
+        {errors.category?.message}
+      </div>
+      <TuiEditor
+        showToast={showToast}
+        initialValue={data?.contents}
+        editorRef={editorRef}
+      />
+      <FileUploadWrap>
+        {fileUrls.map((el, index) => (
+          <FileUpload
+            key={uuidv4()}
+            showToast={showToast}
+            fileUrl={el}
+            onChangeFileUrls={onChangeFileUrls}
+            index={index}
+          />
+        ))}
+      </FileUploadWrap>
+      <Button variant="contained" type="submit" size="large">
+        {isEdit ? "수정완료" : "작성완료"}
+      </Button>
+      <Toast
+        open={openToast}
+        severity={severity}
+        message={messageToast}
+        closeToast={closeToast}
+      />
+    </form>
   );
 }
