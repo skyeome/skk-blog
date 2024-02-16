@@ -59,4 +59,5 @@ export const SignConfirmWrap = styled.div`
 export const SignResetPass = styled.a`
   color: #333;
   font-weight: bold;
+  cursor: pointer;
 `;

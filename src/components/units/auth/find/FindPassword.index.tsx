@@ -5,10 +5,9 @@ import Toast from "../../../commons/layout/toast/Toast";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useMutationResetEmail } from "../../../../commons/hooks/mutations/useMutationResetEmail";
-import type { IFindPasswordProps } from "./FindPassword.types";
 import * as S from "../signup/Signup.styles";
 
-export default function FindPassword(props: IFindPasswordProps): JSX.Element {
+export default function FindPassword(): JSX.Element {
   const { openToast, severity, messageToast, closeToast, showToast } =
     useToast();
   const { control, errors, onSubmit } = useMutationResetEmail(showToast);

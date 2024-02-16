@@ -1,5 +1,10 @@
 import { useCallback, useState } from "react";
 
+export type ShowToastParams = (
+  newSeverity: "success" | "error" | "warning" | "info",
+  newMessage: string
+) => void;
+
 export default function useToast() {
   // Toast
   const [openToast, setOpenToast] = useState(false);
@@ -7,7 +12,7 @@ export default function useToast() {
     "success" | "error" | "warning" | "info"
   >("success");
   const [messageToast, setMessageToast] = useState("");
-  const showToast = useCallback(
+  const showToast: ShowToastParams = useCallback(
     (
       newSeverity: "success" | "error" | "warning" | "info",
       newMessage: string

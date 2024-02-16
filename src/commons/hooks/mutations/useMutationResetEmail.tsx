@@ -6,13 +6,11 @@ import { resetPassSchema } from "../../libraries/yup";
 import type { FindPasswordType } from "../../../components/units/auth/find/FindPassword.types";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../libraries/firebase";
+import type { ShowToastParams } from "../custom/useToast";
 
 export const useMutationResetEmail = (
   // api: NotificationInstance,
-  showToast: (
-    type: "success" | "error" | "warning" | "info",
-    message: string
-  ) => void
+  showToast: ShowToastParams
 ): {
   control: Control<FindPasswordType, any>;
   errors: FieldErrors<FindPasswordType>;
