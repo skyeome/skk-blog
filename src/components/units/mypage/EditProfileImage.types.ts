@@ -4,4 +4,5 @@ export interface EditProfileImageProps {
   image?: string;
   newImage?: string;
   setImage: Dispatch<SetStateAction<string | undefined>>;
+  handleDeleteImage: VoidFunction;
 }

@@ -22,10 +22,9 @@ import EditProfileImage from "./EditProfileImage";
 
 function EditProfileForm() {
   const user = useRecoilValue(userState);
-  if (user === null) return <div>loading...</div>;
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["mypage", "userInfo"],
-    queryFn: async () => await getMyInfo(user.uid),
+    queryFn: async () => await getMyInfo(user?.uid),
   });
   const { openToast, severity, messageToast, closeToast, showToast } =
     useToast();
@@ -33,14 +32,11 @@ function EditProfileForm() {
     control,
     errors,
     onSubmit,
-    showPassword,
-    showPasswordConfirm,
-    handleClickShowPassword,
-    handleClickShowPasswordConfirm,
-    handleMouseDownPassword,
+    password,
     image,
     setImage,
-  } = useMutationUpdateProfile(showToast, data);
+    handleDeleteImage,
+  } = useMutationUpdateProfile(showToast, refetch, data);
 
   return (
     <Container maxWidth="sm" sx={{ p: 0 }}>
@@ -48,6 +44,7 @@ function EditProfileForm() {
         image={data?.avatar}
         newImage={image}
         setImage={setImage}
+        handleDeleteImage={handleDeleteImage}
       />
       <form onSubmit={onSubmit} autoComplete="off">
         <Grid container alignItems="center" mb={2}>
@@ -122,7 +119,7 @@ function EditProfileForm() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <OutlinedInput
-                  type={showPassword ? "text" : "password"}
+                  type={password.showPassword ? "text" : "password"}
                   onChange={onChange}
                   value={value}
                   placeholder="변경하실 비밀번호를 입력해주세요."
@@ -131,11 +128,15 @@ function EditProfileForm() {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={password.handleClickShowPassword}
+                        onMouseDown={password.handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {password.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -163,7 +164,7 @@ function EditProfileForm() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <OutlinedInput
-                  type={showPasswordConfirm ? "text" : "password"}
+                  type={password.showPasswordConfirm ? "text" : "password"}
                   onChange={onChange}
                   value={value}
                   placeholder="변경하실 비밀번호를 다시 입력해주세요."
@@ -172,11 +173,11 @@ function EditProfileForm() {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPasswordConfirm}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={password.handleClickShowPasswordConfirm}
+                        onMouseDown={password.handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPasswordConfirm ? (
+                        {password.showPasswordConfirm ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />

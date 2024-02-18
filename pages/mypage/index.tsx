@@ -11,15 +11,14 @@ import { userState } from "../../src/commons/stores";
 
 function Mypage() {
   const user = useRecoilValue(userState);
-  if (user === null) return <div>loading...</div>;
   const result = useQueries([
     {
       queryKey: ["mypage", "userInfo"],
-      queryFn: async () => await getMyInfo(user.uid),
+      queryFn: async () => await getMyInfo(user?.uid),
     },
     {
       queryKey: ["mypage", "ratestData"],
-      queryFn: async () => await getMyRatestData(user.uid),
+      queryFn: async () => await getMyRatestData(user?.uid),
     },
   ]);
   return (

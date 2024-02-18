@@ -25,6 +25,7 @@ function EditProfileImage({
   image,
   newImage,
   setImage,
+  handleDeleteImage,
 }: EditProfileImageProps) {
   const editor = useRef<AvatarEditor>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -53,7 +54,7 @@ function EditProfileImage({
   // 모달에서 확인을 눌렀을때
   const handleClickSave = async () => {
     if (editor.current === null) return;
-    const dataUrl = editor.current.getImage().toDataURL();
+    const dataUrl = editor.current.getImageScaledToCanvas().toDataURL();
     setImage(dataUrl);
     handleClose();
   };
@@ -67,7 +68,11 @@ function EditProfileImage({
             sx={{ width: 100, height: 100, mb: 1 }}
           />
           <Tooltip title="이미지 삭제">
-            <ProfileDelBtn size="small" color="error">
+            <ProfileDelBtn
+              size="small"
+              color="error"
+              onClick={handleDeleteImage}
+            >
               <DeleteIcon fontSize="small" />
             </ProfileDelBtn>
           </Tooltip>

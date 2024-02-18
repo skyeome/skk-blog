@@ -120,6 +120,7 @@ export class UserInfo {
   constructor(
     public uid: string,
     public avatar: string,
+    public avatarName: string,
     public nickname: string,
     public email: string,
     public desc: string,
@@ -131,6 +132,8 @@ export class UserInfo {
       this.uid +
       ", " +
       this.avatar +
+      ", " +
+      this.avatarName +
       ", " +
       this.nickname +
       ", " +
@@ -148,6 +151,7 @@ export const UserInfoConverter: FirestoreDataConverter<UserInfo> = {
     return {
       uid: docData.uid,
       avatar: docData.avatar,
+      avatarName: docData.avatarName,
       nickname: docData.nickname,
       email: docData.email,
       desc: docData.desc,
@@ -163,6 +167,7 @@ export const UserInfoConverter: FirestoreDataConverter<UserInfo> = {
     return new UserInfo(
       data.uid,
       data.avatar,
+      data.avatarName,
       data.nickname,
       data.email,
       data.desc,
