@@ -1,10 +1,4 @@
-import { useEffect, useState } from "react";
-import { auth } from "../../../../commons/libraries/firebase";
-import type { User } from "firebase/auth";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { HeaderUsers } from "./LayoutHeader.styles";
-import { useRecoilState } from "recoil";
-import { userState } from "../../../../commons/stores";
+import { useState } from "react";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -13,6 +7,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
+import useAuthChange from "../../../../commons/hooks/custom/useAuthChange";
+import { HeaderUsers } from "./LayoutHeader.styles";
 
 export function AuthUser(): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -23,28 +19,8 @@ export function AuthUser(): JSX.Element {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const { user, handleLogout } = useAuthChange();
 
-  const [user, setUser] = useRecoilState<User | null>(userState);
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user !== null) {
-        const userCopy = JSON.parse(JSON.stringify(user));
-        setUser(userCopy);
-      } else {
-        setUser(null);
-      }
-    });
-  }, []);
-
-  const onClickLogout = (): void => {
-    signOut(auth)
-      .then(() => {
-        setUser(null);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
   return (
     <>
       {user !== null ? (
@@ -98,7 +74,7 @@ export function AuthUser(): JSX.Element {
             <MenuItem onClick={handleClose}>
               <Avatar /> 내 정보 관리
             </MenuItem>
-            <MenuItem onClick={onClickLogout}>
+            <MenuItem onClick={handleLogout}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>

@@ -17,10 +17,11 @@ import useToast from "../../../../commons/hooks/custom/useToast";
 import FileUpload from "../../../commons/upload/FileUpload.container";
 import { FileUploadWrap } from "./BoardWrite.styles";
 import { useMutationCreateBoard } from "../../../../commons/hooks/mutations/useMutationCreateBoard";
+import type { LangTag } from "../../../../commons/types/tag";
 
 interface Language {
-  label: string;
-  value: string;
+  label: LangTag;
+  value: LangTag;
 }
 
 const options: Language[] = [
