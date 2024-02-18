@@ -35,8 +35,10 @@ const getRatestData = async () => {
     userIds.push(userId);
   });
 
-  const writerRef = collection(db, "User");
-  const writerQuery = query(writerRef, where("uid", "in", userIds));
+  const writerQuery = query(
+    collection(db, "User"),
+    where("uid", "in", userIds)
+  );
   const writerSn = await getDocs(writerQuery);
   writerSn.forEach((userDoc) => {
     const userData = userDoc.data();

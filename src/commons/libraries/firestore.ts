@@ -115,3 +115,58 @@ export const BoardConverter: FirestoreDataConverter<Board> = {
     );
   },
 };
+
+export class UserInfo {
+  constructor(
+    public uid: string,
+    public avatar: string,
+    public nickname: string,
+    public email: string,
+    public desc: string,
+    public createdAt: Timestamp
+  ) {}
+
+  toString(): string {
+    return (
+      this.uid +
+      ", " +
+      this.avatar +
+      ", " +
+      this.nickname +
+      ", " +
+      this.email +
+      ", " +
+      this.desc +
+      ", " +
+      this.createdAt.toDate().toLocaleString()
+    );
+  }
+}
+
+export const UserInfoConverter: FirestoreDataConverter<UserInfo> = {
+  toFirestore: (docData: UserInfo): DocumentData => {
+    return {
+      uid: docData.uid,
+      avatar: docData.avatar,
+      nickname: docData.nickname,
+      email: docData.email,
+      desc: docData.desc,
+      createdAt: docData.createdAt,
+    };
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ) => {
+    const sn = snapshot;
+    const data = sn.data(options);
+    return new UserInfo(
+      data.uid,
+      data.avatar,
+      data.nickname,
+      data.email,
+      data.desc,
+      data.createdAt
+    );
+  },
+};

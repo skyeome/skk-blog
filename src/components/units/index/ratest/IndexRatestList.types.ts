@@ -4,6 +4,7 @@ export type BoardRatest = Board & {
   id: string;
 };
 
-export interface IindexRatestListProps {
+export interface IndexRatestListProps {
+  title?: string;
   data?: BoardRatest[];
 }
