@@ -11,8 +11,7 @@ import { userState } from "../../src/commons/stores";
 
 function Mypage() {
   const user = useRecoilValue(userState);
-
-  if (user === null) return null;
+  if (user === null) return <div>loading...</div>;
   const result = useQueries([
     {
       queryKey: ["mypage", "userInfo"],
