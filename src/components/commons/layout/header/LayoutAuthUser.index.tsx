@@ -1,10 +1,4 @@
-import { useEffect, useState } from "react";
-import { auth } from "../../../../commons/libraries/firebase";
-import type { User } from "firebase/auth";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { HeaderUsers } from "./LayoutHeader.styles";
-import { useRecoilState } from "recoil";
-import { userState } from "../../../../commons/stores";
+import { useState } from "react";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -13,38 +7,29 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import useAuthChange from "../../../../commons/hooks/custom/useAuthChange";
+import { HeaderUsers } from "./LayoutHeader.styles";
+import { useQuery } from "react-query";
+import { getMyInfo } from "../../../../commons/apis/mypage";
 
 export function AuthUser(): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const { data } = useQuery({
+    queryKey: ["mypage", "userInfo"],
+    queryFn: async () => await getMyInfo(user?.uid),
+  });
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const { user, handleLogout } = useAuthChange();
 
-  const [user, setUser] = useRecoilState<User | null>(userState);
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user !== null) {
-        const userCopy = JSON.parse(JSON.stringify(user));
-        setUser(userCopy);
-      } else {
-        setUser(null);
-      }
-    });
-  }, []);
-
-  const onClickLogout = (): void => {
-    signOut(auth)
-      .then(() => {
-        setUser(null);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
   return (
     <>
       {user !== null ? (
@@ -57,7 +42,11 @@ export function AuthUser(): JSX.Element {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+              <Avatar
+                alt={data?.nickname}
+                src={data?.avatar}
+                sx={{ width: 32, height: 32 }}
+              />
             </IconButton>
           </Tooltip>
           <Menu
@@ -95,10 +84,13 @@ export function AuthUser(): JSX.Element {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={handleClose}>
-              <Avatar /> 내 정보 관리
+            <MenuItem>
+              <ListItemIcon>
+                <ManageAccountsIcon fontSize="small" />
+              </ListItemIcon>
+              <Link href="/mypage/edit">내 정보 관리</Link>
             </MenuItem>
-            <MenuItem onClick={onClickLogout}>
+            <MenuItem onClick={handleLogout}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>

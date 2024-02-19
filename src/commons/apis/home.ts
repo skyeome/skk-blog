@@ -10,7 +10,7 @@ import type { BoardRatest } from "../../components/units/index/ratest/IndexRates
 import { db } from "../libraries/firebase";
 import { BoardConverter } from "../libraries/firestore";
 
-type UserIds = Record<string, string>;
+export type UserIds = Record<string, string>;
 
 const getRatestData = async () => {
   const data: BoardRatest[] = [];
@@ -35,8 +35,10 @@ const getRatestData = async () => {
     userIds.push(userId);
   });
 
-  const writerRef = collection(db, "User");
-  const writerQuery = query(writerRef, where("uid", "in", userIds));
+  const writerQuery = query(
+    collection(db, "User"),
+    where("uid", "in", userIds)
+  );
   const writerSn = await getDocs(writerQuery);
   writerSn.forEach((userDoc) => {
     const userData = userDoc.data();

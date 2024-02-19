@@ -1,29 +1,32 @@
-import type { IBoardListProps } from "./BoardList.types";
-import InfiniteScroller from "react-infinite-scroller";
+import React from "react";
+import type { BoardListProps } from "./BoardList.types";
 import BoardListItem from "./BoardListItem.presenter";
 import Grid from "@mui/material/Grid";
-import { Skeleton } from "@mui/material";
+import Box from "@mui/material/Box/Box";
 
-export default function BoardListUI(props: IBoardListProps): JSX.Element {
-  return (
-    <>
-      {props.data !== undefined && (
-        <InfiniteScroller
-          loadMore={() => {
-            props.onLoadMore(props.lastKey ?? "");
-          }}
-          hasMore={props.lastKey.toString() !== ""}
-          loader={<Skeleton />}
-        >
+const BoardListUI = React.forwardRef<HTMLDivElement, BoardListProps>(
+  ({ data, isLoading }, ref) => {
+    if (isLoading) return <div>loading...</div>;
+    if (data === undefined) return <div>데이터가 없습니다.</div>;
+    return (
+      <div>
+        <Box sx={{ minHeight: "100vh" }}>
           <Grid container spacing={2}>
-            {props.data?.map((el) => (
-              <Grid item xs={6}>
-                <BoardListItem key={el.id} el={el} />
-              </Grid>
+            {data?.pages.map((group, i) => (
+              <React.Fragment key={i}>
+                {group.map((el) => (
+                  <Grid item key={el.id} xs={12} sm={6}>
+                    <BoardListItem el={el} />
+                  </Grid>
+                ))}
+              </React.Fragment>
             ))}
           </Grid>
-        </InfiniteScroller>
-      )}
-    </>
-  );
-}
+        </Box>
+        <Box ref={ref} sx={{ height: 100 }} />
+      </div>
+    );
+  }
+);
+
+export default BoardListUI;

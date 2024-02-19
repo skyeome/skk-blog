@@ -86,3 +86,25 @@ export const boardWriteSchema = yup.object({
   title: yup.string(),
   category: yup.array(),
 });
+
+const notRequiredPassword = yup
+  .string()
+  .matches(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/, {
+    message: "영문 숫자 특수기호 조합 8자리 이상으로 입력해주세요",
+  })
+  .max(15, "비밀번호는 15자리 이하여야 합니다.")
+  .min(8, "비밀번호는 8자리 이상이어야 합니다.");
+
+export const profileFormSchema = yup.object({
+  nickname: yup
+    .string()
+    .max(20, "닉네임은 최대 한글10자 영문20자까지 가능합니다."),
+  desc: yup
+    .string()
+    .max(200, "설명글은 최대 한글100자 영문200자까지 가능합니다."),
+  password: notRequiredPassword,
+  passwordCheck: notRequiredPassword.oneOf(
+    [yup.ref("password"), undefined],
+    "비밀번호가 일치하지 않습니다."
+  ),
+});

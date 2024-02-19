@@ -1,6 +1,15 @@
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import * as Styled from "./HomeTags.styles";
+import type { LangTag } from "../../../../commons/types/tag";
+
+const TAG_LIST: LangTag[] = [
+  "Javascript",
+  "Typescript",
+  "React",
+  "Next.js",
+  "Git",
+];
 
 function HomeTags() {
   return (
@@ -9,18 +18,13 @@ function HomeTags() {
         Tags
       </Typography>
       <Styled.HomeTagList>
-        <li>
-          <Link href="/free?tag=javascript">#Javascript</Link>
-        </li>
-        <li>
-          <Link href="/free?tag=typescript">#Typescript</Link>
-        </li>
-        <li>
-          <Link href="/free?tag=react">#React.js</Link>
-        </li>
-        <li>
-          <Link href="/free?tag=next">#Next.js</Link>
-        </li>
+        {TAG_LIST.map((link) => (
+          <li key={link}>
+            <Link href={{ pathname: "/free", query: { tag: link } }}>
+              {"#" + link}
+            </Link>
+          </li>
+        ))}
       </Styled.HomeTagList>
     </Styled.HomeTags>
   );

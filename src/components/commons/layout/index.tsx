@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { useRouter } from "next/router";
 import LayoutFooter from "./footer/LayoutFooter.index";
@@ -22,6 +22,18 @@ export default function Layout({ children }: LayoutProps) {
   const handleClose = (): void => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      handleClose();
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
   return (
     <>
       <LayoutHeaderIndex handleOpen={handleOpen} />

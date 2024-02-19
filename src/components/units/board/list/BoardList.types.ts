@@ -1,6 +1,6 @@
-// import type { DocumentData } from "firebase/firestore";
+import type { InfiniteData } from "react-query";
 import type { IBoardList } from "../../../../commons/hooks/queries/useQueryFetchBoards";
-// import type { IQuery } from "../../../../commons/types/generated/types";
+import type { BoardRatest } from "../../index/ratest/IndexRatestList.types";
 
 export interface IBoardListProps {
   // data: Pick<IQuery, "fetchBoards"> | undefined;
@@ -10,6 +10,12 @@ export interface IBoardListProps {
   lastKey: string;
   // dataBoardsCount: Pick<IQuery, "fetchBoardsCount"> | undefined;
 }
+
+export interface BoardListProps {
+  data?: InfiniteData<BoardRatest[]>;
+  isLoading: boolean;
+}
+
 export interface IBoardListItemProps {
   el: IBoardList;
 }
