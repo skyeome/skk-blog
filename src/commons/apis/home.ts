@@ -10,7 +10,7 @@ import type { BoardRatest } from "../../components/units/index/ratest/IndexRates
 import { db } from "../libraries/firebase";
 import { BoardConverter } from "../libraries/firestore";
 
-type UserIds = Record<string, string>;
+export type UserIds = Record<string, string>;
 
 const getRatestData = async () => {
   const data: BoardRatest[] = [];

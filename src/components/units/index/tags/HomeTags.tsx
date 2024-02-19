@@ -3,8 +3,6 @@ import Link from "next/link";
 import * as Styled from "./HomeTags.styles";
 import type { LangTag } from "../../../../commons/types/tag";
 
-const preUrl = "/free?tag=";
-
 const TAG_LIST: LangTag[] = [
   "Javascript",
   "Typescript",
@@ -22,7 +20,9 @@ function HomeTags() {
       <Styled.HomeTagList>
         {TAG_LIST.map((link) => (
           <li key={link}>
-            <Link href={`${preUrl}${link}`}>{"#" + link}</Link>
+            <Link href={{ pathname: "/free", query: { tag: link } }}>
+              {"#" + link}
+            </Link>
           </li>
         ))}
       </Styled.HomeTagList>

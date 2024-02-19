@@ -1,37 +1,33 @@
-import { useState, useEffect } from "react";
-import type { IBoardList } from "../../../../commons/hooks/queries/useQueryFetchBoards";
-import {
-  useQueryFetchBoards,
-  useQueryFetchMoreBoards,
-} from "../../../../commons/hooks/queries/useQueryFetchBoards";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useInfiniteQuery } from "react-query";
+import { useInView } from "react-intersection-observer";
+import { getBoardsAll } from "../../../../commons/apis/board";
 import BoardListUI from "./BoardList.presenter";
 
 export default function BoardList(): JSX.Element {
-  const [posts, setPosts] = useState<IBoardList[]>();
-  const [lastKey, setLastKey] = useState("");
+  const router = useRouter();
+  // parameter 가져오기
+  const { tag: tagName } = router.query;
+  let tag = "";
+  if (tagName === undefined) tag = "";
+  if (typeof tagName === "string") tag = tagName;
+  if (typeof tagName === "object") tag = tagName[0];
+
+  const [ref, inView] = useInView();
+  const { data, isLoading, fetchNextPage } = useInfiniteQuery({
+    queryKey: ["board", tag === "" ? "all" : tag],
+    queryFn: async ({ pageParam }) => await getBoardsAll({ pageParam, tag }),
+    getNextPageParam: (lastPage) =>
+      lastPage.length < 6 ? null : lastPage[lastPage.length - 1].createdAt,
+    retry: 1,
+  });
+
   useEffect(() => {
-    void useQueryFetchBoards()
-      .then((res) => {
-        setPosts(res.posts);
-        setLastKey(res.lastKey);
-      })
-      .catch((err) => {
-        if (err instanceof Error) alert(err.message);
-      });
-  }, []);
+    if (inView) {
+      void fetchNextPage();
+    }
+  }, [inView]);
 
-  const onLoadMore = (key: any): void => {
-    // console.log(key);
-    if (key.length <= 0) return;
-    void useQueryFetchMoreBoards(key)
-      .then((res) => {
-        setLastKey(res.lastKey); // add new posts to old posts
-        setPosts((prev) => prev?.concat(res.posts));
-      })
-      .catch((err) => {
-        if (err instanceof Error) alert(err.message);
-      });
-  };
-
-  return <BoardListUI data={posts} onLoadMore={onLoadMore} lastKey={lastKey} />;
+  return <BoardListUI data={data} isLoading={isLoading} ref={ref} />;
 }
