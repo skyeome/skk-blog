@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { boardWriteSchema } from "../../libraries/yup";
 import type { Editor } from "@toast-ui/react-editor";
 import type { ShowToastParams } from "../custom/useToast";
+import MarkdownIt from "markdown-it";
 
 export const useMutationCreateBoard = (
   showToast: ShowToastParams,
@@ -64,12 +65,21 @@ export const useMutationCreateBoard = (
     const notEmptyCategory = currentCategory !== emptyCategory;
 
     const markdown = editorRef.current?.getInstance().getMarkdown();
+    // 요약글 만들기
+    const md = new MarkdownIt();
+    const htmlText = md.render(markdown ?? "");
+    let summary = new DOMParser().parseFromString(htmlText, "text/html").body
+      .textContent;
+    if (summary !== null && summary.length > 100) {
+      summary = summary.substring(0, 100);
+    }
     if (inputs.title !== undefined && notEmptyCategory && markdown !== "") {
       addDoc(collection(db, "Board"), {
         writer: user.uid,
         title: inputs.title,
         category: inputs.category,
         contents: markdown,
+        summary,
         images: [...fileUrls],
         createdAt: serverTimestamp(),
       })
@@ -92,6 +102,14 @@ export const useMutationCreateBoard = (
     const notEmptyCategory = currentCategory !== emptyCategory;
 
     const markdown = editorRef.current?.getInstance().getMarkdown();
+    // 요약글 만들기
+    const md = new MarkdownIt();
+    const htmlText = md.render(markdown ?? "");
+    let summary = new DOMParser().parseFromString(htmlText, "text/html").body
+      .textContent;
+    if (summary !== null && summary.length > 100) {
+      summary = summary.substring(0, 100);
+    }
     if (inputs.title === "" && notEmptyCategory && markdown === "") {
       alert("수정한 내용이 없습니다.");
       return;
@@ -101,6 +119,7 @@ export const useMutationCreateBoard = (
     if (inputs.title !== undefined) updateBoardInput.title = inputs.title;
     if (inputs.category !== undefined && notEmptyCategory)
       updateBoardInput.category = inputs.category;
+    if (summary !== null) updateBoardInput.summary = summary;
     if (markdown !== "") updateBoardInput.contents = markdown;
     if (isChangedFiles) updateBoardInput.images = fileUrls;
     if (typeof router.query.boardId !== "string") {

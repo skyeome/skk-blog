@@ -8,6 +8,7 @@ import { useQueries } from "react-query";
 import { getMyInfo, getMyRatestData } from "../../src/commons/apis/mypage";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../src/commons/stores";
+import { loginCheck } from "../../src/components/commons/hocs/loginCheck";
 
 function Mypage() {
   const user = useRecoilValue(userState);
@@ -45,4 +46,4 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default loginCheck(Mypage);
