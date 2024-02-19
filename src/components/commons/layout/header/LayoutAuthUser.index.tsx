@@ -12,11 +12,13 @@ import useAuthChange from "../../../../commons/hooks/custom/useAuthChange";
 import { HeaderUsers } from "./LayoutHeader.styles";
 import { useQuery } from "react-query";
 import { getMyInfo } from "../../../../commons/apis/mypage";
+import { paperProps } from "./LayoutAuthUser.styles";
 
 export function AuthUser(): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const { user, handleLogout } = useAuthChange();
   const { data } = useQuery({
     queryKey: ["mypage", "userInfo"],
     queryFn: async () => await getMyInfo(user?.uid),
@@ -28,7 +30,6 @@ export function AuthUser(): JSX.Element {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const { user, handleLogout } = useAuthChange();
 
   return (
     <>
@@ -44,7 +45,7 @@ export function AuthUser(): JSX.Element {
             >
               <Avatar
                 alt={data?.nickname}
-                src={data?.avatar}
+                src={user?.photoURL !== null ? user?.photoURL : undefined}
                 sx={{ width: 32, height: 32 }}
               />
             </IconButton>
@@ -55,32 +56,7 @@ export function AuthUser(): JSX.Element {
             open={open}
             onClose={handleClose}
             onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                mt: 1.5,
-                "& .MuiAvatar-root": {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                "&::before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: "background.paper",
-                  transform: "translateY(-50%) rotate(45deg)",
-                  zIndex: 0,
-                },
-              },
-            }}
+            PaperProps={paperProps}
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >

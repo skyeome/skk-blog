@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { loginCheck } from "../../../src/components/commons/hocs/loginCheck";
 import EditProfileForm from "../../../src/components/units/mypage/EditProfileForm";
 
 function EditProfilePage() {
@@ -12,4 +13,4 @@ function EditProfilePage() {
   );
 }
 
-export default EditProfilePage;
+export default loginCheck(EditProfilePage);

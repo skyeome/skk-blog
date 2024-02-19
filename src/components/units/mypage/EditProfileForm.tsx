@@ -41,7 +41,7 @@ function EditProfileForm() {
   return (
     <Container maxWidth="sm" sx={{ p: 0 }}>
       <EditProfileImage
-        image={data?.avatar}
+        image={user?.photoURL !== null ? user?.photoURL : undefined}
         newImage={image}
         setImage={setImage}
         handleDeleteImage={handleDeleteImage}

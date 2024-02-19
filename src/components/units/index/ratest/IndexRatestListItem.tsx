@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import MarkdownIt from "markdown-it";
 import type { IndexRatestListItemProps } from "./IndexRatestListItem.types";
 import * as S from "./IndexRatestListItem.styles";
 
@@ -14,16 +13,11 @@ function IndexRatestListItem({ data }: IndexRatestListItemProps) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const md = new MarkdownIt();
-  const markdownText = data.contents;
-  const htmlText = md.render(markdownText);
-
+  let summary = data.summary ?? "";
   const maxLength = matches ? 80 : 58; // 최대 길이 설정
-  // HTML에서 텍스트 추출
-  let text = new DOMParser().parseFromString(htmlText, "text/html").body
-    .textContent;
-  if (text !== null && text.length > maxLength) {
-    text = text.substring(0, maxLength) + "... 더보기"; // 글자수 제한
+
+  if (summary.length > maxLength) {
+    summary = summary.substring(0, maxLength) + "... 더보기"; // 글자수 제한
   }
 
   return (
@@ -70,7 +64,7 @@ function IndexRatestListItem({ data }: IndexRatestListItemProps) {
               {data.title}
             </Typography>
             <Typography variant="body2" color="GrayText">
-              {text}
+              {summary}
             </Typography>
           </a>
         </Link>

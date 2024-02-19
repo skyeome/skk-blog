@@ -34,6 +34,7 @@ const useMutationUpdateProfile = (
       nickname: data !== undefined ? data.nickname : "",
       desc: data !== undefined ? data.desc : "",
     },
+    mode: "all",
   });
   // 비밀번호 보이기 state
   const [showPassword, setShowPassword] = useState(false);
@@ -71,6 +72,7 @@ const useMutationUpdateProfile = (
 
   // 저장하기 버튼 클릭시 작업
   const onSubmit = handleSubmit(async (formData) => {
+    console.log(formData);
     const updateData = { ...formData, uid: data?.uid ?? "", image };
     // 설명글의 경우 빈 값일경우 db에도 빈값으로 넣어주어 변경해야함.
     if (updateData.desc === undefined) {

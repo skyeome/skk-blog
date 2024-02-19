@@ -11,6 +11,7 @@ export class BoardDetail {
     public uid: string,
     public writer: string,
     public title: string,
+    public summary: string,
     public contents: string,
     public createdAt: Timestamp,
     public category: string[],
@@ -24,6 +25,8 @@ export class BoardDetail {
       this.writer +
       ", " +
       this.title +
+      ", " +
+      this.summary +
       ", " +
       this.contents +
       ", " +
@@ -42,6 +45,7 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       uid: docData.uid,
       writer: docData.writer,
       title: docData.title,
+      summary: docData.summary,
       contents: docData.contents,
       createdAt: docData.createdAt,
       category: docData.category,
@@ -58,6 +62,7 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       data.uid,
       data.writer,
       data.title,
+      data.summary,
       data.contents,
       data.createdAt,
       data.category,
@@ -70,7 +75,7 @@ export class Board {
   constructor(
     public writer: string,
     public title: string,
-    public contents: string,
+    public summary: string,
     public createdAt: Timestamp,
     public category: string[],
     public images: string[]
@@ -82,7 +87,7 @@ export class Board {
       ", " +
       this.title +
       ", " +
-      this.contents +
+      this.summary +
       ", " +
       this.createdAt.toDate().toLocaleString() +
       ", " +
@@ -108,7 +113,7 @@ export const BoardConverter: FirestoreDataConverter<Board> = {
     return new Board(
       data.writer,
       data.title,
-      data.contents,
+      data.summary,
       data.createdAt,
       data.category,
       data.images

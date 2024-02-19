@@ -6,6 +6,7 @@ export interface IBoardWriteProps {
 }
 export interface IBoardUpdateInputs {
   title?: string;
+  summary?: string;
   contents?: string;
   category?: string[];
   images?: string[];

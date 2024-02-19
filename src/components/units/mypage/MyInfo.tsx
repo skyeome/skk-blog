@@ -11,7 +11,7 @@ import useAuthChange from "../../../commons/hooks/custom/useAuthChange";
 import type { MyInfoProps } from "./MyInfo.types";
 
 function MyInfo({ data }: MyInfoProps) {
-  const { handleLogout } = useAuthChange();
+  const { user, handleLogout } = useAuthChange();
 
   return (
     <Grid container spacing={2} py={4}>
@@ -19,7 +19,7 @@ function MyInfo({ data }: MyInfoProps) {
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
             alt={data?.nickname}
-            src={data?.avatar}
+            src={user?.photoURL !== null ? user?.photoURL : undefined}
             sx={{ width: 64, height: 64 }}
           />
           <div>
