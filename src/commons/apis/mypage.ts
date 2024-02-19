@@ -10,7 +10,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db, storage } from "../libraries/firebase";
+import { auth, db, storage } from "../libraries/firebase";
 import {
   deleteObject,
   getDownloadURL,
@@ -20,10 +20,12 @@ import {
 import type { BoardRatest } from "../../components/units/index/ratest/IndexRatestList.types";
 import type { ProfileForm } from "../../components/units/mypage/EditProfileForm.types";
 import { BoardConverter, UserInfoConverter } from "../libraries/firestore";
+import { updatePassword, updateProfile } from "firebase/auth";
 
 export const getMyInfo = async (writer?: string) => {
-  if (writer === undefined) return;
-  const writerRef = doc(db, "User", writer).withConverter(UserInfoConverter);
+  const writerRef = doc(db, "User", writer ?? "").withConverter(
+    UserInfoConverter
+  );
   const writerSn = await getDoc(writerRef);
   if (writerSn.exists()) {
     const userData = writerSn.data();
@@ -32,7 +34,6 @@ export const getMyInfo = async (writer?: string) => {
 };
 
 export const getMyRatestData = async (writer?: string) => {
-  if (writer === undefined) return;
   const data: BoardRatest[] = [];
   const q = query(
     collection(db, "Board"),
@@ -83,8 +84,17 @@ export const updateMyInfo = async (
     // 파일을 업로드 합니다.
     await uploadBytes(storageRef, blob);
     const avatar = await getDownloadURL(storageRef);
+    // 프로필 정보에도 추가
+    if (auth.currentUser !== null)
+      await updateProfile(auth.currentUser, { photoURL: avatar });
+
+    // 기존 아바타 이미지는 삭제
+    const docSn = await getDoc(myInfoRef);
+    if (docSn.exists()) {
+      const fileName = docSn.data().avatarName;
+      if (fileName !== undefined) await deleteProfileObject(fileName);
+    }
     await updateDoc(myInfoRef, {
-      avatar,
       avatarName: `${data.uid}_${timestamp}`,
       ...updateData,
     });
@@ -93,6 +103,16 @@ export const updateMyInfo = async (
     await updateDoc(myInfoRef, updateData);
   }
   // 비밀번호를 변경할 경우
+  if (data.password !== undefined && auth.currentUser !== null)
+    await updatePassword(auth.currentUser, data.password);
+};
+
+// 이전 프로필 사진 파일만 삭제
+export const deleteProfileObject = async (image: string) => {
+  const imgRef = ref(storage, `images/${image}`);
+
+  // 파일 삭제
+  await deleteObject(imgRef);
 };
 
 // 파일 삭제 및 프로필 아바타 이미지 url 삭제
