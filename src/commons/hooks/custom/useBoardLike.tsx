@@ -11,7 +11,7 @@ import type { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../libraries/firebase";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../../stores";
 import type { ShowToastParams } from "./useToast";
 
@@ -25,7 +25,7 @@ export const useBoardLike = (
   const router = useRouter();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const [user] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
 
   const onClickLikeBtn = async (): Promise<void> => {
     const boardId = router.query.boardId as string;
@@ -35,7 +35,7 @@ export const useBoardLike = (
     }
     if (!liked) {
       try {
-        await setDoc(doc(db, `Board/${boardId}/Like`, user.uid), {
+        await setDoc(doc(db, `Board/${boardId}/Like`, user.uid ?? ""), {
           likedAt: serverTimestamp(),
         });
         setLiked(true);
@@ -44,7 +44,7 @@ export const useBoardLike = (
       }
     } else {
       try {
-        await deleteDoc(doc(db, `Board/${boardId}/Like`, user.uid));
+        await deleteDoc(doc(db, `Board/${boardId}/Like`, user.uid ?? ""));
         setLiked(false);
       } catch (error) {
         if (error instanceof Error) console.log(error.message);
