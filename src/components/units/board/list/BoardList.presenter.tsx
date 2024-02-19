@@ -2,7 +2,7 @@ import React from "react";
 import type { BoardListProps } from "./BoardList.types";
 import BoardListItem from "./BoardListItem.presenter";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box/Box";
+import Box from "@mui/material/Box";
 
 const BoardListUI = React.forwardRef<HTMLDivElement, BoardListProps>(
   ({ data, isLoading }, ref) => {
