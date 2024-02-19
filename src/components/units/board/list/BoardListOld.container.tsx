@@ -4,7 +4,7 @@ import {
   useQueryFetchBoards,
   useQueryFetchMoreBoards,
 } from "../../../../commons/hooks/queries/useQueryFetchBoards";
-import BoardListUI from "./BoardList.presenter";
+import BoardListUI from "./BoardListOld.presenter";
 
 export default function BoardList(): JSX.Element {
   const [posts, setPosts] = useState<IBoardList[]>();
