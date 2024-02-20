@@ -15,7 +15,8 @@ export class BoardDetail {
     public contents: string,
     public createdAt: Timestamp,
     public category: string[],
-    public images: string[]
+    public thumb: string,
+    public thumbRef: string
   ) {}
 
   toString(): string {
@@ -34,7 +35,9 @@ export class BoardDetail {
       ", " +
       this.category[0] +
       ", " +
-      this.images[0]
+      this.thumb +
+      ", " +
+      this.thumbRef
     );
   }
 }
@@ -42,14 +45,7 @@ export class BoardDetail {
 export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
   toFirestore: (docData: BoardDetail): DocumentData => {
     return {
-      uid: docData.uid,
-      writer: docData.writer,
-      title: docData.title,
-      summary: docData.summary,
-      contents: docData.contents,
-      createdAt: docData.createdAt,
-      category: docData.category,
-      images: docData.images,
+      ...docData,
     };
   },
   fromFirestore: (
@@ -66,7 +62,8 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       data.contents,
       data.createdAt,
       data.category,
-      data.images
+      data.thumb,
+      data.thumbRef
     );
   },
 };
@@ -78,7 +75,7 @@ export class Board {
     public summary: string,
     public createdAt: Timestamp,
     public category: string[],
-    public images: string[]
+    public thumb: string
   ) {}
 
   toString(): string {
@@ -93,7 +90,7 @@ export class Board {
       ", " +
       this.category[0] +
       ", " +
-      this.images[0]
+      this.thumb
     );
   }
 }
@@ -116,7 +113,7 @@ export const BoardConverter: FirestoreDataConverter<Board> = {
       data.summary,
       data.createdAt,
       data.category,
-      data.images
+      data.thumb
     );
   },
 };

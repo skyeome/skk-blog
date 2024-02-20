@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { RefObject } from "react";
 import { useRouter } from "next/router";
-import type { Control, FieldErrors } from "react-hook-form";
 import { useForm } from "react-hook-form";
-import type { DocumentData } from "firebase/firestore";
+import type { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import MarkdownIt from "markdown-it";
+import { db, auth } from "../../libraries/firebase";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { boardWriteSchema } from "../../libraries/yup";
 import {
   addDoc,
   collection,
@@ -15,46 +18,34 @@ import type {
   IBoardUpdateInputs,
   IBoardWriteInputTypes,
 } from "../../../components/units/board/write/BoardWrite.types";
-import { db, auth } from "../../libraries/firebase";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { boardWriteSchema } from "../../libraries/yup";
+import type { BoardDetail } from "../../libraries/firestore";
 import type { Editor } from "@toast-ui/react-editor";
 import type { ShowToastParams } from "../custom/useToast";
-import MarkdownIt from "markdown-it";
+import { deleteImage } from "../../apis/mypage";
 
 export const useMutationCreateBoard = (
   showToast: ShowToastParams,
   editorRef: RefObject<Editor>,
-  data?: DocumentData | undefined
+  data?: BoardDetail | undefined
 ): {
   control: Control<IBoardWriteInputTypes, any>;
   errors: FieldErrors<IBoardWriteInputTypes>;
-  fileUrls: string[];
-  onChangeFileUrls: (fileUrl: string, index: number) => void;
+  fileUrl: string | undefined;
+  setFileUrl: (fileUrl: string) => void;
+  setValue: UseFormSetValue<IBoardWriteInputTypes>;
   onClickWrite: () => Promise<void>;
   onClickUpdate: () => Promise<void>;
 } => {
-  // const editorRef = useRef<Editor>(null);
   const router = useRouter();
   const {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<IBoardWriteInputTypes>({
     resolver: yupResolver(boardWriteSchema),
   });
-  const [fileUrls, setFileUrls] = useState(["", "", ""]);
-
-  useEffect(() => {
-    const images = data?.images;
-    if (images !== undefined && images !== null) setFileUrls([...images]);
-  }, [data]);
-
-  const onChangeFileUrls = (fileUrl: string, index: number): void => {
-    const newFileUrls = [...fileUrls];
-    newFileUrls[index] = fileUrl;
-    setFileUrls(newFileUrls);
-  };
+  const [fileUrl, setFileUrl] = useState<string | undefined>(data?.thumb);
 
   const onClickWrite = handleSubmit((inputs: IBoardWriteInputTypes) => {
     const user = auth.currentUser;
@@ -80,7 +71,8 @@ export const useMutationCreateBoard = (
         category: inputs.category,
         contents: markdown,
         summary,
-        images: [...fileUrls],
+        thumb: fileUrl,
+        thumbRef: inputs.thumbRef,
         createdAt: serverTimestamp(),
       })
         .then((result) => {
@@ -93,8 +85,8 @@ export const useMutationCreateBoard = (
   });
 
   const onClickUpdate = handleSubmit((inputs: IBoardWriteInputTypes) => {
-    const currentFiles = JSON.stringify(fileUrls);
-    const defaultFiles = JSON.stringify(data?.images);
+    const currentFiles = fileUrl;
+    const defaultFiles = data?.thumb;
     const isChangedFiles = currentFiles !== defaultFiles;
 
     const currentCategory = JSON.stringify(inputs.category);
@@ -121,7 +113,11 @@ export const useMutationCreateBoard = (
       updateBoardInput.category = inputs.category;
     if (summary !== null) updateBoardInput.summary = summary;
     if (markdown !== "") updateBoardInput.contents = markdown;
-    if (isChangedFiles) updateBoardInput.images = fileUrls;
+    // 파일이 이전과 달라졌으면
+    if (isChangedFiles) {
+      updateBoardInput.thumb = fileUrl;
+      updateBoardInput.thumbRef = inputs.thumbRef;
+    }
     if (typeof router.query.boardId !== "string") {
       showToast("error", "시스템에 문제가 있습니다.");
       return;
@@ -139,13 +135,19 @@ export const useMutationCreateBoard = (
       .catch((error) => {
         if (error instanceof Error) showToast("error", error.message);
       });
+    if (isChangedFiles && data?.thumbRef !== undefined) {
+      deleteImage(data.thumbRef).catch((error) => {
+        showToast("error", error.message);
+      });
+    }
   });
 
   return {
     control,
     errors,
-    fileUrls,
-    onChangeFileUrls,
+    fileUrl,
+    setFileUrl,
+    setValue,
     onClickWrite,
     onClickUpdate,
   };

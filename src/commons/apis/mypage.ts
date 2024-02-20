@@ -91,8 +91,8 @@ export const updateMyInfo = async (
     const storageRef = ref(storage, `images/${data.uid}_${timestamp}`);
 
     // 파일을 업로드 합니다.
-    await uploadBytes(storageRef, blob);
-    const avatar = await getDownloadURL(storageRef);
+    const uploadRef = await uploadBytes(storageRef, blob);
+    const avatar = await getDownloadURL(uploadRef.ref);
     // 프로필 정보에도 추가
     if (auth.currentUser !== null)
       await updateProfile(auth.currentUser, { photoURL: avatar });
@@ -101,7 +101,7 @@ export const updateMyInfo = async (
     const docSn = await getDoc(myInfoRef);
     if (docSn.exists()) {
       const fileName = docSn.data().avatarName;
-      if (fileName !== undefined) await deleteProfileObject(fileName);
+      if (fileName !== undefined) await deleteImage(fileName);
     }
     await updateDoc(myInfoRef, {
       avatarName: `${data.uid}_${timestamp}`,
@@ -117,7 +117,7 @@ export const updateMyInfo = async (
 };
 
 // 이전 프로필 사진 파일만 삭제
-export const deleteProfileObject = async (image: string) => {
+export const deleteImage = async (image: string) => {
   const imgRef = ref(storage, `images/${image}`);
 
   // 파일 삭제

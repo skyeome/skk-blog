@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
@@ -37,7 +38,7 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
     open,
     handleClickOpen,
     handleClose,
-  } = useMutateBoard(router);
+  } = useMutateBoard(router, data, showToast);
   const [user] = useRecoilState(userState);
   const { likeCount, liked, onClickLikeBtn } = useBoardLike(showToast);
   return (
@@ -45,25 +46,30 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
       <Head>
         <title>{data.title} | 자유게시판</title>
       </Head>
-      <S.topKv bg={data.images?.[0]}>
-        <S.topKvBox>
-          <S.topKvCategory>자유게시판</S.topKvCategory>
-          <S.topKvTitle>{data.title}</S.topKvTitle>
-          <S.topKvInfos>
-            <Typography variant="caption" color="GrayText" mr={1}>
-              <PersonOutlineIcon fontSize="small" />
-              {data.writer}
-            </Typography>
-            <Typography variant="caption" color="GrayText">
-              <AccessTimeIcon fontSize="small" />
-              {format(data.createdAt.toDate(), "yyyy. MM. dd", {
-                locale: ko,
-              })}
-            </Typography>
-          </S.topKvInfos>
-        </S.topKvBox>
-      </S.topKv>
-      <Viewer initialValue={data.contents} />
+      <S.topKvBox>
+        <S.topKvCategory>자유게시판</S.topKvCategory>
+        <S.topKvTitle>{data.title}</S.topKvTitle>
+        <S.topKvInfos>
+          <Typography variant="caption" color="GrayText" mr={1}>
+            <PersonOutlineIcon fontSize="small" />
+            {data.writer}
+          </Typography>
+          <Typography variant="caption" color="GrayText">
+            <AccessTimeIcon fontSize="small" />
+            {format(data.createdAt.toDate(), "yyyy. MM. dd", {
+              locale: ko,
+            })}
+          </Typography>
+        </S.topKvInfos>
+      </S.topKvBox>
+      {data.thumb !== undefined && (
+        <S.topThumb>
+          <Image src={data.thumb} layout="fill" objectFit="contain" />
+        </S.topThumb>
+      )}
+      <Box sx={{ overflow: "hidden" }}>
+        <Viewer initialValue={data.contents} />
+      </Box>
       <S.BoardLikeWrap>
         <S.BoardLikeCount>{likeCount}</S.BoardLikeCount>
         <S.BoardLikeBtn onClick={_.debounce(onClickLikeBtn, 300)}>

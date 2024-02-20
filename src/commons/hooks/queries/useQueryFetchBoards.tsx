@@ -18,11 +18,11 @@ export interface IBoardList {
   id: string;
   title: string;
   createdAt: Timestamp;
-  images: string[];
+  thumb: string;
 }
 
 export const useQueryFetchBoards = async (
-  limits: number = 4
+  limits: number = 6
 ): Promise<IFetchBoardsList> => {
   try {
     const q = query(
@@ -39,7 +39,7 @@ export const useQueryFetchBoards = async (
         id: doc.id,
         title: doc.data().title,
         createdAt: doc.data().createdAt,
-        images: doc.data().images,
+        thumb: doc.data().thumb,
       });
       lastKey = doc.data().createdAt;
     });
@@ -47,9 +47,7 @@ export const useQueryFetchBoards = async (
   } catch (error) {
     if (error instanceof Error) alert(error.message);
     return {
-      posts: [
-        { id: "", title: "", createdAt: new Timestamp(0, 0), images: [] },
-      ],
+      posts: [{ id: "", title: "", createdAt: new Timestamp(0, 0), thumb: "" }],
       lastKey: "",
     };
   }
@@ -74,7 +72,7 @@ export const useQueryFetchMoreBoards = async (
         id: doc.id,
         title: doc.data().title,
         createdAt: doc.data().createdAt,
-        images: doc.data().images,
+        thumb: doc.data().thumb,
       });
       lastKey = doc.data().createdAt;
     });
@@ -82,9 +80,7 @@ export const useQueryFetchMoreBoards = async (
   } catch (error) {
     if (error instanceof Error) alert(error.message);
     return {
-      posts: [
-        { id: "", title: "", createdAt: new Timestamp(0, 0), images: [] },
-      ],
+      posts: [{ id: "", title: "", createdAt: new Timestamp(0, 0), thumb: "" }],
       lastKey: "",
     };
   }

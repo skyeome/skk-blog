@@ -1,10 +1,15 @@
+import { useState } from "react";
 import type { NextRouter } from "next/router";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
-import { useState } from "react";
+import type { BoardDetail } from "../../libraries/firestore";
+import type { ShowToastParams } from "../custom/useToast";
+import { deleteImage } from "../../apis/mypage";
 
 export const useMutateBoard = (
-  router: NextRouter
+  router: NextRouter,
+  data: BoardDetail,
+  showToast: ShowToastParams
 ): {
   onClickEditBtn: VoidFunction;
   onClickDeleteBtn: VoidFunction;
@@ -26,14 +31,15 @@ export const useMutateBoard = (
     void router.push(`/free/${router.query.boardId as string}/edit`);
   };
 
-  const onClickDeleteBtn = (): void => {
-    deleteDoc(doc(db, "Board", router.query.boardId as string))
-      .then((res) => {
-        void router.push(`/free`);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+  const onClickDeleteBtn = async () => {
+    try {
+      await deleteDoc(doc(db, "Board", router.query.boardId as string));
+      await deleteImage(data.thumbRef);
+      showToast("success", "게시물이 삭제 되었습니다.");
+      void router.push(`/free`);
+    } catch (error) {
+      if (error instanceof Error) showToast("error", error.message);
+    }
   };
 
   return {
