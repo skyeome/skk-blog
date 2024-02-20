@@ -9,7 +9,7 @@ export interface IBoardUpdateInputs {
   summary?: string;
   contents?: string;
   category?: string[];
-  images?: string[];
+  thumb?: string;
 }
 
 export interface IBoardWriteInputTypes {

@@ -1,29 +1,28 @@
+import React from "react";
 import Image from "next/image";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import type { IFileUploadUIProps } from "./FileUpload.types";
 import * as S from "./FileUpload.styles";
 
-export default function FileUploadUI(props: IFileUploadUIProps): JSX.Element {
-  return (
-    <div>
-      {props.fileUrl !== "" ? (
+const FileUploadUI = React.forwardRef<HTMLInputElement, IFileUploadUIProps>(
+  (props, ref) => {
+    return (
+      <div>
         <S.FileUploadWrap onClick={props.onClickUpload}>
-          <Image src={props.fileUrl} layout="fill" />
+          {props.fileUrl !== undefined ? (
+            <Image src={props.fileUrl} layout="fill" />
+          ) : (
+            <p>
+              <CloudUploadIcon fontSize="small" />
+              <br />
+              파일 업로드
+            </p>
+          )}
         </S.FileUploadWrap>
-      ) : (
-        <S.FileUploadWrap onClick={props.onClickUpload}>
-          <p>
-            <CloudUploadIcon fontSize="small" />
-            <br />
-            파일 업로드
-          </p>
-        </S.FileUploadWrap>
-      )}
-      <S.HidedInput
-        type="file"
-        ref={props.fileRef}
-        onChange={props.onChangeFile}
-      />
-    </div>
-  );
-}
+        <S.HidedInput type="file" ref={ref} onChange={props.onChangeFile} />
+      </div>
+    );
+  }
+);
+
+export default FileUploadUI;

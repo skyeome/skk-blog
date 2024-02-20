@@ -34,9 +34,9 @@ function IndexRatestListItem({ data }: IndexRatestListItemProps) {
               objectFit="cover"
               layout="fill"
               src={
-                data.images[0] !== ""
-                  ? data.images[0]
-                  : "//placeholder-image.jpg"
+                data.thumb === "" || data.thumb === undefined
+                  ? "//placeholder-image.jpg"
+                  : data.thumb
               }
             />
           </S.RatestItemThumb>

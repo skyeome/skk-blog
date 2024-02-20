@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { Controller } from "react-hook-form";
 import type { Editor } from "@toast-ui/react-editor";
-import { v4 as uuidv4 } from "uuid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
@@ -15,7 +14,6 @@ import TuiEditor from "../../../commons/editor/TuiEditor";
 import Toast from "../../../commons/layout/toast/Toast";
 import useToast from "../../../../commons/hooks/custom/useToast";
 import FileUpload from "../../../commons/upload/FileUpload.container";
-import { FileUploadWrap } from "./BoardWrite.styles";
 import { useMutationCreateBoard } from "../../../../commons/hooks/mutations/useMutationCreateBoard";
 import type { LangTag } from "../../../../commons/types/tag";
 
@@ -51,14 +49,8 @@ export default function BoardWrite({
     useToast();
 
   const editorRef = useRef<Editor>(null);
-  const {
-    control,
-    errors,
-    fileUrls,
-    onChangeFileUrls,
-    onClickWrite,
-    onClickUpdate,
-  } = useMutationCreateBoard(showToast, editorRef, data);
+  const { control, errors, fileUrl, setFileUrl, onClickWrite, onClickUpdate } =
+    useMutationCreateBoard(showToast, editorRef, data);
 
   return (
     <form onSubmit={isEdit ? onClickUpdate : onClickWrite} autoComplete="off">
@@ -66,11 +58,10 @@ export default function BoardWrite({
         <Controller
           name="title"
           control={control}
-          render={({ field: { onChange, value } }) => (
+          render={({ field }) => (
             <Input
+              {...field}
               defaultValue={data?.title}
-              onChange={onChange}
-              value={value}
               placeholder="제목을 적어주세요."
               sx={{ mb: 2 }}
               fullWidth
@@ -83,14 +74,13 @@ export default function BoardWrite({
         <Controller
           name="category"
           control={control}
-          render={({ field: { onChange, value } }) => (
+          render={({ field }) => (
             <FormControl fullWidth>
               <InputLabel>#태그</InputLabel>
               <Select
                 multiple
+                {...field}
                 defaultValue={data !== undefined ? data.category : []}
-                value={value}
-                onChange={onChange}
                 input={<Input />}
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -118,17 +108,11 @@ export default function BoardWrite({
         initialValue={data?.contents}
         editorRef={editorRef}
       />
-      <FileUploadWrap>
-        {fileUrls.map((el, index) => (
-          <FileUpload
-            key={uuidv4()}
-            showToast={showToast}
-            fileUrl={el}
-            onChangeFileUrls={onChangeFileUrls}
-            index={index}
-          />
-        ))}
-      </FileUploadWrap>
+      <FileUpload
+        showToast={showToast}
+        fileUrl={fileUrl}
+        setFileUrl={setFileUrl}
+      />
       <Button variant="contained" type="submit" size="large">
         {isEdit ? "수정완료" : "작성완료"}
       </Button>

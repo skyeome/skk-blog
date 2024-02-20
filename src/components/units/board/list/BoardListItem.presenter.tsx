@@ -16,7 +16,11 @@ export default function BoardListItem({
           <Image
             objectFit="cover"
             layout="fill"
-            src={el.images[0] !== "" ? el.images[0] : "//placeholder-image.jpg"}
+            src={
+              el.thumb === "" || el.thumb === undefined
+                ? "//placeholder-image.jpg"
+                : el.thumb
+            }
           />
         </BoardListItemImg>
         <Typography variant="body2" color="GrayText">

@@ -91,8 +91,8 @@ export const updateMyInfo = async (
     const storageRef = ref(storage, `images/${data.uid}_${timestamp}`);
 
     // 파일을 업로드 합니다.
-    await uploadBytes(storageRef, blob);
-    const avatar = await getDownloadURL(storageRef);
+    const uploadRef = await uploadBytes(storageRef, blob);
+    const avatar = await getDownloadURL(uploadRef.ref);
     // 프로필 정보에도 추가
     if (auth.currentUser !== null)
       await updateProfile(auth.currentUser, { photoURL: avatar });
