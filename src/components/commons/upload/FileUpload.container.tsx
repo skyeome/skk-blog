@@ -10,6 +10,7 @@ export default function FileUpload({
   showToast,
   fileUrl,
   setFileUrl,
+  setValue,
 }: IFileUploadProps): JSX.Element {
   const fileRef = useRef<HTMLInputElement>(null);
   // upload 강제로 누르는 함수
@@ -29,15 +30,14 @@ export default function FileUpload({
     if (file === undefined) return;
     try {
       const timestamp = new Date().getTime(); // 현재 시간을 밀리초로 변환
-      const storageRef = ref(
-        storage,
-        `images/${file?.name ?? "file"}_${timestamp}`
-      );
+      const fileName = `${file?.name ?? "file"}_${timestamp}`;
+      const storageRef = ref(storage, `images/${fileName}`);
       // 파일을 업로드 합니다.
       const uploadRef = await uploadBytes(storageRef, file);
       const location = await getDownloadURL(uploadRef.ref);
       // 업로드 완료 후 fileurl 변경
       setFileUrl(location);
+      setValue("thumbRef", fileName);
     } catch (error) {
       if (error instanceof Error) showToast("error", error.message);
     }

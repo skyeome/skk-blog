@@ -38,7 +38,7 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
     open,
     handleClickOpen,
     handleClose,
-  } = useMutateBoard(router);
+  } = useMutateBoard(router, data, showToast);
   const [user] = useRecoilState(userState);
   const { likeCount, liked, onClickLikeBtn } = useBoardLike(showToast);
   return (

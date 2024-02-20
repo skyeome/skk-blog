@@ -49,8 +49,15 @@ export default function BoardWrite({
     useToast();
 
   const editorRef = useRef<Editor>(null);
-  const { control, errors, fileUrl, setFileUrl, onClickWrite, onClickUpdate } =
-    useMutationCreateBoard(showToast, editorRef, data);
+  const {
+    control,
+    errors,
+    fileUrl,
+    setFileUrl,
+    setValue,
+    onClickWrite,
+    onClickUpdate,
+  } = useMutationCreateBoard(showToast, editorRef, data);
 
   return (
     <form onSubmit={isEdit ? onClickUpdate : onClickWrite} autoComplete="off">
@@ -112,6 +119,7 @@ export default function BoardWrite({
         showToast={showToast}
         fileUrl={fileUrl}
         setFileUrl={setFileUrl}
+        setValue={setValue}
       />
       <Button variant="contained" type="submit" size="large">
         {isEdit ? "수정완료" : "작성완료"}

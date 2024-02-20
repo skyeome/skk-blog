@@ -15,7 +15,8 @@ export class BoardDetail {
     public contents: string,
     public createdAt: Timestamp,
     public category: string[],
-    public thumb: string
+    public thumb: string,
+    public thumbRef: string
   ) {}
 
   toString(): string {
@@ -34,7 +35,9 @@ export class BoardDetail {
       ", " +
       this.category[0] +
       ", " +
-      this.thumb
+      this.thumb +
+      ", " +
+      this.thumbRef
     );
   }
 }
@@ -42,14 +45,7 @@ export class BoardDetail {
 export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
   toFirestore: (docData: BoardDetail): DocumentData => {
     return {
-      uid: docData.uid,
-      writer: docData.writer,
-      title: docData.title,
-      summary: docData.summary,
-      contents: docData.contents,
-      createdAt: docData.createdAt,
-      category: docData.category,
-      thumb: docData.thumb,
+      ...docData,
     };
   },
   fromFirestore: (
@@ -66,7 +62,8 @@ export const BoardDetailConverter: FirestoreDataConverter<BoardDetail> = {
       data.contents,
       data.createdAt,
       data.category,
-      data.thumb
+      data.thumb,
+      data.thumbRef
     );
   },
 };

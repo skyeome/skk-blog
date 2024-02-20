@@ -10,9 +10,11 @@ export interface IBoardUpdateInputs {
   contents?: string;
   category?: string[];
   thumb?: string;
+  thumbRef?: string;
 }
 
 export interface IBoardWriteInputTypes {
   title?: string | undefined;
   category?: any[] | undefined;
+  thumbRef?: string;
 }
