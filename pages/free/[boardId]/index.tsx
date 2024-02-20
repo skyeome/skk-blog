@@ -5,6 +5,8 @@ import CommentWrite from "../../../src/components/units/boardComment/write/Comme
 import CommentList from "../../../src/components/units/boardComment/list/CommentList.index";
 import { useQueryFetchComment } from "../../../src/commons/hooks/queries/useQueryFetchComment";
 import { getBoardDetail } from "../../../src/commons/apis/board";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const BoardDetail = dynamic(
   async () =>
@@ -16,11 +18,18 @@ const BoardDetail = dynamic(
 export default function BoardDetailPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
-  const { data: boardDetail } = useQuery({
+  const router = useRouter();
+  const { data: boardDetail, isFetched } = useQuery({
     queryKey: ["board", id],
     queryFn: async () => await getBoardDetail(id),
   });
   const { data, refetch } = useQueryFetchComment(id);
+
+  // 게시글을 찾지 못하였을때 다른 페이지로 이동
+  useEffect(() => {
+    if (isFetched && boardDetail === undefined)
+      void router.replace("/free/not-found");
+  }, [boardDetail, isFetched]);
 
   return (
     <>

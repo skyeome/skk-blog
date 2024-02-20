@@ -62,10 +62,14 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
           </Typography>
         </S.topKvInfos>
       </S.topKvBox>
-      <S.topThumb>
-        <Image src={data.thumb} layout="fill" objectFit="contain" />
-      </S.topThumb>
-      <Viewer initialValue={data.contents} />
+      {data.thumb !== undefined && (
+        <S.topThumb>
+          <Image src={data.thumb} layout="fill" objectFit="contain" />
+        </S.topThumb>
+      )}
+      <Box sx={{ overflow: "hidden" }}>
+        <Viewer initialValue={data.contents} />
+      </Box>
       <S.BoardLikeWrap>
         <S.BoardLikeCount>{likeCount}</S.BoardLikeCount>
         <S.BoardLikeBtn onClick={_.debounce(onClickLikeBtn, 300)}>
