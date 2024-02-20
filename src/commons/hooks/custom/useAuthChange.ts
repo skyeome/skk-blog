@@ -3,13 +3,7 @@ import { useRecoilState } from "recoil";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../libraries/firebase";
 import { userState } from "../../stores";
-
-export interface FbUser {
-  uid?: string;
-  displayName?: string | null;
-  email?: string | null;
-  photoURL?: string | null;
-}
+import type { UserSimple } from "../../stores";
 
 export default function useAuthChange() {
   const [user, setUser] = useRecoilState(userState);
@@ -21,9 +15,8 @@ export default function useAuthChange() {
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user !== null) {
-        const userCopy: FbUser = {
+        const userCopy: UserSimple = {
           uid: user.uid,
-          displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
         };

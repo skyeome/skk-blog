@@ -23,9 +23,8 @@ import { BoardConverter, UserInfoConverter } from "../libraries/firestore";
 import { updatePassword, updateProfile } from "firebase/auth";
 
 export const getMyInfo = async (writer?: string) => {
-  const writerRef = doc(db, "User", writer ?? "").withConverter(
-    UserInfoConverter
-  );
+  if (writer === undefined) return;
+  const writerRef = doc(db, "User", writer).withConverter(UserInfoConverter);
   const writerSn = await getDoc(writerRef);
   if (writerSn.exists()) {
     const userData = writerSn.data();

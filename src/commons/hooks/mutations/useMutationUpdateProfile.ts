@@ -30,10 +30,6 @@ const useMutationUpdateProfile = (
     clearErrors,
   } = useForm<ProfileForm>({
     resolver: yupResolver(profileFormSchema),
-    defaultValues: {
-      nickname: data !== undefined ? data.nickname : "",
-      desc: data !== undefined ? data.desc : "",
-    },
     mode: "all",
   });
   // 비밀번호 보이기 state

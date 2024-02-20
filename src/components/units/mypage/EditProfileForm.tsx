@@ -37,7 +37,7 @@ function EditProfileForm() {
     setImage,
     handleDeleteImage,
   } = useMutationUpdateProfile(showToast, refetch, data);
-
+  if (data === undefined) return <div></div>;
   return (
     <Container maxWidth="sm" sx={{ p: 0 }}>
       <EditProfileImage
@@ -62,6 +62,7 @@ function EditProfileForm() {
               render={({ field: { onChange, value } }) => (
                 <TextField
                   id="nickname"
+                  defaultValue={data.nickname}
                   onChange={onChange}
                   value={value}
                   placeholder="개성있는 닉네임을 입력해보세요."
@@ -91,6 +92,7 @@ function EditProfileForm() {
               render={({ field: { onChange, value } }) => (
                 <TextField
                   id="desc"
+                  defaultValue={data.desc}
                   onChange={onChange}
                   value={value}
                   placeholder="회원님에 대해 자세히 설명해주세요."
