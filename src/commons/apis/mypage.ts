@@ -23,9 +23,8 @@ import { BoardConverter, UserInfoConverter } from "../libraries/firestore";
 import { updatePassword, updateProfile } from "firebase/auth";
 
 export const getMyInfo = async (writer?: string) => {
-  const writerRef = doc(db, "User", writer ?? "").withConverter(
-    UserInfoConverter
-  );
+  if (writer === undefined) return;
+  const writerRef = doc(db, "User", writer).withConverter(UserInfoConverter);
   const writerSn = await getDoc(writerRef);
   if (writerSn.exists()) {
     const userData = writerSn.data();
@@ -33,14 +32,24 @@ export const getMyInfo = async (writer?: string) => {
   }
 };
 
-export const getMyRatestData = async (writer?: string) => {
+export const getMyRatestData = async (writer?: string, tag?: string) => {
+  if (writer === undefined) return;
   const data: BoardRatest[] = [];
-  const q = query(
-    collection(db, "Board"),
-    where("writer", "==", writer),
-    orderBy("createdAt", "desc"),
-    limit(6)
-  ).withConverter(BoardConverter);
+  const q =
+    tag === ""
+      ? query(
+          collection(db, "Board"),
+          where("writer", "==", writer),
+          orderBy("createdAt", "desc"),
+          limit(6)
+        ).withConverter(BoardConverter)
+      : query(
+          collection(db, "Board"),
+          where("writer", "==", writer),
+          where("category", "array-contains", tag),
+          orderBy("createdAt", "desc"),
+          limit(6)
+        ).withConverter(BoardConverter);
   const querySnapshot = await getDocs(q);
   const datas = querySnapshot.docs;
 

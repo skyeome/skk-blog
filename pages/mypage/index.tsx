@@ -1,16 +1,20 @@
 import Head from "next/head";
-import Divider from "@mui/material/Divider";
-import MyInfo from "../../src/components/units/mypage/MyInfo";
-import Grid from "@mui/material/Grid";
-import HomeTags from "../../src/components/units/index/tags/HomeTags";
-import IndexRatestListUI from "../../src/components/units/index/ratest/IndexRatestList.presenter";
 import { useQueries } from "react-query";
-import { getMyInfo, getMyRatestData } from "../../src/commons/apis/mypage";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../src/commons/stores";
 import { loginCheck } from "../../src/components/commons/hocs/loginCheck";
+import { getMyInfo, getMyRatestData } from "../../src/commons/apis/mypage";
+import Divider from "@mui/material/Divider";
+import MyInfo from "../../src/components/units/mypage/MyInfo";
+import Grid from "@mui/material/Grid";
+import IndexRatestListUI from "../../src/components/units/index/ratest/IndexRatestList.presenter";
+import HomeTags from "../../src/components/units/index/tags/HomeTags";
+import useSearchParam from "../../src/commons/hooks/custom/useSearchParam";
+import ItemNone from "../../src/components/commons/layout/none/ItemNone";
 
 function Mypage() {
+  const tag = useSearchParam("tag");
+
   const user = useRecoilValue(userState);
   const result = useQueries([
     {
@@ -18,10 +22,11 @@ function Mypage() {
       queryFn: async () => await getMyInfo(user?.uid),
     },
     {
-      queryKey: ["mypage", "ratestData"],
-      queryFn: async () => await getMyRatestData(user?.uid),
+      queryKey: ["mypage", "ratestData", tag === "" ? "all" : tag],
+      queryFn: async () => await getMyRatestData(user?.uid, tag),
     },
   ]);
+
   return (
     <>
       <Head>
@@ -36,10 +41,14 @@ function Mypage() {
         pt={5}
       >
         <Grid item xs={12} md={9}>
-          <IndexRatestListUI title="내가 작성한 글" data={result[1].data} />
+          {result[1].data?.length === 0 ? (
+            <ItemNone />
+          ) : (
+            <IndexRatestListUI title="내가 작성한 글" data={result[1].data} />
+          )}
         </Grid>
         <Grid item xs={12} md={3}>
-          <HomeTags />
+          <HomeTags isMyTag />
         </Grid>
       </Grid>
     </>

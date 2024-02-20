@@ -7,6 +7,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import useAuthChange from "../../../../commons/hooks/custom/useAuthChange";
 import { HeaderUsers } from "./LayoutHeader.styles";
@@ -62,9 +63,15 @@ export function AuthUser(): JSX.Element {
           >
             <MenuItem>
               <ListItemIcon>
+                <AccountCircleIcon fontSize="small" />
+              </ListItemIcon>
+              <Link href="/mypage">내 정보 보기</Link>
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon>
                 <ManageAccountsIcon fontSize="small" />
               </ListItemIcon>
-              <Link href="/mypage/edit">내 정보 관리</Link>
+              <Link href="/mypage/edit">프로필 수정</Link>
             </MenuItem>
             <MenuItem onClick={handleLogout}>
               <ListItemIcon>

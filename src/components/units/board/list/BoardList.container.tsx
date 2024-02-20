@@ -1,18 +1,12 @@
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
 import { getBoardsAll } from "../../../../commons/apis/board";
 import BoardListUI from "./BoardList.presenter";
+import useSearchParam from "../../../../commons/hooks/custom/useSearchParam";
 
 export default function BoardList(): JSX.Element {
-  const router = useRouter();
-  // parameter 가져오기
-  const { tag: tagName } = router.query;
-  let tag = "";
-  if (tagName === undefined) tag = "";
-  if (typeof tagName === "string") tag = tagName;
-  if (typeof tagName === "object") tag = tagName[0];
+  const tag = useSearchParam("tag");
 
   const [ref, inView] = useInView();
   const { data, isLoading, fetchNextPage } = useInfiniteQuery({
