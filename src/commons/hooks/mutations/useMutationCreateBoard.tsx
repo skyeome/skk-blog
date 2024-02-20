@@ -21,6 +21,7 @@ import type {
 import type { BoardDetail } from "../../libraries/firestore";
 import type { Editor } from "@toast-ui/react-editor";
 import type { ShowToastParams } from "../custom/useToast";
+import { deleteImage } from "../../apis/mypage";
 
 export const useMutationCreateBoard = (
   showToast: ShowToastParams,
@@ -134,6 +135,11 @@ export const useMutationCreateBoard = (
       .catch((error) => {
         if (error instanceof Error) showToast("error", error.message);
       });
+    if (isChangedFiles && data?.thumbRef !== undefined) {
+      deleteImage(data.thumbRef).catch((error) => {
+        showToast("error", error.message);
+      });
+    }
   });
 
   return {
