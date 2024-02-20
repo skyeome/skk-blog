@@ -3,11 +3,12 @@ import type { BoardListProps } from "./BoardList.types";
 import BoardListItem from "./BoardListItem.presenter";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import ItemNone from "../../../commons/layout/none/ItemNone";
 
 const BoardListUI = React.forwardRef<HTMLDivElement, BoardListProps>(
   ({ data, isLoading }, ref) => {
     if (isLoading) return <div>loading...</div>;
-    if (data === undefined) return <div>데이터가 없습니다.</div>;
+    if (data === undefined) return <ItemNone />;
     return (
       <div>
         <Box sx={{ minHeight: "100vh" }}>
