@@ -8,12 +8,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCoY493BC1RvwWQUMdsI50vFwJVzvHEBlw",
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
   authDomain: "skk-blog.firebaseapp.com",
   projectId: "skk-blog",
   storageBucket: "skk-blog.appspot.com",
-  messagingSenderId: "773833552258",
-  appId: "1:773833552258:web:0172f6a2cd29eefce69f9b",
+  messagingSenderId: process.env.NEXT_PUBLIC_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
 // Initialize Firebase

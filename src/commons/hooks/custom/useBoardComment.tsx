@@ -32,7 +32,9 @@ export const useBoardComment = (
 ): Record<any, any> => {
   const onClickWrite = async (data: CommentValues): Promise<void> => {
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt(Number(process.env.REACT_APP_SOME_CODE));
+    const salt = await bcrypt.genSalt(
+      Number(process.env.NEXT_PUBLIC_SOME_CODE)
+    );
     const hashedPassword = await bcrypt.hash(data.password, salt);
 
     try {
@@ -57,7 +59,9 @@ export const useBoardComment = (
 
   const onClickUpdate = async (data: CommentValues): Promise<void> => {
     // 비밀번호 암호화
-    const salt = await bcrypt.genSalt(Number(process.env.REACT_APP_SOME_CODE));
+    const salt = await bcrypt.genSalt(
+      Number(process.env.NEXT_PUBLIC_SOME_CODE)
+    );
     const hashedPassword = await bcrypt.hash(data.password, salt);
 
     try {
