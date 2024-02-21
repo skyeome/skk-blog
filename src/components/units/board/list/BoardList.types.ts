@@ -17,5 +17,5 @@ export interface BoardListProps {
 }
 
 export interface IBoardListItemProps {
-  el: IBoardList;
+  el: BoardRatest;
 }
