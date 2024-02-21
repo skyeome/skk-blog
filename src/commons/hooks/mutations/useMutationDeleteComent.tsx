@@ -1,6 +1,7 @@
+import type { Dispatch, SetStateAction } from "react";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
-import type { Dispatch, SetStateAction } from "react";
+import bcrypt from "bcryptjs";
 
 export const useMutationDeleteComment = (
   id: string,
@@ -12,25 +13,28 @@ export const useMutationDeleteComment = (
   onClickDelete: () => Promise<void>;
 } => {
   const onClickDelete = async (): Promise<void> => {
-    getDoc(doc(db, "BoardComment", id))
-      .then((docSnap) => {
-        if (!docSnap.exists()) return;
-        if (docSnap.data().password === password) {
-          deleteDoc(doc(db, "BoardComment", id))
-            .then(() => {
-              setOpen(false);
-              setIsOpenEdit(false);
-            })
-            .catch((error) => {
-              console.log(error.message);
-            });
-        } else {
-          setErrMsg("입력하신 비밀번호가 다릅니다.");
-        }
-      })
-      .catch((error) => {
-        setErrMsg(error.message);
-      });
+    try {
+      const docSnap = await getDoc(doc(db, "BoardComment", id));
+      if (!docSnap.exists()) return;
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        docSnap.data().password
+      );
+      if (isPasswordCorrect) {
+        deleteDoc(doc(db, "BoardComment", id))
+          .then(() => {
+            setOpen(false);
+            setIsOpenEdit(false);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      } else {
+        setErrMsg("입력하신 비밀번호가 다릅니다.");
+      }
+    } catch (error) {
+      if (error instanceof Error) setErrMsg(error.message);
+    }
   };
   return {
     onClickDelete,

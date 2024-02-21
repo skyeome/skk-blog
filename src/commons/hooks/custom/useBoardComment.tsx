@@ -8,6 +8,7 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
+import bcrypt from "bcryptjs";
 
 export interface CommentValues {
   writer: string;
@@ -30,10 +31,15 @@ export const useBoardComment = (
   args: IUseBoardCommentArgs
 ): Record<any, any> => {
   const onClickWrite = async (data: CommentValues): Promise<void> => {
+    // 비밀번호 암호화
+    const salt = await bcrypt.genSalt(Number(process.env.REACT_APP_SOME_CODE));
+    const hashedPassword = await bcrypt.hash(data.password, salt);
+
     try {
       await addDoc(collection(db, "BoardComment"), {
         boardId: args.boardId,
         ...data,
+        password: hashedPassword,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -50,10 +56,14 @@ export const useBoardComment = (
   };
 
   const onClickUpdate = async (data: CommentValues): Promise<void> => {
+    // 비밀번호 암호화
+    const salt = await bcrypt.genSalt(Number(process.env.REACT_APP_SOME_CODE));
+    const hashedPassword = await bcrypt.hash(data.password, salt);
+
     try {
       const updatedData: Partial<CommentValues> = {};
       if (data.writer !== undefined) updatedData.writer = data.writer;
-      if (data.password !== undefined) updatedData.password = data.password;
+      if (data.password !== undefined) updatedData.password = hashedPassword;
       if (data.contents !== undefined) updatedData.contents = data.contents;
       if (data.star !== undefined) updatedData.star = data.star;
       if (args.commentId === undefined || args.onClickSubmit === undefined)

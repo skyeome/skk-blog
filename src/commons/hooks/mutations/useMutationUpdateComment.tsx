@@ -1,6 +1,7 @@
+import type { Dispatch, SetStateAction } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
-import type { Dispatch, SetStateAction } from "react";
+import bcrypt from "bcryptjs";
 
 export const useMutationUpdateComment = (
   id: string,
@@ -13,20 +14,23 @@ export const useMutationUpdateComment = (
   onClickEdit: () => Promise<void>;
 } => {
   const onClickEdit = async (): Promise<void> => {
-    getDoc(doc(db, "BoardComment", id))
-      .then((docSnap) => {
-        if (!docSnap.exists()) return;
-        if (docSnap.data().password === password) {
-          setOpen(false);
-          setIsOpenEdit(false);
-          setIsEdit(true);
-        } else {
-          setErrMsg("입력하신 비밀번호가 다릅니다.");
-        }
-      })
-      .catch((error) => {
-        setErrMsg(error.message);
-      });
+    try {
+      const docSnap = await getDoc(doc(db, "BoardComment", id));
+      if (!docSnap.exists()) return;
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        docSnap.data().password
+      );
+      if (isPasswordCorrect) {
+        setOpen(false);
+        setIsOpenEdit(false);
+        setIsEdit(true);
+      } else {
+        setErrMsg("입력하신 비밀번호가 다릅니다.");
+      }
+    } catch (error) {
+      if (error instanceof Error) setErrMsg(error.message);
+    }
   };
   return {
     onClickEdit,
