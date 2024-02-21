@@ -16,6 +16,9 @@ const nextConfig = {
     "/auth/signup": { page: "/auth/signup" },
     "/free": { page: "/free" },
     "/free/new": { page: "/free/new" },
+    "/free/not-found": { page: "/free/not-found" },
+    "/mypage": { page: "/mypage" },
+    "/mypage/edit": { page: "/mypage/edit" },
     "/404": { page: "/404" },
   }),
 };

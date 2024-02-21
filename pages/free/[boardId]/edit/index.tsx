@@ -1,18 +1,10 @@
+import Head from "next/head";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import dynamic from "next/dynamic";
 import { useQuery } from "react-query";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import BoardWrite from "../../../../src/components/units/board/write/BoardWrite.index";
 import { userIdCheck } from "../../../../src/components/commons/hocs/loginCheck";
 import { getBoardDetail } from "../../../../src/commons/apis/board";
-
-const BoardWrite = dynamic(
-  async () =>
-    await import(
-      "../../../../src/components/units/board/write/BoardWrite.index"
-    ),
-  { ssr: false }
-);
+import LoaderBox from "../../../../src/components/commons/layout/loader/LoaderBox";
 
 function BoardUpdatePage({
   id,
@@ -21,20 +13,15 @@ function BoardUpdatePage({
     queryKey: ["board", id],
     queryFn: async () => await getBoardDetail(id),
   });
-  if (data === undefined)
-    return (
-      <Box
-        sx={{
-          height: "calc(100vh - 100px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  return <BoardWrite isEdit data={data} />;
+  if (data === undefined) return <LoaderBox />;
+  return (
+    <>
+      <Head>
+        <title>(수정중) {data.title} | 나만의 블로그</title>
+      </Head>
+      <BoardWrite isEdit data={data} />
+    </>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps<{ id: string }> = async (
