@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import dynamic from "next/dynamic";
 import { Controller } from "react-hook-form";
 import type { Editor } from "@toast-ui/react-editor";
 import Box from "@mui/material/Box";
@@ -10,12 +11,16 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import type { IBoardWriteProps } from "./BoardWrite.types";
-import TuiEditor from "../../../commons/editor/TuiEditor";
 import Toast from "../../../commons/layout/toast/Toast";
 import useToast from "../../../../commons/hooks/custom/useToast";
 import FileUpload from "../../../commons/upload/FileUpload.container";
 import { useMutationCreateBoard } from "../../../../commons/hooks/mutations/useMutationCreateBoard";
 import type { LangTag } from "../../../../commons/types/tag";
+
+const TuiEditor = dynamic(
+  async () => await import("../../../commons/editor/TuiEditor"),
+  { ssr: false }
+);
 
 interface Language {
   label: LangTag;

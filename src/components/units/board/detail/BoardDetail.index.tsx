@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import Image from "next/image";
 import _ from "lodash";
@@ -17,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { Viewer } from "@toast-ui/react-editor";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { userState } from "../../../../commons/stores";
@@ -27,6 +27,11 @@ import useToast from "../../../../commons/hooks/custom/useToast";
 import type { BoardDetailProps } from "./BoardDetail.types";
 import * as S from "./BoardDetail.styles";
 import "@toast-ui/editor/dist/toastui-editor.css";
+
+const Viewer = dynamic(
+  async () => await import("@toast-ui/react-editor").then((mod) => mod.Viewer),
+  { ssr: false }
+);
 
 export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
   const router = useRouter();

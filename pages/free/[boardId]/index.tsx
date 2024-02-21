@@ -1,20 +1,13 @@
+import { useEffect } from "react";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
+import BoardDetail from "../../../src/components/units/board/detail/BoardDetail.index";
 import CommentWrite from "../../../src/components/units/boardComment/write/CommentWrite.index";
 import CommentList from "../../../src/components/units/boardComment/list/CommentList.index";
 import { useQueryFetchComment } from "../../../src/commons/hooks/queries/useQueryFetchComment";
 import { getBoardDetail } from "../../../src/commons/apis/board";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
 
-const BoardDetail = dynamic(
-  async () =>
-    await import(
-      "../../../src/components/units/board/detail/BoardDetail.index"
-    ),
-  { ssr: false }
-);
 export default function BoardDetailPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
