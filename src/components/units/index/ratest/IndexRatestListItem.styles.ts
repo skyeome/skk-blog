@@ -9,8 +9,12 @@ export const RatestListItem = styled("div")<{ counts?: number }>`
 `;
 export const RatestItemThumb = styled("a")(({ theme }) => ({
   position: "relative",
+
   display: "block",
+  maxWidth: 140,
+  margin: "0 auto",
   aspectRatio: 1,
+
   overflow: "hidden",
   cursor: "pointer",
   [theme.breakpoints.up("sm")]: {

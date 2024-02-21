@@ -1,5 +1,6 @@
 import type { InfiniteData } from "react-query";
 import type { BoardRatest } from "../../index/ratest/IndexRatestList.types";
+import type { ViewLayoutType } from "./BoardListTop.types";
 
 export interface BoardListOldProps {
   data?: BoardRatest[] | undefined;
@@ -9,6 +10,7 @@ export interface BoardListOldProps {
 
 export interface BoardListProps {
   tag: string;
+  layout: ViewLayoutType;
 }
 
 export interface BoardListUIProps {

@@ -1,23 +1,23 @@
-import Fab from "@mui/material/Fab";
+import { useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import useSearchParam from "../../src/commons/hooks/custom/useSearchParam";
-import BoardList from "../../src/components/units/board/list/BoardList.container";
+import Link from "next/link";
+import Fab from "@mui/material/Fab";
 import EditIcon from "@mui/icons-material/Edit";
-import Typography from "@mui/material/Typography";
+import BoardList from "../../src/components/units/board/list/BoardList.container";
+import BoardListTop from "../../src/components/units/board/list/BoardListTop";
+import type { ViewLayoutType } from "../../src/components/units/board/list/BoardListTop.types";
 
 export default function FreeBoardPage(): JSX.Element {
   const tag = useSearchParam("tag");
-
+  const [viewLayout, setViewLayout] = useState<ViewLayoutType>("card");
   return (
     <>
       <Head>
-        <title>자유게시판</title>
+        <title>{tag === "" ? "전체 글 보기" : "#" + tag} | skk-blog</title>
       </Head>
-      <Typography variant="h2" py={6}>
-        {tag === "" ? "✍️전체 글 보기" : "#" + tag}
-      </Typography>
-      <BoardList tag={tag} />
+      <BoardListTop tag={tag} layout={viewLayout} setLayout={setViewLayout} />
+      <BoardList tag={tag} layout={viewLayout} />
       <Link href="/free/new">
         <Fab
           variant="extended"

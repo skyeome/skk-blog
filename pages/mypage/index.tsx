@@ -44,7 +44,11 @@ function Mypage() {
           {result[1].data?.length === 0 ? (
             <ItemNone />
           ) : (
-            <IndexRatestListUI title="내가 작성한 글" data={result[1].data} />
+            <IndexRatestListUI
+              title="내가 작성한 글"
+              data={result[1].data}
+              isLoading={result[1].isLoading}
+            />
           )}
         </Grid>
         <Grid item xs={12} md={3}>
