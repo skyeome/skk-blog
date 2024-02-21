@@ -1,10 +1,10 @@
-import type { IBoardListProps } from "./BoardList.types";
+import type { BoardListOldProps } from "./BoardList.types";
 import InfiniteScroller from "react-infinite-scroller";
 import BoardListItem from "./BoardListItem.presenter";
 import Grid from "@mui/material/Grid";
 import { Skeleton } from "@mui/material";
 
-export default function BoardListUI(props: IBoardListProps): JSX.Element {
+export default function BoardListUI(props: BoardListOldProps): JSX.Element {
   return (
     <>
       {props.data !== undefined && (

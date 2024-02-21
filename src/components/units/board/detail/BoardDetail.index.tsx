@@ -49,7 +49,7 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
   return (
     <>
       <Head>
-        <title>{data.title} | 자유게시판</title>
+        <title>{data.title} | 나만의 블로그</title>
       </Head>
       <S.topKvBox>
         <S.topKvCategory>자유게시판</S.topKvCategory>
