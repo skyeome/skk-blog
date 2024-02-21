@@ -8,17 +8,12 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
+import type { BoardRatest } from "../../../components/units/index/ratest/IndexRatestList.types";
+import { BoardConverter } from "../../libraries/firestore";
 
 interface IFetchBoardsList {
-  posts: IBoardList[];
+  posts: BoardRatest[];
   lastKey: string;
-}
-
-export interface IBoardList {
-  id: string;
-  title: string;
-  createdAt: Timestamp;
-  thumb: string;
 }
 
 export const useQueryFetchBoards = async (
@@ -29,17 +24,15 @@ export const useQueryFetchBoards = async (
       collection(db, "Board"),
       orderBy("createdAt", "desc"),
       limit(limits)
-    );
+    ).withConverter(BoardConverter);
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs;
-    const posts: IBoardList[] = [];
-    let lastKey: string = "";
+    const posts: BoardRatest[] = [];
+    let lastKey: Timestamp | string = "";
     data.forEach((doc) => {
       posts.push({
         id: doc.id,
-        title: doc.data().title,
-        createdAt: doc.data().createdAt,
-        thumb: doc.data().thumb,
+        ...doc.data(),
       });
       lastKey = doc.data().createdAt;
     });
@@ -47,11 +40,22 @@ export const useQueryFetchBoards = async (
   } catch (error) {
     if (error instanceof Error) alert(error.message);
     return {
-      posts: [{ id: "", title: "", createdAt: new Timestamp(0, 0), thumb: "" }],
+      posts: [
+        {
+          id: "",
+          writer: "",
+          title: "",
+          summary: "",
+          createdAt: new Timestamp(0, 0),
+          category: [""],
+          thumb: "",
+        },
+      ],
       lastKey: "",
     };
   }
 };
+
 export const useQueryFetchMoreBoards = async (
   key: any,
   limits: number = 4
@@ -62,17 +66,15 @@ export const useQueryFetchMoreBoards = async (
       orderBy("createdAt", "desc"),
       startAfter(key),
       limit(limits)
-    );
+    ).withConverter(BoardConverter);
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs;
-    const posts: IBoardList[] = [];
-    let lastKey: string = "";
+    const posts: BoardRatest[] = [];
+    let lastKey: Timestamp | string = "";
     data.forEach((doc) => {
       posts.push({
         id: doc.id,
-        title: doc.data().title,
-        createdAt: doc.data().createdAt,
-        thumb: doc.data().thumb,
+        ...doc.data(),
       });
       lastKey = doc.data().createdAt;
     });
@@ -80,7 +82,17 @@ export const useQueryFetchMoreBoards = async (
   } catch (error) {
     if (error instanceof Error) alert(error.message);
     return {
-      posts: [{ id: "", title: "", createdAt: new Timestamp(0, 0), thumb: "" }],
+      posts: [
+        {
+          id: "",
+          writer: "",
+          title: "",
+          summary: "",
+          createdAt: new Timestamp(0, 0),
+          category: [""],
+          thumb: "",
+        },
+      ],
       lastKey: "",
     };
   }

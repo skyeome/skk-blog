@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import type { IBoardList } from "../../../../commons/hooks/queries/useQueryFetchBoards";
 import {
   useQueryFetchBoards,
   useQueryFetchMoreBoards,
 } from "../../../../commons/hooks/queries/useQueryFetchBoards";
 import BoardListUI from "./BoardListOld.presenter";
+import type { BoardRatest } from "../../index/ratest/IndexRatestList.types";
 
 export default function BoardList(): JSX.Element {
-  const [posts, setPosts] = useState<IBoardList[]>();
+  const [posts, setPosts] = useState<BoardRatest[]>();
   const [lastKey, setLastKey] = useState("");
   useEffect(() => {
     void useQueryFetchBoards()

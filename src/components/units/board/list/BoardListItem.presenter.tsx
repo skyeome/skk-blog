@@ -1,15 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardActionArea, CardActions, CardContent } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import type { BoardListItemProps } from "./BoardList.types";
 import * as Styled from "./BoardList.styles";
-import type { IBoardListItemProps } from "./BoardList.types";
-import Typography from "@mui/material/Typography";
 
-export default function BoardListItem({
-  el,
-}: IBoardListItemProps): JSX.Element {
+export default function BoardListItem({ el }: BoardListItemProps): JSX.Element {
   return (
     <Link href={`/free/${el.id}`}>
       <a>

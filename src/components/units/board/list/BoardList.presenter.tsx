@@ -4,10 +4,11 @@ import BoardListItem from "./BoardListItem.presenter";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import ItemNone from "../../../commons/layout/none/ItemNone";
+import BoardListSkeleton from "./BoardListSkeleton";
 
 const BoardListUI = React.forwardRef<HTMLDivElement, BoardListProps>(
   ({ data, isLoading }, ref) => {
-    if (isLoading) return <div>loading...</div>;
+    if (isLoading) return <BoardListSkeleton />;
     if (data === undefined) return <ItemNone />;
     return (
       <div>

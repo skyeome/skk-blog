@@ -14,7 +14,7 @@ export const BoardListItemWrap = styled.div`
 export const BoardListItemImg = styled.div`
   position: relative;
   aspect-ratio: 1024 / 699;
-  background-color: #000;
+  /* background-color: #000; */
 `;
 export const BoardListItemTitle = styled(Typography)`
   white-space: nowrap;

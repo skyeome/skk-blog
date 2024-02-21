@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
 import { getBoardsAll } from "../../../../commons/apis/board";
-import BoardListUI from "./BoardList.presenter";
 import useSearchParam from "../../../../commons/hooks/custom/useSearchParam";
+import BoardListUI from "./BoardList.presenter";
 
 export default function BoardList(): JSX.Element {
   const tag = useSearchParam("tag");
