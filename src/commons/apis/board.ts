@@ -10,8 +10,12 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../libraries/firebase";
-import { BoardConverter, BoardDetailConverter } from "../libraries/firestore";
-import type { BoardDetail } from "../libraries/firestore";
+import {
+  BoardCommentConverter,
+  BoardConverter,
+  BoardDetailConverter,
+} from "../libraries/firestore";
+import type { BoardComment, BoardDetail } from "../libraries/firestore";
 import type { BoardRatest } from "../../components/units/index/ratest/IndexRatestList.types";
 import type { UserIds } from "./home";
 
@@ -98,4 +102,21 @@ export const getBoardsAll = async ({
     });
   });
   return data;
+};
+
+// 댓글 목록 가져오기
+export const getCommentData = async (boardId: string) => {
+  const docRef = collection(db, "BoardComment");
+  const q = query(
+    docRef,
+    where("boardId", "==", boardId),
+    orderBy("createdAt")
+  ).withConverter(BoardCommentConverter);
+
+  const CommentData: BoardComment[] = [];
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    CommentData.push(doc.data());
+  });
+  return CommentData;
 };

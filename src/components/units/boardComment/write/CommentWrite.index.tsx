@@ -7,22 +7,15 @@ import Grid from "@mui/material/Grid";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import { useQueryIdCheck } from "../../../../commons/hooks/custom/useQueryIdCheck";
-import type { ICommentValues } from "../../../../commons/hooks/custom/useBoardComment";
 import { useBoardComment } from "../../../../commons/hooks/custom/useBoardComment";
-import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import type { CommentValues } from "../../../../commons/hooks/custom/useBoardComment";
+import type { CommentWriteProps } from "./CommentWrite.types";
 import { Textarea } from "./CommentWrite.styles";
 
-interface ICommentWriteProps {
-  isEdit: boolean;
-  data?: Omit<IBoardCommentData, "password">;
-  onClickSubmit?: () => void;
-  refetch?: () => void;
-}
-
-export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
+export default function CommentWrite(props: CommentWriteProps): JSX.Element {
   const { id } = useQueryIdCheck("boardId");
   const { handleSubmit, setValue, reset, control, formState } =
-    useForm<ICommentValues>({
+    useForm<CommentValues>({
       defaultValues: {
         writer: props.data?.writer ?? "",
         contents: props.data?.contents ?? "",
@@ -45,16 +38,15 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
           <Controller
             name="writer"
             control={control}
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                 <AccountCircle
                   sx={{ color: "action.active", mr: 1, my: 0.5 }}
                 />
                 <TextField
+                  {...field}
                   label="닉네임"
                   variant="standard"
-                  onChange={onChange}
-                  value={value}
                   disabled={props.isEdit}
                   margin="none"
                   fullWidth
@@ -67,15 +59,14 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
           <Controller
             name="password"
             control={control}
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                 <LockIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
                 <TextField
                   type="password"
+                  {...field}
                   label="비밀번호"
                   variant="standard"
-                  onChange={onChange}
-                  value={value}
                   margin="none"
                   fullWidth
                 />
@@ -93,11 +84,10 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
         <Controller
           name="contents"
           control={control}
-          render={({ field: { onChange, value } }) => (
+          render={({ field }) => (
             <Textarea
+              {...field}
               minRows={3}
-              onChange={onChange}
-              value={value}
               placeholder="내용을 작성해주세요."
             />
           )}
@@ -108,12 +98,12 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
           variant="contained"
           size="large"
           onClick={
-            props.isEdit
+            props.isEdit ?? false
               ? handleSubmit(onClickUpdate)
               : handleSubmit(onClickWrite)
           }
         >
-          {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
+          {props.isEdit ?? false ? "댓글 수정하기" : "댓글 남기기"}
         </Button>
       </Box>
     </>

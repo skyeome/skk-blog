@@ -1,10 +1,10 @@
 import type { BoardDetail } from "../../../../commons/libraries/firestore";
 
-export interface IBoardWriteProps {
-  isEdit: boolean;
+export interface BoardWriteProps {
+  isEdit?: boolean;
   data?: BoardDetail;
 }
-export interface IBoardUpdateInputs {
+export interface BoardUpdateInputs {
   title?: string;
   summary?: string;
   contents?: string;
@@ -13,7 +13,7 @@ export interface IBoardUpdateInputs {
   thumbRef?: string;
 }
 
-export interface IBoardWriteInputTypes {
+export interface BoardWriteInputTypes {
   title?: string | undefined;
   category?: any[] | undefined;
   thumbRef?: string;

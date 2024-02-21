@@ -351,23 +351,28 @@ export default function BoardDetailPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   const router = useRouter();
-  const { data: boardDetail, isFetched } = useQuery({
-    queryKey: ["board", id],
-    queryFn: async () => await getBoardDetail(id),
-  });
-  const { data, refetch } = useQueryFetchComment(id);
+  const result = useQueries([
+    {
+      queryKey: ["board", id],
+      queryFn: async () => await getBoardDetail(id),
+    },
+    {
+      queryKey: ["board", id, "comments"],
+      queryFn: async () => await getCommentData(id),
+    },
+  ]);
 
   // 게시글을 찾지 못하였을때 다른 페이지로 이동
   useEffect(() => {
-    if (isFetched && boardDetail === undefined)
+    if (result[0].isFetched && result[0].data === undefined)
       void router.replace("/free/not-found");
-  }, [boardDetail, isFetched]);
+  }, [result[0].data, result[0].isFetched]);
 
   return (
     <>
-      {boardDetail !== undefined && <BoardDetail data={boardDetail} />}
-      <CommentWrite isEdit={false} refetch={refetch} />
-      <CommentList comments={data} />
+      {result[0].data !== undefined && <BoardDetail data={result[0].data} />}
+      <CommentWrite refetch={result[1].refetch} />
+      <CommentList comments={result[1].data} />
     </>
   );
 }

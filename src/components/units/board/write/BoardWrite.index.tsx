@@ -10,7 +10,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import type { IBoardWriteProps } from "./BoardWrite.types";
+import type { BoardWriteProps } from "./BoardWrite.types";
 import Toast from "../../../commons/layout/toast/Toast";
 import useToast from "../../../../commons/hooks/custom/useToast";
 import FileUpload from "../../../commons/upload/FileUpload.container";
@@ -49,7 +49,7 @@ const MenuProps = {
 export default function BoardWrite({
   isEdit,
   data,
-}: IBoardWriteProps): JSX.Element {
+}: BoardWriteProps): JSX.Element {
   const { openToast, severity, messageToast, closeToast, showToast } =
     useToast();
 
@@ -65,7 +65,10 @@ export default function BoardWrite({
   } = useMutationCreateBoard(showToast, editorRef, data);
 
   return (
-    <form onSubmit={isEdit ? onClickUpdate : onClickWrite} autoComplete="off">
+    <form
+      onSubmit={isEdit ?? false ? onClickUpdate : onClickWrite}
+      autoComplete="off"
+    >
       <div>
         <Controller
           name="title"
@@ -127,7 +130,7 @@ export default function BoardWrite({
         setValue={setValue}
       />
       <Button variant="contained" type="submit" size="large">
-        {isEdit ? "수정완료" : "작성완료"}
+        {isEdit ?? false ? "수정완료" : "작성완료"}
       </Button>
       <Toast
         open={openToast}

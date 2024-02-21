@@ -8,8 +8,9 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
+import bcrypt from "bcryptjs";
 
-export interface ICommentValues {
+export interface CommentValues {
   writer: string;
   password: string;
   contents: string;
@@ -19,9 +20,9 @@ export interface ICommentValues {
 interface IUseBoardCommentArgs {
   boardId: string;
   commentId?: string | undefined;
-  formState: FormState<ICommentValues>;
-  setValue: UseFormSetValue<ICommentValues>;
-  reset: UseFormReset<ICommentValues>;
+  formState: FormState<CommentValues>;
+  setValue: UseFormSetValue<CommentValues>;
+  reset: UseFormReset<CommentValues>;
   onClickSubmit?: () => void;
   refetch?: () => void;
 }
@@ -29,11 +30,18 @@ interface IUseBoardCommentArgs {
 export const useBoardComment = (
   args: IUseBoardCommentArgs
 ): Record<any, any> => {
-  const onClickWrite = async (data: ICommentValues): Promise<void> => {
+  const onClickWrite = async (data: CommentValues): Promise<void> => {
+    // 비밀번호 암호화
+    const salt = await bcrypt.genSalt(
+      Number(process.env.NEXT_PUBLIC_SOME_CODE)
+    );
+    const hashedPassword = await bcrypt.hash(data.password, salt);
+
     try {
       await addDoc(collection(db, "BoardComment"), {
         boardId: args.boardId,
         ...data,
+        password: hashedPassword,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -49,11 +57,19 @@ export const useBoardComment = (
     if (args.refetch !== undefined) args.refetch();
   };
 
-  const onClickUpdate = async (data: ICommentValues): Promise<void> => {
+  const onClickUpdate = async (data: CommentValues): Promise<void> => {
+    // 비밀번호 암호화
+    const salt = await bcrypt.genSalt(
+      Number(process.env.NEXT_PUBLIC_SOME_CODE)
+    );
+
     try {
-      const updatedData: Partial<ICommentValues> = {};
+      const updatedData: Partial<CommentValues> = {};
       if (data.writer !== undefined) updatedData.writer = data.writer;
-      if (data.password !== undefined) updatedData.password = data.password;
+      if (data.password !== undefined) {
+        const hashedPassword = await bcrypt.hash(data.password, salt);
+        updatedData.password = hashedPassword;
+      }
       if (data.contents !== undefined) updatedData.contents = data.contents;
       if (data.star !== undefined) updatedData.star = data.star;
       if (args.commentId === undefined || args.onClickSubmit === undefined)

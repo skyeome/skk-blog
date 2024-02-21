@@ -8,7 +8,7 @@ function BoardNewPage(): JSX.Element {
       <Head>
         <title>새 글 작성 | 나만의 블로그</title>
       </Head>
-      <BoardWrite isEdit={false} />
+      <BoardWrite />
     </>
   );
 }

@@ -15,8 +15,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import type {
-  IBoardUpdateInputs,
-  IBoardWriteInputTypes,
+  BoardUpdateInputs,
+  BoardWriteInputTypes,
 } from "../../../components/units/board/write/BoardWrite.types";
 import type { BoardDetail } from "../../libraries/firestore";
 import type { Editor } from "@toast-ui/react-editor";
@@ -28,11 +28,11 @@ export const useMutationCreateBoard = (
   editorRef: RefObject<Editor>,
   data?: BoardDetail | undefined
 ): {
-  control: Control<IBoardWriteInputTypes, any>;
-  errors: FieldErrors<IBoardWriteInputTypes>;
+  control: Control<BoardWriteInputTypes, any>;
+  errors: FieldErrors<BoardWriteInputTypes>;
   fileUrl: string | undefined;
   setFileUrl: (fileUrl: string) => void;
-  setValue: UseFormSetValue<IBoardWriteInputTypes>;
+  setValue: UseFormSetValue<BoardWriteInputTypes>;
   onClickWrite: () => Promise<void>;
   onClickUpdate: () => Promise<void>;
 } => {
@@ -42,12 +42,12 @@ export const useMutationCreateBoard = (
     formState: { errors },
     control,
     setValue,
-  } = useForm<IBoardWriteInputTypes>({
+  } = useForm<BoardWriteInputTypes>({
     resolver: yupResolver(boardWriteSchema),
   });
   const [fileUrl, setFileUrl] = useState<string | undefined>(data?.thumb);
 
-  const onClickWrite = handleSubmit((inputs: IBoardWriteInputTypes) => {
+  const onClickWrite = handleSubmit((inputs: BoardWriteInputTypes) => {
     const user = auth.currentUser;
     if (user === null || user === undefined) return;
 
@@ -84,7 +84,7 @@ export const useMutationCreateBoard = (
     }
   });
 
-  const onClickUpdate = handleSubmit((inputs: IBoardWriteInputTypes) => {
+  const onClickUpdate = handleSubmit((inputs: BoardWriteInputTypes) => {
     const currentFiles = fileUrl;
     const defaultFiles = data?.thumb;
     const isChangedFiles = currentFiles !== defaultFiles;
@@ -107,7 +107,7 @@ export const useMutationCreateBoard = (
       return;
     }
 
-    const updateBoardInput: IBoardUpdateInputs = {};
+    const updateBoardInput: BoardUpdateInputs = {};
     if (inputs.title !== undefined) updateBoardInput.title = inputs.title;
     if (inputs.category !== undefined && notEmptyCategory)
       updateBoardInput.category = inputs.category;
