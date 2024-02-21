@@ -62,12 +62,14 @@ export const useBoardComment = (
     const salt = await bcrypt.genSalt(
       Number(process.env.NEXT_PUBLIC_SOME_CODE)
     );
-    const hashedPassword = await bcrypt.hash(data.password, salt);
 
     try {
       const updatedData: Partial<CommentValues> = {};
       if (data.writer !== undefined) updatedData.writer = data.writer;
-      if (data.password !== undefined) updatedData.password = hashedPassword;
+      if (data.password !== undefined) {
+        const hashedPassword = await bcrypt.hash(data.password, salt);
+        updatedData.password = hashedPassword;
+      }
       if (data.contents !== undefined) updatedData.contents = data.contents;
       if (data.star !== undefined) updatedData.star = data.star;
       if (args.commentId === undefined || args.onClickSubmit === undefined)
