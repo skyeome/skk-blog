@@ -8,6 +8,10 @@ export interface BoardListOldProps {
 }
 
 export interface BoardListProps {
+  tag: string;
+}
+
+export interface BoardListUIProps {
   data?: InfiniteData<BoardRatest[]>;
   isLoading: boolean;
 }

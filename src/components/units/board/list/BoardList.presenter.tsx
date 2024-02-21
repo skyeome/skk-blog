@@ -1,12 +1,12 @@
 import React from "react";
-import type { BoardListProps } from "./BoardList.types";
 import BoardListItem from "./BoardListItem.presenter";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import ItemNone from "../../../commons/layout/none/ItemNone";
 import BoardListSkeleton from "./BoardListSkeleton";
+import type { BoardListUIProps } from "./BoardList.types";
 
-const BoardListUI = React.forwardRef<HTMLDivElement, BoardListProps>(
+const BoardListUI = React.forwardRef<HTMLDivElement, BoardListUIProps>(
   ({ data, isLoading }, ref) => {
     if (isLoading) return <BoardListSkeleton />;
     if (data === undefined) return <ItemNone />;

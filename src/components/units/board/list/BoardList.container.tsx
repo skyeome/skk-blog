@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
 import { getBoardsAll } from "../../../../commons/apis/board";
-import useSearchParam from "../../../../commons/hooks/custom/useSearchParam";
 import BoardListUI from "./BoardList.presenter";
+import type { BoardListProps } from "./BoardList.types";
 
-export default function BoardList(): JSX.Element {
-  const tag = useSearchParam("tag");
-
+export default function BoardList({ tag }: BoardListProps): JSX.Element {
   const [ref, inView] = useInView();
   const { data, isLoading, fetchNextPage } = useInfiniteQuery({
     queryKey: ["board", tag === "" ? "all" : tag],
