@@ -26,7 +26,7 @@ const BoardTextList = React.forwardRef<HTMLDivElement, BoardListUIProps>(
                       locale: ko,
                     })}
                 </Typography>
-                <Link href={el.id}>
+                <Link href={`/free/${el.id}`}>
                   <a>
                     <Typography variant="h3" mb={1}>
                       {el.title}

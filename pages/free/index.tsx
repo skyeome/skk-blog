@@ -14,7 +14,7 @@ export default function FreeBoardPage(): JSX.Element {
   return (
     <>
       <Head>
-        <title>{tag === "" ? "전체 글 보기" : "#" + tag} | skk-blog</title>
+        <title>{tag === "" ? "전체 글 보기" : "#" + tag} | 나만의 블로그</title>
       </Head>
       <BoardListTop tag={tag} layout={viewLayout} setLayout={setViewLayout} />
       <BoardList tag={tag} layout={viewLayout} />

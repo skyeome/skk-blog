@@ -29,7 +29,7 @@ const IndexRatestListUI = React.forwardRef<
           ))}
         </React.Fragment>
       ))}
-      <Box ref={ref} sx={{ height: 100 }} />
+      {ref !== null && <Box ref={ref} sx={{ height: 100 }} />}
     </S.Ratest>
   );
 });

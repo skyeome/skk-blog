@@ -48,6 +48,7 @@ function BoardListTop({ tag, layout, setLayout }: BoardListTopProps) {
       <ButtonGroup variant="outlined" size="small" aria-label="레이아웃 변경">
         {LAYOUT_BUTTONS.map(({ layout: buttonLayout, startIcon, text }) => (
           <Button
+            key={buttonLayout}
             variant={layout === buttonLayout ? "contained" : undefined}
             startIcon={startIcon}
             onClick={() => {
