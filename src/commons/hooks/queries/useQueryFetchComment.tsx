@@ -3,7 +3,7 @@ import type { Timestamp } from "firebase/firestore";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../libraries/firebase";
 
-export interface IBoardCommentData {
+export interface BoardCommentData {
   id: string;
   boardId: string;
   writer: string;
@@ -21,26 +21,11 @@ export const useQueryFetchComment = (boardId: string) => {
     orderBy("createdAt")
   );
 
-  // realtime database 예제
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(q, (snapshot) => {
-  //     // console.log("데이터 받아옴");
-  //     const comments = snapshot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...(doc.data() as Omit<IBoardCommentData, "id">),
-  //     }));
-  //     setData(comments);
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, []);
-
-  const getCommentData = async (): Promise<IBoardCommentData[]> => {
-    const CommentData: IBoardCommentData[] = [];
+  const getCommentData = async (): Promise<BoardCommentData[]> => {
+    const CommentData: BoardCommentData[] = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      const docData = doc.data() as IBoardCommentData;
+      const docData = doc.data() as BoardCommentData;
       CommentData.push({ ...docData, id: doc.id });
     });
     return CommentData;

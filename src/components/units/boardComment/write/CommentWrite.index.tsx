@@ -7,22 +7,15 @@ import Grid from "@mui/material/Grid";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import { useQueryIdCheck } from "../../../../commons/hooks/custom/useQueryIdCheck";
-import type { ICommentValues } from "../../../../commons/hooks/custom/useBoardComment";
 import { useBoardComment } from "../../../../commons/hooks/custom/useBoardComment";
-import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import type { CommentValues } from "../../../../commons/hooks/custom/useBoardComment";
+import type { CommentWriteProps } from "./CommentWrite.types";
 import { Textarea } from "./CommentWrite.styles";
 
-interface ICommentWriteProps {
-  isEdit: boolean;
-  data?: Omit<IBoardCommentData, "password">;
-  onClickSubmit?: () => void;
-  refetch?: () => void;
-}
-
-export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
+export default function CommentWrite(props: CommentWriteProps): JSX.Element {
   const { id } = useQueryIdCheck("boardId");
   const { handleSubmit, setValue, reset, control, formState } =
-    useForm<ICommentValues>({
+    useForm<CommentValues>({
       defaultValues: {
         writer: props.data?.writer ?? "",
         contents: props.data?.contents ?? "",
@@ -108,12 +101,12 @@ export default function CommentWrite(props: ICommentWriteProps): JSX.Element {
           variant="contained"
           size="large"
           onClick={
-            props.isEdit
+            props.isEdit ?? false
               ? handleSubmit(onClickUpdate)
               : handleSubmit(onClickWrite)
           }
         >
-          {props.isEdit ? "댓글 수정하기" : "댓글 남기기"}
+          {props.isEdit ?? false ? "댓글 수정하기" : "댓글 남기기"}
         </Button>
       </Box>
     </>

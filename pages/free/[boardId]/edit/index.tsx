@@ -34,7 +34,7 @@ function BoardUpdatePage({
         <CircularProgress />
       </Box>
     );
-  return <BoardWrite isEdit={true} data={data} />;
+  return <BoardWrite isEdit data={data} />;
 }
 
 export const getServerSideProps: GetServerSideProps<{ id: string }> = async (

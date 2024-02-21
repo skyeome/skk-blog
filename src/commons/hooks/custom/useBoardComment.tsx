@@ -9,7 +9,7 @@ import {
   doc,
 } from "firebase/firestore";
 
-export interface ICommentValues {
+export interface CommentValues {
   writer: string;
   password: string;
   contents: string;
@@ -19,9 +19,9 @@ export interface ICommentValues {
 interface IUseBoardCommentArgs {
   boardId: string;
   commentId?: string | undefined;
-  formState: FormState<ICommentValues>;
-  setValue: UseFormSetValue<ICommentValues>;
-  reset: UseFormReset<ICommentValues>;
+  formState: FormState<CommentValues>;
+  setValue: UseFormSetValue<CommentValues>;
+  reset: UseFormReset<CommentValues>;
   onClickSubmit?: () => void;
   refetch?: () => void;
 }
@@ -29,7 +29,7 @@ interface IUseBoardCommentArgs {
 export const useBoardComment = (
   args: IUseBoardCommentArgs
 ): Record<any, any> => {
-  const onClickWrite = async (data: ICommentValues): Promise<void> => {
+  const onClickWrite = async (data: CommentValues): Promise<void> => {
     try {
       await addDoc(collection(db, "BoardComment"), {
         boardId: args.boardId,
@@ -49,9 +49,9 @@ export const useBoardComment = (
     if (args.refetch !== undefined) args.refetch();
   };
 
-  const onClickUpdate = async (data: ICommentValues): Promise<void> => {
+  const onClickUpdate = async (data: CommentValues): Promise<void> => {
     try {
-      const updatedData: Partial<ICommentValues> = {};
+      const updatedData: Partial<CommentValues> = {};
       if (data.writer !== undefined) updatedData.writer = data.writer;
       if (data.password !== undefined) updatedData.password = data.password;
       if (data.contents !== undefined) updatedData.contents = data.contents;

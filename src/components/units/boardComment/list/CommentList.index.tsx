@@ -1,12 +1,12 @@
 import React from "react";
 import Divider from "@mui/material/Divider";
-import type { IBoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import type { BoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
 import CommentListItem from "./CommentListItem.presenter";
 
 function CommentList({
   comments,
 }: {
-  comments?: IBoardCommentData[];
+  comments?: BoardCommentData[];
 }): JSX.Element {
   return (
     <>

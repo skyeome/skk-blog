@@ -27,7 +27,7 @@ export default function BoardDetailPage({
   return (
     <>
       {boardDetail !== undefined && <BoardDetail data={boardDetail} />}
-      <CommentWrite isEdit={false} refetch={refetch} />
+      <CommentWrite refetch={refetch} />
       <CommentList comments={data} />
     </>
   );
