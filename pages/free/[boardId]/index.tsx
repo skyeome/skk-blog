@@ -1,34 +1,41 @@
 import { useEffect } from "react";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import { useQueries } from "react-query";
 import BoardDetail from "../../../src/components/units/board/detail/BoardDetail.index";
 import CommentWrite from "../../../src/components/units/boardComment/write/CommentWrite.index";
 import CommentList from "../../../src/components/units/boardComment/list/CommentList.index";
-import { useQueryFetchComment } from "../../../src/commons/hooks/queries/useQueryFetchComment";
-import { getBoardDetail } from "../../../src/commons/apis/board";
+import {
+  getBoardDetail,
+  getCommentData,
+} from "../../../src/commons/apis/board";
 
 export default function BoardDetailPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   const router = useRouter();
-  const { data: boardDetail, isFetched } = useQuery({
-    queryKey: ["board", id],
-    queryFn: async () => await getBoardDetail(id),
-  });
-  const { data, refetch } = useQueryFetchComment(id);
+  const result = useQueries([
+    {
+      queryKey: ["board", id],
+      queryFn: async () => await getBoardDetail(id),
+    },
+    {
+      queryKey: ["board", id, "comments"],
+      queryFn: async () => await getCommentData(id),
+    },
+  ]);
 
   // 게시글을 찾지 못하였을때 다른 페이지로 이동
   useEffect(() => {
-    if (isFetched && boardDetail === undefined)
+    if (result[0].isFetched && result[0].data === undefined)
       void router.replace("/free/not-found");
-  }, [boardDetail, isFetched]);
+  }, [result[0].data, result[0].isFetched]);
 
   return (
     <>
-      {boardDetail !== undefined && <BoardDetail data={boardDetail} />}
-      <CommentWrite refetch={refetch} />
-      <CommentList comments={data} />
+      {result[0].data !== undefined && <BoardDetail data={result[0].data} />}
+      <CommentWrite refetch={result[1].refetch} />
+      <CommentList comments={result[1].data} />
     </>
   );
 }

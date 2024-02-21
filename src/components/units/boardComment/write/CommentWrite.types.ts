@@ -1,8 +1,8 @@
-import type { BoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import type { BoardComment } from "../../../../commons/libraries/firestore";
 
 export interface CommentWriteProps {
   isEdit?: boolean;
-  data?: Omit<BoardCommentData, "password">;
+  data?: BoardComment;
   onClickSubmit?: () => void;
   refetch?: () => void;
 }

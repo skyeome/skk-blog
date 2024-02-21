@@ -118,6 +118,54 @@ export const BoardConverter: FirestoreDataConverter<Board> = {
   },
 };
 
+export class BoardComment {
+  constructor(
+    public id: string,
+    public boardId: string,
+    public writer: string,
+    public contents: string,
+    public star: number,
+    public createdAt: Timestamp,
+    public updatedAt: Timestamp
+  ) {}
+
+  toString(): string {
+    return `
+      ${this.id} ,
+      ${this.boardId} ,
+      ${this.writer},
+      ${this.contents},
+      ${this.star},
+      ${this.createdAt.toDate().toLocaleString()},
+      ${this.updatedAt.toDate().toLocaleString()}
+      `;
+  }
+}
+
+export const BoardCommentConverter: FirestoreDataConverter<BoardComment> = {
+  toFirestore: (docData: BoardComment): DocumentData => {
+    return {
+      ...docData,
+    };
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ) => {
+    const sn = snapshot;
+    const data = sn.data(options);
+    return new BoardComment(
+      sn.id,
+      data.boardId,
+      data.writer,
+      data.contents,
+      data.star,
+      data.createdAt,
+      data.updatedAt
+    );
+  },
+};
+
 export class UserInfo {
   constructor(
     public uid: string,

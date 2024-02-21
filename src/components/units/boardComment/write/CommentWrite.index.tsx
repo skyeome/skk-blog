@@ -38,16 +38,15 @@ export default function CommentWrite(props: CommentWriteProps): JSX.Element {
           <Controller
             name="writer"
             control={control}
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                 <AccountCircle
                   sx={{ color: "action.active", mr: 1, my: 0.5 }}
                 />
                 <TextField
+                  {...field}
                   label="닉네임"
                   variant="standard"
-                  onChange={onChange}
-                  value={value}
                   disabled={props.isEdit}
                   margin="none"
                   fullWidth
@@ -60,15 +59,14 @@ export default function CommentWrite(props: CommentWriteProps): JSX.Element {
           <Controller
             name="password"
             control={control}
-            render={({ field: { onChange, value } }) => (
+            render={({ field }) => (
               <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                 <LockIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
                 <TextField
                   type="password"
+                  {...field}
                   label="비밀번호"
                   variant="standard"
-                  onChange={onChange}
-                  value={value}
                   margin="none"
                   fullWidth
                 />
@@ -86,11 +84,10 @@ export default function CommentWrite(props: CommentWriteProps): JSX.Element {
         <Controller
           name="contents"
           control={control}
-          render={({ field: { onChange, value } }) => (
+          render={({ field }) => (
             <Textarea
+              {...field}
               minRows={3}
-              onChange={onChange}
-              value={value}
               placeholder="내용을 작성해주세요."
             />
           )}

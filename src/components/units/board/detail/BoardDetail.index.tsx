@@ -69,7 +69,7 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
       </S.topKvBox>
       {data.thumb !== undefined && (
         <S.topThumb>
-          <Image src={data.thumb} layout="fill" objectFit="contain" />
+          <Image src={data.thumb} layout="fill" objectFit="contain" priority />
         </S.topThumb>
       )}
       <Box sx={{ overflow: "hidden" }}>

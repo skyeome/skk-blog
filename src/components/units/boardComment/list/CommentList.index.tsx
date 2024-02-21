@@ -1,13 +1,9 @@
 import React from "react";
 import Divider from "@mui/material/Divider";
-import type { BoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
 import CommentListItem from "./CommentListItem.presenter";
+import type { BoardComment } from "../../../../commons/libraries/firestore";
 
-function CommentList({
-  comments,
-}: {
-  comments?: BoardCommentData[];
-}): JSX.Element {
+function CommentList({ comments }: { comments?: BoardComment[] }): JSX.Element {
   return (
     <>
       <Divider sx={{ mb: 2 }}>{comments?.length} Comments</Divider>

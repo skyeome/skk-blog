@@ -17,13 +17,13 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import type { BoardCommentData } from "../../../../commons/hooks/queries/useQueryFetchComment";
+import type { BoardComment } from "../../../../commons/libraries/firestore";
 import CommentWrite from "../write/CommentWrite.index";
 import { useMutationDeleteComment } from "../../../../commons/hooks/mutations/useMutationDeleteComent";
 import { useMutationUpdateComment } from "../../../../commons/hooks/mutations/useMutationUpdateComment";
 import * as S from "./CommentList.styles";
 
-function CommentListItem(props: { el: BoardCommentData }): JSX.Element {
+function CommentListItem(props: { el: BoardComment }): JSX.Element {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [open, setOpen] = useState(false);
