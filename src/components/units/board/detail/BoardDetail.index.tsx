@@ -1,10 +1,11 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { useMutateBoard } from "../../../../commons/hooks/queries/useQueryFetchBoard";
+import { useMutateBoard } from "../../../../commons/hooks/mutations/useMutateBoard";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -37,13 +38,11 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
   const router = useRouter();
   const { openToast, severity, messageToast, closeToast, showToast } =
     useToast();
-  const {
-    onClickEditBtn,
-    onClickDeleteBtn,
-    open,
-    handleClickOpen,
-    handleClose,
-  } = useMutateBoard(router, data, showToast);
+  const { onClickDeleteBtn, open, handleOpen, handleClose } = useMutateBoard(
+    router,
+    data,
+    showToast
+  );
   const [user] = useRecoilState(userState);
   const { likeCount, liked, onClickLikeBtn } = useBoardLike(showToast);
   return (
@@ -88,21 +87,18 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
       </S.BoardLikeWrap>
       {user?.uid === data.uid ? (
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, mb: 6 }}>
-          <Button
-            variant="contained"
-            size="large"
-            startIcon={<DeleteIcon />}
-            onClick={onClickEditBtn}
-          >
-            수정
-          </Button>
+          <Link href={`/free/${router.query.boardId as string}/edit`}>
+            <Button variant="contained" size="large" startIcon={<DeleteIcon />}>
+              수정
+            </Button>
+          </Link>
           <Button
             variant="outlined"
             size="large"
             color="error"
             sx={{ ml: 1 }}
             startIcon={<DeleteIcon />}
-            onClick={handleClickOpen}
+            onClick={handleOpen}
           >
             삭제
           </Button>
