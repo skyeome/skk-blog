@@ -67,7 +67,7 @@ export default function BoardDetail({ data }: BoardDetailProps): JSX.Element {
           </Typography>
         </S.topKvInfos>
       </S.topKvBox>
-      {data.thumb !== undefined && (
+      {data.thumb !== "" && (
         <S.topThumb>
           <Image src={data.thumb} layout="fill" objectFit="contain" priority />
         </S.topThumb>

@@ -71,8 +71,8 @@ export const useMutationCreateBoard = (
         category: inputs.category,
         contents: markdown,
         summary,
-        thumb: fileUrl,
-        thumbRef: inputs.thumbRef,
+        thumb: fileUrl ?? "",
+        thumbRef: inputs.thumbRef ?? "",
         createdAt: serverTimestamp(),
       })
         .then((result) => {
