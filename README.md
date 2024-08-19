@@ -1,6 +1,6 @@
 ![블로그 섬네일](public/readme/skk-blog-thumb.jpg)
 
-> 🏠 블로그 배포 주소 : [skk-blog](https://skkblog.com)
+> 🏠 블로그 배포 주소 : [skk-blog](https://skk-blog.vercel.app)
 
 ## 💡나만의 블로그 개발 이유
 
